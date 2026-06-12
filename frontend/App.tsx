@@ -1,0 +1,515 @@
+import React, { useState, useEffect } from "react";
+import { ThemeProvider } from "./components/ThemeContext";
+import Login from "./components/Login";
+import DashboardLayout from "./components/DashboardLayout";
+
+// Admin Views
+import AdminDashboard from "./components/AdminDashboard";
+import AdminEmployeeManagement from "./components/AdminEmployeeManagement";
+import AdminDocuments from "./components/AdminDocuments";
+import AdminTests from "./components/AdminTests";
+import AdminTestAssignment from "./components/AdminTestAssignment";
+import AdminReports from "./components/AdminReports";
+import AdminTasks from "./components/AdminTasks";
+import AdminAttendance from "./components/AdminAttendance";
+
+// Employee Views
+import EmployeeDashboard from "./components/EmployeeDashboard";
+import ApplicationForm from "./components/ApplicationForm";
+import EmployeeProfile from "./components/EmployeeProfile";
+import EmployeeAssignedTests from "./components/EmployeeAssignedTests";
+import EmployeeTasks from "./components/EmployeeTasks";
+import EmployeeAttendance from "./components/EmployeeAttendance";
+
+// Testing View Overlay
+import AssessmentModule from "./components/AssessmentModule";
+import PasswordResetPage from "./components/PasswordResetPage";
+import MessageCenter from "./components/MessageCenter";
+
+import { 
+  User, 
+  UserRole, 
+  Application, 
+  EmployeeDocument, 
+  Test, 
+  AssignedTest, 
+  EmailRecord, 
+  SystemNotification, 
+  ActivityLog,
+  TestStatus
+} from "./types";
+
+export default function App() {
+  // Authentication state
+  const [authToken, setAuthToken] = useState<string | null>(localStorage.getItem("agentops_jwt"));
+  const [currentUser, setCurrentUser] = useState<User | null>(null);
+  const [checkingAuth, setCheckingAuth] = useState(true);
+  const [authError, setAuthError] = useState<string | null>(null);
+
+  // Secure Password Reset state parsed from email link redirection
+  const [resetTokenFromUrl, setResetTokenFromUrl] = useState<string | null>(null);
+  const [resetEmailFromUrl, setResetEmailFromUrl] = useState<string | null>(null);
+
+  // Active Tab/Navigation State
+  const [activeTab, setActiveTab] = useState("admin-analytics");
+
+  // Auxiliary state updater tracking
+  const [refreshTrigger, setRefreshTrigger] = useState(0);
+
+  // Loaded Database State Collections
+  const [employees, setEmployees] = useState<User[]>([]);
+  const [applications, setApplications] = useState<Application[]>([]);
+  const [documents, setDocuments] = useState<EmployeeDocument[]>([]);
+  const [tests, setTests] = useState<Test[]>([]);
+  const [assignedTests, setAssignedTests] = useState<AssignedTest[]>([]);
+  const [emails, setEmails] = useState<EmailRecord[]>([]);
+  const [notifications, setNotifications] = useState<SystemNotification[]>([]);
+  const [activityLogs, setActivityLogs] = useState<ActivityLog[]>([]);
+
+  // Active Assessment being taken by employee
+  const [activeExamRecord, setActiveExamRecord] = useState<AssignedTest | null>(null);
+  const [activeExamTemplate, setActiveExamTemplate] = useState<Test | null>(null);
+
+  function triggerRefreshFn() {
+    setRefreshTrigger(p => p + 1);
+  }
+
+  // Safe JSON wrapper to survive dev refreshes & fallback pages
+  async function safeJson(response: Response, fallback: any = null) {
+    if (!response.ok) return fallback;
+    const contentType = response.headers.get("content-type");
+    if (contentType && !contentType.includes("application/json")) {
+      return fallback;
+    }
+    try {
+      const text = await response.text();
+      if (!text || text.trim().startsWith("<") || text.trim().startsWith("<!")) {
+        return fallback;
+      }
+      return JSON.parse(text);
+    } catch {
+      return fallback;
+    }
+  }
+
+  // Core API loader
+  async function refreshDataPool() {
+    if (!authToken) return;
+
+    try {
+      const headers = { "Authorization": `Bearer ${authToken}` };
+
+      // Multi-gather
+      const [
+        resMe,
+        resUsers,
+        resApps,
+        resDocs,
+        resTests,
+        resAssigned,
+        resEmails,
+        resNotifs,
+        resLogs
+      ] = await Promise.all([
+        fetch("/api/auth/me", { headers }),
+        fetch("/api/users", { headers }),
+        fetch("/api/applications", { headers }),
+        fetch("/api/documents", { headers }),
+        fetch("/api/tests", { headers }),
+        fetch("/api/assigned-tests", { headers }),
+        fetch("/api/emails", { headers }),
+        fetch("/api/notifications", { headers }),
+        fetch("/api/activity-logs", { headers })
+      ]);
+
+      const mePayload = await safeJson(resMe);
+      if (mePayload && mePayload.id) {
+        setCurrentUser(mePayload);
+      } else if (!resMe.ok || resMe.status === 401 || resMe.status === 403) {
+        let reason = "Your authentication session has expired. For your safety, please sign in again.";
+        if (resMe.status === 401) {
+          reason = "Session expired or invalid credential token (401 Unauthorized). Please sign in again.";
+        } else if (resMe.status === 403) {
+          reason = "Your account does not have authorization, or access was revoked (403 Forbidden). Please sign in again.";
+        }
+        handleLogout(reason);
+        return;
+      }
+
+      const usersArr = await safeJson(resUsers);
+      if (Array.isArray(usersArr)) setEmployees(usersArr);
+
+      const appsArr = await safeJson(resApps);
+      if (Array.isArray(appsArr)) setApplications(appsArr);
+
+      const docsArr = await safeJson(resDocs);
+      if (Array.isArray(docsArr)) setDocuments(docsArr);
+
+      const testsArr = await safeJson(resTests);
+      if (Array.isArray(testsArr)) setTests(testsArr);
+
+      const assignedArr = await safeJson(resAssigned);
+      if (Array.isArray(assignedArr)) setAssignedTests(assignedArr);
+
+      const emailsArr = await safeJson(resEmails);
+      if (Array.isArray(emailsArr)) setEmails(emailsArr);
+
+      const notifsArr = await safeJson(resNotifs);
+      if (Array.isArray(notifsArr)) setNotifications(notifsArr);
+
+      const logsArr = await safeJson(resLogs);
+      if (Array.isArray(logsArr)) setActivityLogs(logsArr);
+
+    } catch (e) {
+      console.error("Data syncing error:", e);
+    }
+  }
+
+  // Listen for secure password reset links containing URL hash tokens
+  useEffect(() => {
+    function parseResetTokenHash() {
+      const hash = window.location.hash;
+      if (hash && hash.startsWith("#reset-token=")) {
+        const parts = hash.substring(1).split("&");
+        let token = "";
+        let email = "";
+        parts.forEach(part => {
+          const [key, val] = part.split("=");
+          if (key === "reset-token") {
+            token = val;
+          } else if (key === "email") {
+            email = decodeURIComponent(val);
+          }
+        });
+
+        if (token) {
+          setResetTokenFromUrl(token);
+          setResetEmailFromUrl(email);
+          // Logging out ensures there is no session overlap
+          handleLogout();
+        }
+      }
+    }
+
+    parseResetTokenHash();
+    window.addEventListener("hashchange", parseResetTokenHash);
+    return () => {
+      window.removeEventListener("hashchange", parseResetTokenHash);
+    };
+  }, []);
+
+  // Handle bootstrap mount verification checks
+  useEffect(() => {
+    async function initCheck() {
+      if (authToken) {
+        try {
+          const res = await fetch("/api/auth/me", {
+            headers: { "Authorization": `Bearer ${authToken}` }
+          });
+          const user = await safeJson(res);
+          if (user && user.id) {
+            setCurrentUser(user);
+            setActiveTab(user.role === UserRole.ADMIN ? "admin-analytics" : "employee-dashboard");
+          } else if (res.status === 401 || res.status === 403) {
+            const reason = res.status === 401 
+              ? "Your local credential token has expired (Unauthorized 401). Please sign in to establish a new session."
+              : "Access to this candidate profile has been disabled (Forbidden 403). Contact your Administrator.";
+            handleLogout(reason);
+          } else {
+            handleLogout(`An unexpected server state occurred (Status ${res.status}). Please sign in again.`);
+          }
+        } catch (e) {
+          console.error(e);
+          handleLogout("Connection to the server failed. Please verify that the server is online.");
+        }
+      }
+      setCheckingAuth(false);
+    }
+
+    initCheck();
+  }, [authToken]);
+
+  // Handle loading other auxiliary pools once authenticated
+  useEffect(() => {
+    if (currentUser && authToken) {
+      refreshDataPool();
+      // Establish background poll rate
+      const interval = setInterval(refreshDataPool, 8000); // 8 seconds fetch sync rate
+      return () => clearInterval(interval);
+    }
+  }, [currentUser, authToken, refreshTrigger]);
+
+  // Set active testing overrides
+  useEffect(() => {
+    if (currentUser && assignedTests.length > 0) {
+      const activeRunningExam = assignedTests.find(
+        t => t.employeeId === currentUser.id && t.status === TestStatus.IN_PROGRESS
+      );
+      if (activeRunningExam) {
+        const template = tests.find(t => t.id === activeRunningExam.testId);
+        if (template) {
+          setActiveExamRecord(activeRunningExam);
+          setActiveExamTemplate(template);
+        }
+      }
+    }
+  }, [assignedTests, currentUser, tests]);
+
+  function handleLoginSuccess(user: User, token: string) {
+    localStorage.setItem("agentops_jwt", token);
+    setAuthToken(token);
+    setCurrentUser(user);
+    setAuthError(null);
+    setActiveTab(user.role === UserRole.ADMIN ? "admin-analytics" : "employee-dashboard");
+  }
+
+  function handleLogout(errorMessage?: string) {
+    localStorage.removeItem("agentops_jwt");
+    setAuthToken(null);
+    setCurrentUser(null);
+    setActiveExamRecord(null);
+    setActiveExamTemplate(null);
+    if (errorMessage && typeof errorMessage === "string") {
+      setAuthError(errorMessage);
+    } else {
+      setAuthError(null);
+    }
+  }
+
+  // Handle manual start test from dashboard click
+  async function handleLaunchTest(assignedRecord: AssignedTest) {
+    try {
+      const res = await fetch(`/api/assigned-tests/${assignedRecord.id}/start`, {
+        method: "POST"
+      });
+      if (res.ok) {
+        refreshDataPool();
+      }
+    } catch (e) {
+      console.error(e);
+    }
+  }
+
+  if (checkingAuth) {
+    return (
+      <div className="min-h-screen bg-slate-950 flex flex-col items-center justify-center font-mono text-xs text-slate-500">
+        <div className="h-6 w-6 rounded-full border-2 border-indigo-500 border-t-transparent animate-spin mb-4" />
+        <span>Initializing AgentOps Security Protocols...</span>
+      </div>
+    );
+  }
+
+  if (resetTokenFromUrl) {
+    return (
+      <ThemeProvider>
+        <PasswordResetPage 
+          token={resetTokenFromUrl} 
+          email={resetEmailFromUrl || ""} 
+          onClose={() => {
+            setResetTokenFromUrl(null);
+            setResetEmailFromUrl(null);
+            window.location.hash = "";
+          }}
+        />
+      </ThemeProvider>
+    );
+  }
+
+  if (!currentUser || !authToken) {
+    return (
+      <ThemeProvider>
+        <Login onLoginSuccess={handleLoginSuccess} initialError={authError} />
+      </ThemeProvider>
+    );
+  }
+
+  // Is candidate currently taking an active assessment exam?
+  if (activeExamRecord && activeExamTemplate) {
+    return (
+      <ThemeProvider>
+        <AssessmentModule
+          testRecord={activeExamRecord}
+          testTemplate={activeExamTemplate}
+          onSubmitted={() => {
+            setActiveExamRecord(null);
+            setActiveExamTemplate(null);
+            setActiveTab("employee-dashboard");
+            refreshDataPool();
+          }}
+          onExit={() => {
+            setActiveExamRecord(null);
+            setActiveExamTemplate(null);
+            refreshDataPool();
+          }}
+        />
+      </ThemeProvider>
+    );
+  }
+
+  // Filter lists specifically for the current employee session
+  const myApplication = applications.find(a => a.employeeId === currentUser.id) || null;
+  const myAssignedTests = assignedTests.filter(t => t.employeeId === currentUser.id);
+  const myNotifications = notifications.filter(n => n.employeeId === currentUser.id && n.type !== "info");
+
+  // Render components conditionally based on tabs click states
+  function renderTabPanel() {
+    if (currentUser?.role === UserRole.ADMIN) {
+      switch (activeTab) {
+        case "admin-analytics":
+          return (
+            <AdminDashboard 
+              employees={employees}
+              applications={applications}
+              assignedTests={assignedTests}
+              activityLogs={activityLogs}
+              onSelectTab={setActiveTab}
+            />
+          );
+        case "admin-employees":
+          return (
+            <AdminEmployeeManagement 
+              employees={employees}
+              onRefreshAll={refreshDataPool}
+            />
+          );
+        case "admin-documents":
+          return (
+            <AdminDocuments 
+              employees={employees}
+              documents={documents}
+              onRefreshAll={refreshDataPool}
+            />
+          );
+        case "admin-tests":
+          return (
+            <AdminTests 
+              tests={tests}
+              onRefreshAll={refreshDataPool}
+            />
+          );
+        case "admin-assignments":
+          return (
+            <AdminTestAssignment 
+              tests={tests}
+              employees={employees}
+              assignedTests={assignedTests}
+              onRefreshAll={refreshDataPool}
+            />
+          );
+        case "admin-reports":
+          return (
+            <AdminReports 
+              employees={employees}
+              applications={applications}
+              documents={documents}
+              assignedTests={assignedTests}
+            />
+          );
+        case "admin-tasks":
+          return (
+            <AdminTasks 
+              employees={employees}
+              onRefreshAll={refreshDataPool}
+            />
+          );
+        case "admin-attendance":
+          return (
+            <AdminAttendance 
+              employees={employees}
+              onRefreshAll={refreshDataPool}
+            />
+          );
+        case "admin-messages":
+          return (
+            <MessageCenter 
+              currentUser={currentUser}
+              employees={employees}
+              onRefreshAll={refreshDataPool}
+            />
+          );
+        default:
+          return <p className="text-xs text-slate-505 text-center">Admin View Omitted</p>;
+      }
+    } else {
+      // Employee Portal
+      switch (activeTab) {
+        case "employee-dashboard":
+          return (
+            <EmployeeDashboard 
+              application={myApplication}
+              assignedTests={myAssignedTests}
+              notifications={myNotifications}
+              onSelectTab={setActiveTab}
+              onStartTest={handleLaunchTest}
+            />
+          );
+        case "employee-application":
+          return (
+            <ApplicationForm 
+              currentUser={currentUser}
+              application={myApplication}
+              onRefreshAll={refreshDataPool}
+            />
+          );
+        case "employee-profile":
+          return (
+            <EmployeeProfile 
+              currentUser={currentUser}
+              application={myApplication}
+              onRefreshAll={refreshDataPool}
+            />
+          );
+        case "employee-tests":
+          const isEligible = myApplication && (myApplication.status === "submitted" || myApplication.status === "approved");
+          return (
+            <EmployeeAssignedTests 
+              assignedTests={myAssignedTests}
+              tests={tests}
+              onStartTest={handleLaunchTest}
+              isEligible={!!isEligible}
+              onSelectTab={setActiveTab}
+            />
+          );
+        case "employee-tasks":
+          return (
+            <EmployeeTasks 
+              currentUser={currentUser}
+              onRefreshAll={refreshDataPool}
+            />
+          );
+        case "employee-attendance":
+          return (
+            <EmployeeAttendance 
+              currentUser={currentUser}
+              onRefreshAll={refreshDataPool}
+            />
+          );
+        case "employee-messages":
+          return (
+            <MessageCenter 
+              currentUser={currentUser}
+              employees={employees}
+              onRefreshAll={refreshDataPool}
+            />
+          );
+        default:
+          return <p className="text-xs text-slate-505 text-center font-mono">Employee Tab Not Implemented</p>;
+      }
+    }
+  }
+
+  return (
+    <ThemeProvider>
+      <DashboardLayout
+        currentUser={currentUser}
+        activeTab={activeTab}
+        setActiveTab={setActiveTab}
+        onLogout={handleLogout}
+        refreshTrigger={refreshTrigger}
+        triggerRefreshFn={triggerRefreshFn}
+      >
+        {renderTabPanel()}
+      </DashboardLayout>
+    </ThemeProvider>
+  );
+}
