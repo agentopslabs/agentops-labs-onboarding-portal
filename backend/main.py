@@ -271,9 +271,10 @@ def atomic_write_json(file_path, data):
         raise e
 
 load_lock = threading.Lock()
+last_synced_db = {}
 
 def load_database(silent=True):
-    global db_state, last_firestore_load_time
+    global db_state, last_firestore_load_time, last_synced_db
     now = time.time()
     
     with db_lock:
@@ -295,6 +296,7 @@ def load_database(silent=True):
                             with db_lock:
                                 db_state.clear()
                                 db_state.update(data)
+                                last_synced_db = copy.deepcopy(data)
                             loaded_from_disk = True
                             if not silent:
                                 print(f"[Python FastAPI] Loaded initial data from disk cache {DB_PATH}.")
@@ -312,6 +314,7 @@ def load_database(silent=True):
                         with db_lock:
                             db_state.clear()
                             db_state.update(temp_db)
+                            last_synced_db = copy.deepcopy(temp_db)
                         try:
                             atomic_write_json(DB_PATH, temp_db)
                         except Exception:
@@ -327,6 +330,7 @@ def load_database(silent=True):
                             with db_lock:
                                 db_state.clear()
                                 db_state.update(data)
+                                last_synced_db = copy.deepcopy(data)
                             last_firestore_load_time = time.time()
                 except Exception as e:
                     print(f"[Python FastAPI] Firestore load failed: {e}")
@@ -343,21 +347,12 @@ def load_database(silent=True):
         seed_database()
 
 def save_database(target_collection=None):
-    global db_state
+    global db_state, last_synced_db
     try:
-        # Load previous disk cache to detect what has changed
-        old_db = {}
-        if os.path.exists(DB_PATH):
-            try:
-                with open(DB_PATH, "r", encoding="utf-8") as f:
-                    old_db = json.load(f)
-            except Exception:
-                pass
-                
         with db_lock:
             db_copy = copy.deepcopy(db_state)
             
-        # 1. Detect modified collections to sync selectively
+        # 1. Detect modified collections to sync selectively by comparing with last_synced_db
         changed_collections = set()
         if target_collection:
             if isinstance(target_collection, (list, set)):
@@ -366,7 +361,7 @@ def save_database(target_collection=None):
                 changed_collections.add(target_collection)
         else:
             for key in db_copy.keys():
-                if old_db.get(key) != db_copy.get(key):
+                if last_synced_db.get(key) != db_copy.get(key):
                     changed_collections.add(key)
                     
         # 2. Atomic write to local disk cache (completed instantly)
@@ -377,6 +372,10 @@ def save_database(target_collection=None):
             from firestore_sync import sync_to_firestore
             try:
                 sync_to_firestore(db_copy, changed_collections)
+                # Update last_synced_db under db_lock
+                with db_lock:
+                    for key in changed_collections:
+                        last_synced_db[key] = copy.deepcopy(db_copy[key])
             except Exception as sync_err:
                 print(f"[Python FastAPI] Firestore sync failed: {sync_err}")
                 
@@ -409,7 +408,7 @@ def generate_email_body(email_type: str, data: Dict[str, Any]) -> str:
     else:
          return f"System Notification Update for {data.get('name', 'candidate')}."
 
-def log_activity(employee_id: str, employee_name: str, action: str, details: str):
+def log_activity(employee_id: str, employee_name: str, action: str, details: str, sync: bool = True):
     log = {
         "id": f"log-{int(datetime.now().timestamp() * 1000)}-{str(random.randint(10000, 99999))}",
         "employeeId": employee_id,
@@ -419,9 +418,10 @@ def log_activity(employee_id: str, employee_name: str, action: str, details: str
         "timestamp": datetime.utcnow().isoformat() + "Z"
     }
     db_state["activityLogs"].insert(0, log)
-    save_database("activityLogs")
+    if sync:
+        save_database("activityLogs")
 
-def send_system_notification(employee_id: Optional[str], title: str, message: str, notif_type: str = "info"):
+def send_system_notification(employee_id: Optional[str], title: str, message: str, notif_type: str = "info", sync: bool = True):
     notif = {
         "id": f"notif-{int(datetime.now().timestamp() * 1000)}-{str(random.randint(10000, 99999))}",
         "employeeId": employee_id,
@@ -432,9 +432,10 @@ def send_system_notification(employee_id: Optional[str], title: str, message: st
         "type": notif_type
     }
     db_state["notifications"].insert(0, notif)
-    save_database("notifications")
+    if sync:
+        save_database("notifications")
 
-def send_simulated_email(to: str, subject: str, body: str, email_type: str):
+def send_simulated_email(to: str, subject: str, body: str, email_type: str, sync: bool = True):
     email = {
         "id": f"email-{int(datetime.now().timestamp() * 1000)}-{str(random.randint(1000, 9999))}",
         "to": to,
@@ -444,7 +445,8 @@ def send_simulated_email(to: str, subject: str, body: str, email_type: str):
         "type": email_type
     }
     db_state["emails"].insert(0, email)
-    save_database("emails")
+    if sync:
+        save_database("emails")
 
 def check_birthdays_and_notify_admin():
     try:
@@ -1088,11 +1090,11 @@ def create_employee(req: Dict[str, Any]):
         }
         db_state["checklists"].append(item)
         
-    log_activity("admin-1", "Admin Olivia Vance", "Account Provisioned", f"Created employee account: {name} ({email})")
+    log_activity("admin-1", "Admin Olivia Vance", "Account Provisioned", f"Created employee account: {name} ({email})", sync=False)
     
     mail_txt = generate_email_body("welcome", {"name": name, "email": email, "password": auto_pwd})
-    send_simulated_email(email, "Welcome to AgentOps Labs - Temporary Account Password", mail_txt, "welcome")
-    send_system_notification(new_id, "Onboarding Setup Launched", "Welcome! Please enter your dashboard, fill your Onboarding application description, and upload credentials.", "info")
+    send_simulated_email(email, "Welcome to AgentOps Labs - Temporary Account Password", mail_txt, "welcome", sync=False)
+    send_system_notification(new_id, "Onboarding Setup Launched", "Welcome! Please enter your dashboard, fill your Onboarding application description, and upload credentials.", "info", sync=False)
     
     save_database()
     return {"user": new_user, "password": auto_pwd}
@@ -2325,14 +2327,16 @@ def update_submission_status(sub_id: str, req: Dict[str, Any]):
         sub["employeeId"], 
         notif_title, 
         notif_msg, 
-        "success" if status == "approved" else "alert"
+        "success" if status == "approved" else "alert",
+        sync=False
     )
     
     log_activity(
         "admin-1", 
         "Admin Olivia Vance", 
         f"Task Submission {status.capitalize()}", 
-        f"{status.capitalize()} task '{task_title}' for employee {sub['employeeName']}"
+        f"{status.capitalize()} task '{task_title}' for employee {sub['employeeName']}",
+        sync=False
     )
     save_database()
     return sub
@@ -2377,15 +2381,15 @@ def create_attendance_request(req: Dict[str, Any]):
         db_state["attendance"] = []
     db_state["attendance"].insert(0, new_record)
     
-    # Notify Admin
     send_system_notification(
         None,
         "Attendance Approval Requested",
         f"Employee {emp_name} requested attendance approval for {date_val}.",
-        "info"
+        "info",
+        sync=False
     )
     
-    log_activity(emp_id, emp_name, "Attendance Requested", f"Checked in for daily attendance on {date_val}.")
+    log_activity(emp_id, emp_name, "Attendance Requested", f"Checked in for daily attendance on {date_val}.", sync=False)
     save_database()
     return new_record
 
@@ -2415,14 +2419,16 @@ def update_attendance_status(record_id: str, req: Dict[str, Any]):
         record["employeeId"],
         notif_title,
         notif_msg,
-        "success" if status == "approved" else "alert"
+        "success" if status == "approved" else "alert",
+        sync=False
     )
     
     log_activity(
         "admin-1",
         "Admin Olivia Vance",
         f"Attendance {status.capitalize()}",
-        f"{status.capitalize()} attendance for employee {record['employeeName']} on {record['date']}."
+        f"{status.capitalize()} attendance for employee {record['employeeName']} on {record['date']}.",
+        sync=False
     )
     save_database()
     return record
@@ -2464,15 +2470,15 @@ def create_leave_request(req: Dict[str, Any]):
         db_state["leaves"] = []
     db_state["leaves"].insert(0, new_request)
     
-    # Notify Admin
     send_system_notification(
         None,
         "Leave Request Submitted",
         f"Employee {emp_name} submitted a leave request ({leave_type.replace('_', ' ').title()}) from {start_date} to {end_date}.",
-        "info"
+        "info",
+        sync=False
     )
     
-    log_activity(emp_id, emp_name, "Leave Requested", f"Applied for leave from {start_date} to {end_date} ({leave_type}).")
+    log_activity(emp_id, emp_name, "Leave Requested", f"Applied for leave from {start_date} to {end_date} ({leave_type}).", sync=False)
     save_database()
     return new_request
 
@@ -2502,14 +2508,16 @@ def update_leave_status(leave_id: str, req: Dict[str, Any]):
         leave["employeeId"],
         notif_title,
         notif_msg,
-        "success" if status == "approved" else "alert"
+        "success" if status == "approved" else "alert",
+        sync=False
     )
     
     log_activity(
         "admin-1",
         "Admin Olivia Vance",
         f"Leave {status.capitalize()}",
-        f"{status.capitalize()} leave request for employee {leave['employeeName']} from {leave['startDate']} to {leave['endDate']}."
+        f"{status.capitalize()} leave request for employee {leave['employeeName']} from {leave['startDate']} to {leave['endDate']}.",
+        sync=False
     )
     save_database()
     return leave
