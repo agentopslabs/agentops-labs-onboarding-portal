@@ -218,9 +218,11 @@ async function startLocalServer() {
     });
   }
 
-  app.listen(PORT, "0.0.0.0", () => {
-    console.log(`[Server] Core operating successfully at http://localhost:${PORT}`);
-  });
+  if (!process.env.VERCEL) {
+    app.listen(PORT, "0.0.0.0", () => {
+      console.log(`[Server] Core operating successfully at http://localhost:${PORT}`);
+    });
+  }
 }
 
 startLocalServer().catch((e) => {
