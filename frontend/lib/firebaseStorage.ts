@@ -24,7 +24,7 @@ async function tryInitFirebaseStorage(): Promise<FirebaseStorage | null> {
   configChecked = true;
 
   try {
-    const res = await fetch("/firebase-applet-config.json");
+    const res = await fetch("/api/firebase-config");
     if (!res.ok) return null;
     const config = await res.json();
 

@@ -466,6 +466,39 @@ def health_check():
     }
 
 
+# Firebase Config endpoint — exposes Firebase config dynamically, prioritizing env vars over file
+@app.get("/api/firebase-config")
+def get_firebase_config():
+    config_path = os.path.join(os.getcwd(), "firebase-applet-config.json")
+    config = {}
+    if os.path.exists(config_path):
+        try:
+            with open(config_path, "r", encoding="utf-8") as f:
+                config = json.load(f)
+        except Exception:
+            pass
+
+    res_config = {
+        "projectId": os.environ.get("FIREBASE_PROJECT_ID", config.get("projectId", "YOUR_AGENTOPS_PROJECT_ID")),
+        "apiKey": os.environ.get("FIREBASE_API_KEY", config.get("apiKey", "YOUR_API_KEY")),
+        "appId": os.environ.get("FIREBASE_APP_ID", config.get("appId", "YOUR_APP_ID")),
+        "authDomain": os.environ.get("FIREBASE_AUTH_DOMAIN", config.get("authDomain", "")),
+        "firestoreDatabaseId": os.environ.get("FIREBASE_FIRESTORE_DATABASE_ID", config.get("firestoreDatabaseId", "(default)")),
+        "storageBucket": os.environ.get("FIREBASE_STORAGE_BUCKET", config.get("storageBucket", "")),
+        "messagingSenderId": os.environ.get("FIREBASE_MESSAGING_SENDER_ID", config.get("messagingSenderId", "YOUR_MESSAGING_SENDER_ID")),
+        "measurementId": os.environ.get("FIREBASE_MEASUREMENT_ID", config.get("measurementId", ""))
+    }
+    
+    if res_config["projectId"] and res_config["projectId"] != "YOUR_AGENTOPS_PROJECT_ID":
+        if not res_config["authDomain"]:
+            res_config["authDomain"] = f"{res_config['projectId']}.firebaseapp.com"
+        if not res_config["storageBucket"]:
+            res_config["storageBucket"] = f"{res_config['projectId']}.appspot.com"
+            
+    return res_config
+
+
+
 def generate_email_body(email_type: str, data: Dict[str, Any]) -> str:
     if email_type == "welcome":
         return f"Welcome {data.get('name')}! Your AgentOps Labs onboarding portal account has been created.\n\nLogin credentials:\nEmail: {data.get('email')}\nPassword: {data.get('password')}\n\nPlease update your password on your first login."

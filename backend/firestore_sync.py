@@ -13,6 +13,7 @@ if os.path.exists(config_path):
         print(f"[Python Sync] Error loading firebase-applet-config.json: {e}")
 
 PROJECT_ID = os.environ.get("FIREBASE_PROJECT_ID", firebase_config.get("projectId"))
+API_KEY = os.environ.get("FIREBASE_API_KEY", firebase_config.get("apiKey"))
 DATABASE_ID = os.environ.get("FIREBASE_FIRESTORE_DATABASE_ID", firebase_config.get("firestoreDatabaseId", "(default)"))
 
 collections_info = [
@@ -86,8 +87,8 @@ def get_item_id(item, col_name):
     return item.get("id")
 
 def load_from_firestore(db_state):
-    if not PROJECT_ID:
-        print("[Python Sync] Project ID missing, bypassing Firestore load.")
+    if not PROJECT_ID or PROJECT_ID == "YOUR_AGENTOPS_PROJECT_ID":
+        print("[Python Sync] Project ID missing or placeholder, bypassing Firestore load.")
         return False
     
     print("[Python Sync] Downloading database from Firestore in parallel...")
@@ -98,6 +99,8 @@ def load_from_firestore(db_state):
         col_key = col["key"]
         col_type = col["type"]
         url = f"https://firestore.googleapis.com/v1/projects/{PROJECT_ID}/databases/{DATABASE_ID}/documents/{col_name}?pageSize=1000"
+        if API_KEY and API_KEY != "YOUR_API_KEY":
+            url += f"&key={API_KEY}"
         try:
             res = requests.get(url, timeout=5)
             if res.status_code == 200:
@@ -134,8 +137,8 @@ def load_from_firestore(db_state):
     return loaded_any
 
 def sync_to_firestore(db_state, target_collection=None):
-    if not PROJECT_ID:
-        print("[Python Sync] Project ID missing, bypassing Firestore sync.")
+    if not PROJECT_ID or PROJECT_ID == "YOUR_AGENTOPS_PROJECT_ID":
+        print("[Python Sync] Project ID missing or placeholder, bypassing Firestore sync.")
         return
     
     print(f"[Python Sync] Syncing database to Firestore in parallel (target={target_collection or 'all'})...")
@@ -156,6 +159,8 @@ def sync_to_firestore(db_state, target_collection=None):
         
         # Get existing IDs and documents from Firestore
         url = f"https://firestore.googleapis.com/v1/projects/{PROJECT_ID}/databases/{DATABASE_ID}/documents/{col_name}?pageSize=1000"
+        if API_KEY and API_KEY != "YOUR_API_KEY":
+            url += f"&key={API_KEY}"
         existing_ids = set()
         existing_docs = {}
         try:
@@ -187,14 +192,22 @@ def sync_to_firestore(db_state, target_collection=None):
                             continue  # Skip patch, they are identical!
                             
                         doc_url = f"https://firestore.googleapis.com/v1/projects/{PROJECT_ID}/databases/{DATABASE_ID}/documents/{col_name}/{doc_id}"
+                        if API_KEY and API_KEY != "YOUR_API_KEY":
+                            doc_url += f"?key={API_KEY}"
                         payload = to_firestore_doc(item)
-                        requests.patch(doc_url, json=payload, timeout=5)
+                        res = requests.patch(doc_url, json=payload, timeout=5)
+                        if res.status_code not in (200, 201):
+                            print(f"[Python Sync] PATCH to {col_name}/{doc_id} failed: {res.status_code} - {res.text}")
                 
                 # Delete removed items
                 for ext_id in existing_ids:
                     if ext_id not in present_ids:
                         doc_url = f"https://firestore.googleapis.com/v1/projects/{PROJECT_ID}/databases/{DATABASE_ID}/documents/{col_name}/{ext_id}"
-                        requests.delete(doc_url, timeout=5)
+                        if API_KEY and API_KEY != "YOUR_API_KEY":
+                            doc_url += f"?key={API_KEY}"
+                        res = requests.delete(doc_url, timeout=5)
+                        if res.status_code not in (200, 204):
+                            print(f"[Python Sync] DELETE to {col_name}/{ext_id} failed: {res.status_code} - {res.text}")
             else:
                 # Passwords mapping
                 passwords = db_state.get(col_key) or {}
@@ -207,14 +220,22 @@ def sync_to_firestore(db_state, target_collection=None):
                         continue  # Skip patch, password matches!
                         
                     doc_url = f"https://firestore.googleapis.com/v1/projects/{PROJECT_ID}/databases/{DATABASE_ID}/documents/{col_name}/{user_id}"
+                    if API_KEY and API_KEY != "YOUR_API_KEY":
+                        doc_url += f"?key={API_KEY}"
                     payload = to_firestore_doc({"id": user_id, "password": pwd})
-                    requests.patch(doc_url, json=payload, timeout=5)
+                    res = requests.patch(doc_url, json=payload, timeout=5)
+                    if res.status_code not in (200, 201):
+                        print(f"[Python Sync] PATCH password for {user_id} failed: {res.status_code} - {res.text}")
                 
                 # Delete removed passwords
                 for ext_id in existing_ids:
                     if ext_id not in present_ids:
                         doc_url = f"https://firestore.googleapis.com/v1/projects/{PROJECT_ID}/databases/{DATABASE_ID}/documents/{col_name}/{ext_id}"
-                        requests.delete(doc_url, timeout=5)
+                        if API_KEY and API_KEY != "YOUR_API_KEY":
+                            doc_url += f"?key={API_KEY}"
+                        res = requests.delete(doc_url, timeout=5)
+                        if res.status_code not in (200, 204):
+                            print(f"[Python Sync] DELETE password for {ext_id} failed: {res.status_code} - {res.text}")
         except Exception as e:
             print(f"[Python Sync] Failed to sync collection {col_name}: {e}")
 
@@ -223,3 +244,4 @@ def sync_to_firestore(db_state, target_collection=None):
         list(executor.map(sync_collection, collections_to_sync))
         
     print("[Python Sync] Database sync completed.")
+

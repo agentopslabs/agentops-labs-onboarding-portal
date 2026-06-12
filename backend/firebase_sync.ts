@@ -33,6 +33,9 @@ firebaseConfig = {
   measurementId: process.env.FIREBASE_MEASUREMENT_ID || firebaseConfig.measurementId
 };
 
+const isPlaceholder = !firebaseConfig.projectId || firebaseConfig.projectId === "YOUR_AGENTOPS_PROJECT_ID";
+
+
 // Initialize Firebase App
 const app = initializeApp(firebaseConfig);
 
@@ -68,6 +71,10 @@ const getId = (item: any, colName: string): string => {
  * Fetch all collections concurrently for speed.
  */
 export async function loadFromFirestore(memoryDb: any): Promise<boolean> {
+  if (isPlaceholder) {
+    console.log("[Firebase Sync] Firebase Project ID is placeholder or missing, bypassing Firestore load.");
+    return false;
+  }
   try {
     const promises = collectionsInfo.map(async (colInfo) => {
       try {
@@ -105,6 +112,10 @@ export async function loadFromFirestore(memoryDb: any): Promise<boolean> {
  * Synchronizes the local memory database state to Google Firestore concurrently.
  */
 export async function syncToFirestore(memoryDb: any): Promise<void> {
+  if (isPlaceholder) {
+    console.log("[Firebase Sync] Firebase Project ID is placeholder or missing, bypassing Firestore sync.");
+    return;
+  }
   try {
     const promises = collectionsInfo.map(async (colInfo) => {
       try {
