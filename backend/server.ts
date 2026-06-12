@@ -4,7 +4,7 @@ import path from "path";
 import http from "http";
 import os from "os";
 import { spawn } from "child_process";
-import { loadFromFirestore, syncToFirestore } from "./firebase_sync";
+import { loadFromFirestore, syncToFirestore } from "./supabase_sync";
 
 interface Database {
   users: any[];

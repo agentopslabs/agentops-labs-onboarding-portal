@@ -26,7 +26,7 @@ import {
 } from "../types";
 import DocumentPreviewModal from "./DocumentPreviewModal";
 import { triggerDocumentDownload } from "../lib/downloadHelper";
-import { uploadDocumentToStorage } from "../lib/firebaseStorage";
+import { uploadDocumentToStorage } from "../lib/supabaseStorage";
 
 interface EmployeeProfileProps {
   currentUser: EmployeeUser;

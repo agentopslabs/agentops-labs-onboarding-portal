@@ -248,11 +248,11 @@ db_state = {
 
 # Token reset secure store
 active_reset_tokens = {}
-last_firestore_load_time = 0.0
+last_supabase_load_time = 0.0
 db_lock = threading.RLock()
 bg_load_lock = threading.Lock()
 bg_sync_lock = threading.Lock()
-# Pending collections queue for background Firestore sync
+# Pending collections queue for background Supabase sync
 _pending_sync_collections: set = set()
 _pending_sync_lock = threading.Lock()
 _bg_sync_thread_running = False
@@ -278,19 +278,19 @@ load_lock = threading.Lock()
 last_synced_db = {}
 
 def load_database(silent=True):
-    global db_state, last_firestore_load_time, last_synced_db
+    global db_state, last_supabase_load_time, last_synced_db
     now = time.time()
     
     with db_lock:
         is_empty = not db_state.get("users")
         
-    # Extended cache: 30 seconds (was 4s). In-memory state is fast and accurate.
-    # After any write, last_firestore_load_time is reset to now, so memory stays fresh.
-    if is_empty or (now - last_firestore_load_time >= 30.0):
+    # Extended cache: 30 seconds. In-memory state is fast and accurate.
+    # After any write, last_supabase_load_time is reset to now, so memory stays fresh.
+    if is_empty or (now - last_supabase_load_time >= 30.0):
         with load_lock:
             is_empty_locked = not db_state.get("users")
-            if is_empty_locked or (time.time() - last_firestore_load_time >= 30.0):
-                # Fast path: try disk cache first (milliseconds vs seconds for Firestore)
+            if is_empty_locked or (time.time() - last_supabase_load_time >= 30.0):
+                # Fast path: try disk cache first
                 loaded_from_disk = False
                 if os.path.exists(DB_PATH):
                     try:
@@ -302,22 +302,20 @@ def load_database(silent=True):
                                 db_state.update(data)
                                 last_synced_db = copy.deepcopy(data)
                             loaded_from_disk = True
-                            # If already loaded from disk and not empty, set timestamp
-                            # so we don't immediately hit Firestore too
                             if not is_empty_locked:
-                                last_firestore_load_time = time.time()
+                                last_supabase_load_time = time.time()
                                 return  # Serve from disk cache immediately
                     except Exception:
                         pass
                 
-                # Pull from Firestore (slower path — only when disk cache is stale/empty)
-                from firestore_sync import load_from_firestore
+                # Pull from Supabase
+                from supabase_sync import load_from_supabase
                 try:
                     temp_db = {}
                     for key in db_state.keys():
                         temp_db[key] = [] if isinstance(db_state[key], list) else {}
-                    firestore_loaded = load_from_firestore(temp_db)
-                    if firestore_loaded and temp_db.get("users"):
+                    supabase_loaded = load_from_supabase(temp_db)
+                    if supabase_loaded and temp_db.get("users"):
                         with db_lock:
                             db_state.clear()
                             db_state.update(temp_db)
@@ -326,11 +324,11 @@ def load_database(silent=True):
                             atomic_write_json(DB_PATH, temp_db)
                         except Exception:
                             pass
-                        last_firestore_load_time = time.time()
+                        last_supabase_load_time = time.time()
                         if not silent:
-                            print("[Python FastAPI] Database successfully updated from Firestore.")
+                            print("[Python FastAPI] Database successfully updated from Supabase.")
                     else:
-                        # Fallback to local DB_PATH if Firestore load failed
+                        # Fallback to local DB_PATH if Supabase load failed
                         if not loaded_from_disk and os.path.exists(DB_PATH):
                             with open(DB_PATH, "r", encoding="utf-8") as f:
                                 data = json.load(f)
@@ -338,9 +336,9 @@ def load_database(silent=True):
                                 db_state.clear()
                                 db_state.update(data)
                                 last_synced_db = copy.deepcopy(data)
-                            last_firestore_load_time = time.time()
+                            last_supabase_load_time = time.time()
                 except Exception as e:
-                    print(f"[Python FastAPI] Firestore load failed: {e}")
+                    print(f"[Python FastAPI] Supabase load failed: {e}")
                     if is_empty_locked and not loaded_from_disk:
                         seed_database()
                         
@@ -350,22 +348,22 @@ def load_database(silent=True):
         print("[Python FastAPI] Database is empty (no users). Seeding default data...")
         seed_database()
 
-def _background_firestore_sync_worker(db_copy: dict, collections: set):
-    """Background thread worker that syncs to Firestore without blocking the API response."""
-    global last_synced_db, last_firestore_load_time
+def _background_supabase_sync_worker(db_copy: dict, collections: set):
+    """Background thread worker that syncs to Supabase without blocking the API response."""
+    global last_synced_db, last_supabase_load_time
     try:
-        from firestore_sync import sync_to_firestore
-        sync_to_firestore(db_copy, collections)
-        last_firestore_load_time = time.time()
+        from supabase_sync import sync_to_supabase
+        sync_to_supabase(db_copy, collections)
+        last_supabase_load_time = time.time()
         with db_lock:
             for key in collections:
                 last_synced_db[key] = copy.deepcopy(db_copy.get(key, [] if isinstance(db_copy.get(key), list) else {}))
     except Exception as sync_err:
-        print(f"[Python FastAPI] Background Firestore sync failed: {sync_err}")
+        print(f"[Python FastAPI] Background Supabase sync failed: {sync_err}")
 
 def save_database(target_collection=None):
-    """Save database: write to disk immediately (fast), then sync Firestore in background (non-blocking)."""
-    global db_state, last_synced_db, last_firestore_load_time
+    """Save database: write to disk immediately (fast), then sync Supabase in background (non-blocking)."""
+    global db_state, last_synced_db, last_supabase_load_time
     try:
         with db_lock:
             db_copy = copy.deepcopy(db_state)
@@ -382,25 +380,23 @@ def save_database(target_collection=None):
                 if last_synced_db.get(key) != db_copy.get(key):
                     changed_collections.add(key)
                     
-        # Step 1: Atomic disk write — near-instant, guarantees local persistence
+        # Step 1: Atomic disk write
         try:
             atomic_write_json(DB_PATH, db_copy)
         except Exception as disk_err:
             print(f"[Python FastAPI] Disk write failed: {disk_err}")
 
-        # Step 2: Update last_synced_db optimistically so the cache stays fresh
+        # Step 2: Update last_synced_db optimistically
         if changed_collections:
             with db_lock:
                 for key in changed_collections:
                     last_synced_db[key] = copy.deepcopy(db_copy.get(key, [] if isinstance(db_copy.get(key), list) else {}))
-            # Update the timestamp immediately so reads stay in-memory (don't re-hit Firestore)
-            last_firestore_load_time = time.time()
+            last_supabase_load_time = time.time()
             
-        # Step 3: Fire-and-forget background Firestore sync — API returns INSTANTLY to user
-        # The background thread durably persists the data to Firestore without blocking.
+        # Step 3: Fire-and-forget background Supabase sync
         if changed_collections:
             sync_thread = threading.Thread(
-                target=_background_firestore_sync_worker,
+                target=_background_supabase_sync_worker,
                 args=(db_copy, changed_collections),
                 daemon=True
             )
@@ -410,21 +406,18 @@ def save_database(target_collection=None):
         print(f"[Python FastAPI] Error occurred while saving database: {e}")
 
 def _startup_preload():
-    """Pre-warm the database from Firestore in a background thread on startup.
-    This prevents the very first user request from experiencing a cold-start delay."""
-    print("[Python FastAPI] Pre-warming database from Firestore in background...")
+    """Pre-warm the database from Supabase in a background thread on startup."""
+    print("[Python FastAPI] Pre-warming database from Supabase in background...")
     load_database(silent=False)
     print("[Python FastAPI] Database pre-warm complete.")
 
-# Kick off background preload immediately on module load (before any request arrives)
+# Kick off background preload immediately on module load
 _preload_thread = threading.Thread(target=_startup_preload, daemon=True)
 _preload_thread.start()
 
-# Middleware: fast path for all requests — only hits Firestore when cache is stale (>30s)
-# Write requests (POST/PUT/DELETE) skip the read since we just updated in-memory state.
+# Middleware: fast path for all requests
 @app.middleware("http")
 async def db_reload_middleware(request: Request, call_next):
-    # Add CORS and caching headers to all responses
     if request.method == "OPTIONS":
         response = Response()
         response.headers["Access-Control-Allow-Origin"] = "*"
@@ -433,10 +426,8 @@ async def db_reload_middleware(request: Request, call_next):
         return response
 
     if request.method in ("GET", "HEAD"):
-        # Only reload if cache is stale or empty — serves from fast in-memory state otherwise
         load_database(silent=True)
     else:
-        # For writes: just guard against empty state (don't reload if we have data)
         with db_lock:
             has_no_users = not db_state.get("users")
         if has_no_users:
@@ -444,16 +435,14 @@ async def db_reload_middleware(request: Request, call_next):
     
     response = await call_next(request)
     
-    # Add caching headers: GET responses can be cached briefly by the browser/CDN
     if request.method == "GET" and response.status_code == 200:
-        # Short cache for dynamic API responses (5 seconds); static assets handled by Vercel CDN
         if "/api/" in str(request.url):
             response.headers["Cache-Control"] = "private, max-age=5"
         response.headers["Access-Control-Allow-Origin"] = "*"
     
     return response
 
-# Health check endpoint — used for uptime monitoring and keep-alive pings
+# Health check endpoint
 @app.get("/api/health")
 def health_check():
     with db_lock:
@@ -461,15 +450,15 @@ def health_check():
     return {
         "status": "ok",
         "users": user_count,
-        "cache_age_seconds": round(time.time() - last_firestore_load_time, 1),
+        "cache_age_seconds": round(time.time() - last_supabase_load_time, 1),
         "timestamp": datetime.utcnow().isoformat() + "Z"
     }
 
 
-# Firebase Config endpoint — exposes Firebase config dynamically, prioritizing env vars over file
-@app.get("/api/firebase-config")
-def get_firebase_config():
-    config_path = os.path.join(os.getcwd(), "firebase-applet-config.json")
+# Supabase Config endpoint — exposes Supabase config dynamically, prioritizing env vars over file
+@app.get("/api/supabase-config")
+def get_supabase_config():
+    config_path = os.path.join(os.getcwd(), "supabase-config.json")
     config = {}
     if os.path.exists(config_path):
         try:
@@ -478,24 +467,10 @@ def get_firebase_config():
         except Exception:
             pass
 
-    res_config = {
-        "projectId": os.environ.get("FIREBASE_PROJECT_ID", config.get("projectId", "YOUR_AGENTOPS_PROJECT_ID")),
-        "apiKey": os.environ.get("FIREBASE_API_KEY", config.get("apiKey", "YOUR_API_KEY")),
-        "appId": os.environ.get("FIREBASE_APP_ID", config.get("appId", "YOUR_APP_ID")),
-        "authDomain": os.environ.get("FIREBASE_AUTH_DOMAIN", config.get("authDomain", "")),
-        "firestoreDatabaseId": os.environ.get("FIREBASE_FIRESTORE_DATABASE_ID", config.get("firestoreDatabaseId", "(default)")),
-        "storageBucket": os.environ.get("FIREBASE_STORAGE_BUCKET", config.get("storageBucket", "")),
-        "messagingSenderId": os.environ.get("FIREBASE_MESSAGING_SENDER_ID", config.get("messagingSenderId", "YOUR_MESSAGING_SENDER_ID")),
-        "measurementId": os.environ.get("FIREBASE_MEASUREMENT_ID", config.get("measurementId", ""))
+    return {
+        "supabaseUrl": os.environ.get("SUPABASE_URL", config.get("supabaseUrl", "YOUR_SUPABASE_URL")),
+        "supabaseAnonKey": os.environ.get("SUPABASE_ANON_KEY", config.get("supabaseAnonKey", "YOUR_SUPABASE_ANON_KEY"))
     }
-    
-    if res_config["projectId"] and res_config["projectId"] != "YOUR_AGENTOPS_PROJECT_ID":
-        if not res_config["authDomain"]:
-            res_config["authDomain"] = f"{res_config['projectId']}.firebaseapp.com"
-        if not res_config["storageBucket"]:
-            res_config["storageBucket"] = f"{res_config['projectId']}.appspot.com"
-            
-    return res_config
 
 
 
