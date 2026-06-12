@@ -12,3 +12,4 @@ push_to_git.js
 push_vercel_updates.cjs
 venv/
 .git_corrupt/
+backend/python_packages/

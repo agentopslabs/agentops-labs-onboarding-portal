@@ -2,32 +2,32 @@
   "users": [
     {
       "email": "agentopslabs@gmail.com",
-      "id": "admin-1",
       "name": "G Venkat (HR Lead)",
       "createdAt": "2026-06-12T09:19:46.377303Z",
       "mobile": "+1 (555) 019-2834",
+      "id": "admin-1",
       "role": "admin",
       "status": "active"
     },
     {
       "id": "emp-1",
-      "email": "bharathsathyasaijanga@gmail.com",
-      "name": "Bharath",
-      "createdAt": "2026-06-12T09:19:46.377303Z",
-      "dob": "1998-06-12",
+      "role": "employee",
       "mobile": "7670845590",
       "status": "active",
-      "role": "employee"
+      "dob": "1998-06-12",
+      "name": "Bharath",
+      "email": "bharathsathyasaijanga@gmail.com",
+      "createdAt": "2026-06-12T09:19:46.377303Z"
     },
     {
-      "mobile": "9876543210",
-      "role": "employee",
-      "status": "active",
       "createdAt": "2026-06-12T09:19:46.377303Z",
-      "dob": "2000-06-18",
+      "email": "rajeshkumar@gmail.com",
       "name": "Rajesh Kumar",
+      "status": "active",
+      "dob": "2000-06-18",
+      "mobile": "9876543210",
       "id": "emp-2",
-      "email": "rajeshkumar@gmail.com"
+      "role": "employee"
     }
   ],
   "passwords": {
@@ -37,18 +37,21 @@
   },
   "applications": [
     {
-      "highestQualification": "B.Tech in Computer Science",
+      "status": "submitted",
+      "gender": "Male",
+      "updatedAt": "2026-06-12T09:34:55.821818Z",
+      "employeeId": "emp-1",
+      "collegeName": "Stanford University",
+      "email": "bharathsathyasaijanga@gmail.com",
       "otherSkills": [
         "Product Management",
         "Team Leadership"
       ],
-      "employeeId": "emp-1",
-      "fullName": "Bharath",
-      "mobile": "7670845590",
-      "gender": "Male",
       "yearOfPassing": "2024",
       "submittedAt": "2026-06-12T09:34:55.821818Z",
-      "email": "bharathsathyasaijanga@gmail.com",
+      "percentageOrCgpa": "10 cgpa",
+      "highestQualification": "B.Tech in Computer Science",
+      "fullName": "Bharath",
       "technicalSkills": [
         "React",
         "TypeScript",
@@ -56,71 +59,94 @@
         "Express",
         "python"
       ],
-      "percentageOrCgpa": "10 cgpa",
-      "status": "submitted",
-      "collegeName": "Stanford University",
-      "updatedAt": "2026-06-12T09:34:55.821818Z"
+      "mobile": "7670845590"
     }
   ],
   "documents": [],
   "tests": [
     {
+      "createdAt": "2026-06-12T09:34:25.336010Z",
+      "passingMarks": 70,
       "name": "test",
-      "id": "test-1781256865335",
-      "duration": 15,
       "questions": [
         {
-          "id": "q-1781256803586-1",
-          "correctAnswers": [
-            0
-          ],
-          "moduleName": "General",
-          "text": "Sample Single Match Question?",
-          "type": "single_choice",
           "options": [
             "Option A",
             "Option B",
             "Option C",
             "Option D"
-          ]
-        },
-        {
-          "id": "q-1781256813835-92",
+          ],
           "moduleName": "General",
+          "type": "single_choice",
           "correctAnswers": [
             0
           ],
-          "text": "New Option Question Details?",
+          "text": "Sample Single Match Question?",
+          "id": "q-1781256803586-1"
+        },
+        {
           "options": [
             "True",
             "False"
           ],
-          "type": "single_choice"
-        },
-        {
-          "moduleName": "sub",
+          "moduleName": "General",
+          "type": "single_choice",
           "correctAnswers": [
             0
           ],
+          "id": "q-1781256813835-92",
+          "text": "New Option Question Details?"
+        },
+        {
+          "correctAnswers": [
+            0
+          ],
+          "text": "New Option Question Details?",
           "id": "q-1781256825153-70",
           "options": [
             "True",
             "False"
           ],
           "type": "single_choice",
-          "text": "New Option Question Details?"
+          "moduleName": "sub"
         },
         {
-          "id": "q-1781256825407-56",
+          "options": [
+            "True",
+            "False"
+          ],
+          "moduleName": "sub",
+          "type": "single_choice",
           "correctAnswers": [
             0
           ],
-          "moduleName": "sub",
           "text": "New Option Question Details?",
+          "id": "q-1781256825407-56"
+        },
+        {
+          "options": [
+            "True",
+            "False"
+          ],
+          "moduleName": "sub",
+          "type": "single_choice",
+          "correctAnswers": [
+            0
+          ],
+          "id": "q-1781256825649-93",
+          "text": "New Option Question Details?"
+        },
+        {
+          "moduleName": "ab",
           "type": "single_choice",
           "options": [
             "True",
             "False"
+          ],
+          "text": "New Option Question Details?",
+          "id": "q-1781256825898-29",
+          "correctAnswers": [
+            0
           ]
         },
         {
@@ -129,95 +155,68 @@
             "False"
           ],
           "type": "single_choice",
-          "text": "New Option Question Details?",
-          "moduleName": "sub",
-          "correctAnswers": [
-            0
-          ],
-          "id": "q-1781256825649-93"
-        },
-        {
-          "type": "single_choice",
-          "options": [
-            "True",
-            "False"
-          ],
-          "text": "New Option Question Details?",
-          "correctAnswers": [
-            0
-          ],
-          "moduleName": "ab",
-          "id": "q-1781256825898-29"
-        },
-        {
           "moduleName": "ab",
           "correctAnswers": [
             0
           ],
-          "id": "q-1781256845750-97",
+          "text": "New Option Question Details?",
+          "id": "q-1781256845750-97"
+        },
+        {
           "options": [
             "True",
             "False"
           ],
           "type": "single_choice",
-          "text": "New Option Question Details?"
-        },
-        {
-          "text": "New Option Question Details?",
-          "options": [
-            "True",
-            "False"
-          ],
-          "type": "single_choice",
-          "id": "q-1781256845985-74",
           "moduleName": "ab",
           "correctAnswers": [
             0
-          ]
+          ],
+          "text": "New Option Question Details?",
+          "id": "q-1781256845985-74"
         }
       ],
-      "isPublished": true,
-      "passingMarks": 70,
-      "createdAt": "2026-06-12T09:34:25.336010Z"
+      "id": "test-1781256865335",
+      "duration": 15,
+      "isPublished": true
     },
     {
+      "name": "AgentOps Core React & Node Assessment",
       "passingMarks": 70,
       "createdAt": "2026-06-12T09:19:46.377303Z",
-      "name": "AgentOps Core React & Node Assessment",
-      "isPublished": true,
       "id": "test-react-node",
       "duration": 15,
+      "isPublished": true,
       "questions": [
         {
           "correctAnswers": [
             1
           ],
           "id": "q1",
-          "type": "single_choice",
+          "text": "What is the primary purpose of the Virtual DOM in React?",
           "options": [
             "To directly modify the browser's hardware visual canvas.",
             "To keep a lightweight virtual copy of the DOM in memory, enabling lightning fast batch updates through reconciliation.",
             "To sandbox external iframes from executing malicious scripts.",
             "To establish permanent SQLite client connections inside Chrome."
           ],
-          "text": "What is the primary purpose of the Virtual DOM in React?"
+          "type": "single_choice"
         },
         {
-          "correctAnswers": [
-            2
-          ],
-          "id": "q2",
+          "type": "single_choice",
           "options": [
             "useEffect",
             "useCallback",
             "useMemo",
             "useRef"
           ],
-          "type": "single_choice",
-          "text": "Which hook should you implement to memoize expensive computations between re-renders?"
+          "id": "q2",
+          "text": "Which hook should you implement to memoize expensive computations between re-renders?",
+          "correctAnswers": [
+            2
+          ]
         },
         {
-          "text": "Select all valid advantages of Node.js event-driven, non-blocking I/O model (Select multiple):",
           "type": "multiple_choice",
           "options": [
             "Extremely high concurrent connection capacity on a single thread.",
@@ -226,395 +225,396 @@
             "Eliminates the possibility of memory leaks entirely."
           ],
           "id": "q3",
+          "text": "Select all valid advantages of Node.js event-driven, non-blocking I/O model (Select multiple):",
           "correctAnswers": [
             0,
             2
           ]
         },
         {
+          "id": "q4",
           "text": "FastAPI is built on top of Starlette for web parts and Pydantic for data parts.",
+          "correctAnswers": [
+            0
+          ],
+          "type": "true_false",
           "options": [
             "True",
             "False"
-          ],
-          "type": "true_false",
-          "id": "q4",
-          "correctAnswers": [
-            0
           ]
         }
       ]
     },
     {
+      "createdAt": "2026-06-12T09:19:46.377303Z",
+      "passingMarks": 100,
       "name": "Enterprise Security & Compliance Quiz",
-      "isPublished": true,
-      "id": "test-system-safety",
-      "duration": 10,
       "questions": [
         {
-          "options": [
-            "True (Yes, provided it's an internal private channel)",
-            "False (Never permissible under any compliance circumstance)"
-          ],
-          "type": "true_false",
           "text": "Is it permissible to share temporary JWT tokens or passwords with fellow team members via Slack?",
+          "id": "sec-q1",
           "correctAnswers": [
             1
           ],
-          "id": "sec-q1"
+          "type": "true_false",
+          "options": [
+            "True (Yes, provided it's an internal private channel)",
+            "False (Never permissible under any compliance circumstance)"
+          ]
         },
         {
           "correctAnswers": [
             2
           ],
           "id": "sec-q2",
-          "type": "single_choice",
+          "text": "What protocol must be used for transferring all external customer files?",
           "options": [
             "Unencrypted HTTP file upload portal",
             "FTP plain transfer on standard port 21",
             "Secure HTTPS / SFTP channels with multi-factor authentication",
             "Physical USB storage mailed via DHL couriers"
           ],
-          "text": "What protocol must be used for transferring all external customer files?"
+          "type": "single_choice"
         }
       ],
-      "passingMarks": 100,
-      "createdAt": "2026-06-12T09:19:46.377303Z"
+      "id": "test-system-safety",
+      "duration": 10,
+      "isPublished": true
     }
   ],
   "assignedTests": [
     {
       "testName": "AgentOps Core React & Node Assessment",
-      "status": "not_started",
-      "employeeId": "emp-1",
+      "testId": "test-react-node",
       "id": "assign-1",
-      "testId": "test-react-node"
+      "status": "not_started",
+      "employeeId": "emp-1"
     },
     {
-      "remainingTime": 864,
-      "testName": "test",
-      "employeeId": "emp-1",
-      "status": "not_started",
-      "startedAt": "2026-06-12T09:36:09.952981Z",
-      "testId": "test-1781256865335",
       "id": "assign-1781256877473-175",
-      "answers": {}
+      "testId": "test-1781256865335",
+      "answers": {},
+      "testName": "test",
+      "status": "not_started",
+      "remainingTime": 864,
+      "startedAt": "2026-06-12T09:36:09.952981Z",
+      "employeeId": "emp-1"
     }
   ],
   "checklists": [
     {
-      "isCompleted": true,
-      "employeeId": "emp-1",
-      "text": "Application Submitted",
       "category": "application",
       "updatedAt": "2026-06-12T09:34:55.821818Z",
+      "employeeId": "emp-1",
+      "isCompleted": true,
+      "text": "Application Submitted",
       "id": "chk-1"
     },
     {
-      "updatedAt": "2026-06-12T09:19:46.377303Z",
       "id": "chk-10",
       "text": "HR Review Completed",
+      "employeeId": "emp-1",
       "category": "approval",
+      "updatedAt": "2026-06-12T09:19:46.377303Z",
+      "isCompleted": false
+    },
+    {
+      "id": "chk-11",
+      "text": "Final Approval Completed",
       "isCompleted": false,
+      "employeeId": "emp-1",
+      "category": "approval",
+      "updatedAt": "2026-06-12T09:19:46.377303Z"
+    },
+    {
+      "id": "chk-2",
+      "text": "Resume Uploaded",
+      "isCompleted": false,
+      "updatedAt": "2026-06-12T09:19:46.377303Z",
+      "category": "documents",
+      "employeeId": "emp-1"
+    },
+    {
+      "id": "chk-3",
+      "text": "Aadhaar Uploaded",
+      "isCompleted": false,
+      "employeeId": "emp-1",
+      "category": "documents",
+      "updatedAt": "2026-06-12T09:19:46.377303Z"
+    },
+    {
+      "id": "chk-4",
+      "text": "PAN Uploaded",
+      "isCompleted": false,
+      "category": "documents",
+      "updatedAt": "2026-06-12T09:19:46.377303Z",
+      "employeeId": "emp-1"
+    },
+    {
+      "id": "chk-5",
+      "text": "Passport Photo Uploaded",
+      "isCompleted": false,
+      "employeeId": "emp-1",
+      "category": "documents",
+      "updatedAt": "2026-06-12T09:19:46.377303Z"
+    },
+    {
+      "isCompleted": false,
+      "employeeId": "emp-1",
+      "category": "documents",
+      "updatedAt": "2026-06-12T09:19:46.377303Z",
+      "id": "chk-6",
+      "text": "Educational Certificates Uploaded"
+    },
+    {
+      "text": "Test Assigned",
+      "id": "chk-7",
+      "isCompleted": true,
+      "category": "assessments",
+      "updatedAt": "2026-06-12T09:34:37.473605Z",
       "employeeId": "emp-1"
     },
     {
       "employeeId": "emp-1",
-      "isCompleted": false,
-      "text": "Final Approval Completed",
-      "category": "approval",
-      "updatedAt": "2026-06-12T09:19:46.377303Z",
-      "id": "chk-11"
-    },
-    {
-      "text": "Resume Uploaded",
-      "category": "documents",
-      "employeeId": "emp-1",
-      "isCompleted": false,
-      "updatedAt": "2026-06-12T09:19:46.377303Z",
-      "id": "chk-2"
-    },
-    {
-      "category": "documents",
-      "text": "Aadhaar Uploaded",
-      "employeeId": "emp-1",
-      "isCompleted": false,
-      "id": "chk-3",
-      "updatedAt": "2026-06-12T09:19:46.377303Z"
-    },
-    {
-      "employeeId": "emp-1",
-      "isCompleted": false,
-      "text": "PAN Uploaded",
-      "category": "documents",
-      "updatedAt": "2026-06-12T09:19:46.377303Z",
-      "id": "chk-4"
-    },
-    {
-      "updatedAt": "2026-06-12T09:19:46.377303Z",
-      "id": "chk-5",
-      "employeeId": "emp-1",
-      "isCompleted": false,
-      "text": "Passport Photo Uploaded",
-      "category": "documents"
-    },
-    {
-      "text": "Educational Certificates Uploaded",
-      "category": "documents",
-      "isCompleted": false,
-      "employeeId": "emp-1",
-      "updatedAt": "2026-06-12T09:19:46.377303Z",
-      "id": "chk-6"
-    },
-    {
-      "isCompleted": true,
-      "employeeId": "emp-1",
-      "text": "Test Assigned",
       "category": "assessments",
-      "updatedAt": "2026-06-12T09:34:37.473605Z",
-      "id": "chk-7"
-    },
-    {
-      "employeeId": "emp-1",
+      "updatedAt": "2026-06-12T09:19:46.377303Z",
       "isCompleted": false,
-      "category": "assessments",
-      "text": "Test Completed",
       "id": "chk-8",
-      "updatedAt": "2026-06-12T09:19:46.377303Z"
+      "text": "Test Completed"
     },
     {
       "id": "chk-9",
-      "updatedAt": "2026-06-12T09:19:46.377303Z",
-      "isCompleted": false,
+      "text": "Passed Assessment",
       "employeeId": "emp-1",
       "category": "assessments",
-      "text": "Passed Assessment"
+      "updatedAt": "2026-06-12T09:19:46.377303Z",
+      "isCompleted": false
     }
   ],
   "activityLogs": [
     {
-      "timestamp": "2026-06-12T09:19:46.377303Z",
-      "employeeId": "emp-1",
       "details": "Welcome profile automatically generated by system default seeds.",
-      "action": "Account Provisioned",
       "id": "log-1",
-      "employeeName": "Bharath"
+      "timestamp": "2026-06-12T09:19:46.377303Z",
+      "employeeName": "Bharath",
+      "employeeId": "emp-1",
+      "action": "Account Provisioned"
     },
     {
-      "timestamp": "2026-06-12T09:19:46.480215Z",
-      "employeeId": "admin-1",
       "details": "Approved leave request for employee Bharath from 2026-06-15 to 2026-06-19.",
       "id": "log-1781255986480-52526",
-      "action": "Leave Approved",
-      "employeeName": "Admin Olivia Vance"
-    },
-    {
-      "timestamp": "2026-06-12T09:20:38.893758Z",
-      "employeeId": "emp-1",
-      "details": "Successful authentication via credentials.",
-      "id": "log-1781256038893-94831",
-      "action": "User Sign-In",
-      "employeeName": "Bharath"
-    },
-    {
-      "details": "Successful authentication via credentials.",
+      "timestamp": "2026-06-12T09:19:46.480215Z",
       "employeeId": "admin-1",
-      "timestamp": "2026-06-12T09:21:25.012441Z",
+      "employeeName": "Admin Olivia Vance",
+      "action": "Leave Approved"
+    },
+    {
+      "action": "User Sign-In",
+      "employeeId": "emp-1",
+      "employeeName": "Bharath",
+      "timestamp": "2026-06-12T09:20:38.893758Z",
+      "id": "log-1781256038893-94831",
+      "details": "Successful authentication via credentials."
+    },
+    {
+      "action": "User Sign-In",
+      "employeeId": "admin-1",
       "employeeName": "G Venkat (HR Lead)",
       "id": "log-1781256085012-47480",
-      "action": "User Sign-In"
-    },
-    {
-      "id": "log-1781256865340-16030",
-      "action": "Assessment Created",
-      "employeeName": "Admin Olivia Vance",
-      "timestamp": "2026-06-12T09:34:25.340327Z",
-      "details": "Created new exam standard: \"test\"",
-      "employeeId": "admin-1"
+      "timestamp": "2026-06-12T09:21:25.012441Z",
+      "details": "Successful authentication via credentials."
     },
     {
       "employeeId": "admin-1",
-      "details": "Drafted exam deployment [test] to Bharath",
-      "timestamp": "2026-06-12T09:34:37.473700Z",
+      "employeeName": "Admin Olivia Vance",
+      "action": "Assessment Created",
+      "details": "Created new exam standard: \"test\"",
+      "id": "log-1781256865340-16030",
+      "timestamp": "2026-06-12T09:34:25.340327Z"
+    },
+    {
+      "action": "Assigned Test Standard",
+      "employeeId": "admin-1",
       "employeeName": "Admin Olivia Vance",
       "id": "log-1781256877473-58498",
-      "action": "Assigned Test Standard"
+      "timestamp": "2026-06-12T09:34:37.473700Z",
+      "details": "Drafted exam deployment [test] to Bharath"
     },
     {
-      "employeeName": "Bharath",
-      "id": "log-1781256885175-36969",
       "action": "User Sign-In",
-      "employeeId": "emp-1",
-      "details": "Successful authentication via credentials.",
-      "timestamp": "2026-06-12T09:34:45.175695Z"
-    },
-    {
-      "details": "Submitted complete onboarding profile and validated checklists.",
-      "employeeId": "emp-1",
-      "timestamp": "2026-06-12T09:34:55.821968Z",
       "employeeName": "Bharath",
-      "id": "log-1781256895821-55329",
-      "action": "Onboarding Profile Submitted"
+      "employeeId": "emp-1",
+      "id": "log-1781256885175-36969",
+      "timestamp": "2026-06-12T09:34:45.175695Z",
+      "details": "Successful authentication via credentials."
     },
     {
       "employeeId": "emp-1",
+      "employeeName": "Bharath",
+      "action": "Onboarding Profile Submitted",
+      "details": "Submitted complete onboarding profile and validated checklists.",
+      "id": "log-1781256895821-55329",
+      "timestamp": "2026-06-12T09:34:55.821968Z"
+    },
+    {
       "details": "Checked in for daily attendance on 2026-06-12.",
+      "id": "log-1781256901314-44521",
       "timestamp": "2026-06-12T09:35:01.314132Z",
       "employeeName": "Bharath",
-      "id": "log-1781256901314-44521",
+      "employeeId": "emp-1",
       "action": "Attendance Requested"
     },
     {
-      "action": "Exam Commenced",
       "id": "log-1781256916731-35285",
-      "employeeName": "Bharath",
       "timestamp": "2026-06-12T09:35:16.731560Z",
-      "employeeId": "emp-1",
-      "details": "Began taking quiz assignment: \"test\""
-    },
-    {
       "details": "Began taking quiz assignment: \"test\"",
-      "employeeId": "emp-1",
-      "timestamp": "2026-06-12T09:35:19.524030Z",
-      "employeeName": "Bharath",
-      "id": "log-1781256919523-72019",
-      "action": "Exam Commenced"
-    },
-    {
-      "id": "log-1781256956358-15506",
-      "action": "Exam Paused",
-      "employeeName": "Bharath",
-      "timestamp": "2026-06-12T09:35:56.358673Z",
-      "employeeId": "emp-1",
-      "details": "Paused taking quiz assignment: \"test\""
-    },
-    {
-      "employeeName": "Bharath",
-      "id": "log-1781256960436-99492",
-      "action": "Exam Paused",
-      "details": "Paused taking quiz assignment: \"test\"",
-      "employeeId": "emp-1",
-      "timestamp": "2026-06-12T09:36:00.437022Z"
-    },
-    {
-      "timestamp": "2026-06-12T09:36:06.847945Z",
-      "employeeId": "emp-1",
-      "details": "Began taking quiz assignment: \"test\"",
-      "id": "log-1781256966847-40564",
       "action": "Exam Commenced",
+      "employeeId": "emp-1",
       "employeeName": "Bharath"
     },
     {
+      "id": "log-1781256919523-72019",
+      "timestamp": "2026-06-12T09:35:19.524030Z",
+      "details": "Began taking quiz assignment: \"test\"",
+      "action": "Exam Commenced",
+      "employeeId": "emp-1",
+      "employeeName": "Bharath"
+    },
+    {
+      "employeeId": "emp-1",
+      "employeeName": "Bharath",
+      "action": "Exam Paused",
+      "details": "Paused taking quiz assignment: \"test\"",
+      "timestamp": "2026-06-12T09:35:56.358673Z",
+      "id": "log-1781256956358-15506"
+    },
+    {
+      "employeeId": "emp-1",
+      "employeeName": "Bharath",
+      "action": "Exam Paused",
+      "details": "Paused taking quiz assignment: \"test\"",
+      "id": "log-1781256960436-99492",
+      "timestamp": "2026-06-12T09:36:00.437022Z"
+    },
+    {
+      "employeeId": "emp-1",
       "employeeName": "Bharath",
       "action": "Exam Commenced",
-      "id": "log-1781256969968-96983",
-      "employeeId": "emp-1",
       "details": "Began taking quiz assignment: \"test\"",
-      "timestamp": "2026-06-12T09:36:09.968440Z"
+      "id": "log-1781256966847-40564",
+      "timestamp": "2026-06-12T09:36:06.847945Z"
+    },
+    {
+      "action": "Exam Commenced",
+      "employeeId": "emp-1",
+      "employeeName": "Bharath",
+      "id": "log-1781256969968-96983",
+      "timestamp": "2026-06-12T09:36:09.968440Z",
+      "details": "Began taking quiz assignment: \"test\""
     },
     {
       "employeeName": "Bharath",
-      "id": "log-1781256977719-36553",
-      "action": "Exam Paused",
       "employeeId": "emp-1",
+      "action": "Exam Paused",
       "details": "Paused taking quiz assignment: \"test\"",
+      "id": "log-1781256977719-36553",
       "timestamp": "2026-06-12T09:36:17.719366Z"
     },
     {
-      "id": "log-1781256981170-88372",
-      "action": "Exam Paused",
+      "employeeId": "emp-1",
       "employeeName": "Bharath",
+      "action": "Exam Paused",
+      "details": "Paused taking quiz assignment: \"test\"",
       "timestamp": "2026-06-12T09:36:21.170626Z",
-      "employeeId": "emp-1",
-      "details": "Paused taking quiz assignment: \"test\""
+      "id": "log-1781256981170-88372"
     },
     {
+      "details": "Paused taking quiz assignment: \"test\"",
       "id": "log-1781256985798-99904",
-      "action": "Exam Paused",
-      "employeeName": "Bharath",
       "timestamp": "2026-06-12T09:36:25.798328Z",
+      "employeeName": "Bharath",
       "employeeId": "emp-1",
-      "details": "Paused taking quiz assignment: \"test\""
+      "action": "Exam Paused"
     },
     {
+      "employeeId": "emp-1",
       "employeeName": "Bharath",
       "action": "User Sign-In",
-      "id": "log-1781257697019-89520",
-      "employeeId": "emp-1",
       "details": "Successful authentication via credentials.",
+      "id": "log-1781257697019-89520",
       "timestamp": "2026-06-12T09:48:17.019656Z"
     },
     {
-      "action": "Attendance Requested",
-      "id": "log-1781257714776-14392",
-      "employeeName": "Bharath",
-      "timestamp": "2026-06-12T09:48:34.776663Z",
       "employeeId": "emp-1",
-      "details": "Checked in for daily attendance on 2026-06-12."
+      "employeeName": "Bharath",
+      "action": "Attendance Requested",
+      "details": "Checked in for daily attendance on 2026-06-12.",
+      "id": "log-1781257714776-14392",
+      "timestamp": "2026-06-12T09:48:34.776663Z"
     }
   ],
   "emails": [
     {
-      "subject": "Welcome to AgentOps Labs!",
-      "to": "bharathsathyasaijanga@gmail.com",
-      "body": "Welcome Bharath! Your AgentOps Labs onboarding portal account has been created.\n\nLogin credentials:\nEmail: bharathsathyasaijanga@gmail.com\nPassword: Bharath@767\n\nPlease update your password on your first login.",
-      "id": "email-1",
+      "sentAt": "2026-06-12T09:19:46.377303Z",
       "type": "welcome",
-      "sentAt": "2026-06-12T09:19:46.377303Z"
+      "subject": "Welcome to AgentOps Labs!",
+      "id": "email-1",
+      "to": "bharathsathyasaijanga@gmail.com",
+      "body": "Welcome Bharath! Your AgentOps Labs onboarding portal account has been created.\n\nLogin credentials:\nEmail: bharathsathyasaijanga@gmail.com\nPassword: Bharath@767\n\nPlease update your password on your first login."
     },
     {
       "sentAt": "2026-06-12T09:34:37.482833Z",
       "type": "test_assigned",
       "id": "email-1781256877481-3352",
-      "to": "bharathsathyasaijanga@gmail.com",
+      "subject": "EXAM ASSIGNED: test",
       "body": "Dear Bharath,\nA new skills assessment test [test] has been assigned to you. You have 15 minutes to complete it.\nPlease complete this assessment to advance your onboarding workflow.",
-      "subject": "EXAM ASSIGNED: test"
+      "to": "bharathsathyasaijanga@gmail.com"
     },
     {
-      "id": "email-1781256895839-3802",
-      "to": "admin@agentops.com",
-      "body": "Onboarding application submitted by candidate: Bharath (bharathsathyasaijanga@gmail.com).\nSubmission Time: 2026-06-12 15:04:55\nStatus: PENDING ADMIN REVIEW.",
-      "subject": "New Candidate Application: Bharath",
       "sentAt": "2026-06-12T09:34:55.839657Z",
-      "type": "app_submitted"
+      "type": "app_submitted",
+      "body": "Onboarding application submitted by candidate: Bharath (bharathsathyasaijanga@gmail.com).\nSubmission Time: 2026-06-12 15:04:55\nStatus: PENDING ADMIN REVIEW.",
+      "to": "admin@agentops.com",
+      "id": "email-1781256895839-3802",
+      "subject": "New Candidate Application: Bharath"
     }
   ],
   "notifications": [
     {
-      "title": "New Assessment Assigned",
-      "createdAt": "2026-06-12T09:34:37.490036Z",
-      "isRead": false,
       "type": "warning",
-      "employeeId": "emp-1",
       "message": "Admin assigned standard certification exam: \"test\". Start assessment when ready.",
+      "createdAt": "2026-06-12T09:34:37.490036Z",
+      "employeeId": "emp-1",
+      "title": "New Assessment Assigned",
+      "isRead": false,
       "id": "notif-1781256877489-42912"
     },
     {
-      "id": "notif-1781256895832-50014",
-      "createdAt": "2026-06-12T09:34:55.832638Z",
       "title": "New Application Submitted",
-      "message": "Onboarding application profile submitted by Bharath. Complete reviews.",
-      "employeeId": null,
+      "id": "notif-1781256895832-50014",
       "isRead": false,
-      "type": "warning"
+      "type": "warning",
+      "message": "Onboarding application profile submitted by Bharath. Complete reviews.",
+      "createdAt": "2026-06-12T09:34:55.832638Z",
+      "employeeId": null
     },
     {
-      "message": "Employee Bharath requested attendance approval for 2026-06-12.",
       "employeeId": null,
-      "isRead": false,
-      "type": "info",
+      "message": "Employee Bharath requested attendance approval for 2026-06-12.",
       "createdAt": "2026-06-12T09:35:01.304519Z",
-      "title": "Attendance Approval Requested",
-      "id": "notif-1781256901304-73059"
+      "type": "info",
+      "isRead": false,
+      "id": "notif-1781256901304-73059",
+      "title": "Attendance Approval Requested"
     },
     {
       "id": "notif-1781257714769-71889",
-      "createdAt": "2026-06-12T09:48:34.770008Z",
-      "title": "Attendance Approval Requested",
-      "employeeId": null,
-      "message": "Employee Bharath requested attendance approval for 2026-06-12.",
       "isRead": false,
-      "type": "info"
+      "title": "Attendance Approval Requested",
+      "type": "info",
+      "employeeId": null,
+      "createdAt": "2026-06-12T09:48:34.770008Z",
+      "message": "Employee Bharath requested attendance approval for 2026-06-12."
     }
   ],
   "annotations": [],
