@@ -9,22 +9,14 @@
       }
     },
     {
-      "src": "api/index.ts",
-      "use": "@vercel/node",
-      "config": {
-        "includeFiles": [
-          "backend/main.py",
-          "backend/python_packages/**",
-          "db_agentops.json",
-          "firebase-applet-config.json"
-        ]
-      }
+      "src": "backend/main.py",
+      "use": "@vercel/python"
     }
   ],
   "rewrites": [
     {
       "source": "/api/(.*)",
-      "destination": "/api/index.ts"
+      "destination": "backend/main.py"
     },
     {
       "source": "/(.*)",

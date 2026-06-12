@@ -230,31 +230,56 @@ active_reset_tokens = {}
 
 def load_database(silent=True):
     global db_state
-    if os.path.exists(DB_PATH):
+    
+    # Try Firestore loading first
+    from firestore_sync import load_from_firestore
+    firestore_loaded = False
+    try:
+        firestore_loaded = load_from_firestore(db_state)
+    except Exception as e:
+        print(f"[Python FastAPI] Firestore load crashed: {e}")
+        
+    if firestore_loaded:
+        # Save Firestore state to local cache
         try:
-            with open(DB_PATH, "r", encoding="utf-8") as f:
-                data = json.load(f)
-                # Ensure all required lists are present
-                for key in db_state.keys():
-                    if key not in data:
-                        data[key] = [] if isinstance(db_state[key], list) else {}
-                db_state = data
-            if not silent:
-                print(f"[Python FastAPI] Database state restored from {DB_PATH}.")
-            if not db_state.get("users"):
-                print("[Python FastAPI] Database is empty (no users). Seeding default data...")
-                seed_database()
-        except Exception as e:
-            print(f"[Python FastAPI] Fails parsing database. Triggering default seed. Error: {e}")
-            seed_database()
+            with open(DB_PATH, "w", encoding="utf-8") as f:
+                json.dump(db_state, f, indent=2, ensure_ascii=False)
+        except Exception:
+            pass
     else:
+        # Fallback to local DB_PATH if exists
+        if os.path.exists(DB_PATH):
+            try:
+                with open(DB_PATH, "r", encoding="utf-8") as f:
+                    data = json.load(f)
+                    for key in db_state.keys():
+                        if key not in data:
+                            data[key] = [] if isinstance(db_state[key], list) else {}
+                    db_state = data
+                if not silent:
+                    print(f"[Python FastAPI] Database state restored from {DB_PATH}.")
+            except Exception as e:
+                print(f"[Python FastAPI] Fails parsing database. Triggering default seed. Error: {e}")
+                seed_database()
+        else:
+            seed_database()
+            
+    if not db_state.get("users"):
+        print("[Python FastAPI] Database is empty (no users). Seeding default data...")
         seed_database()
 
 def save_database():
+    global db_state
     try:
         with open(DB_PATH, "w", encoding="utf-8") as f:
             json.dump(db_state, f, indent=2, ensure_ascii=False)
-        # Notify Node wrapper of a change by updating file modified stamp
+            
+        # Sync to Firestore
+        from firestore_sync import sync_to_firestore
+        try:
+            sync_to_firestore(db_state)
+        except Exception as sync_err:
+            print(f"[Python FastAPI] Firestore sync crashed: {sync_err}")
     except Exception as e:
         print(f"[Python FastAPI] Error occurred while saving database: {e}")
 
