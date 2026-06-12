@@ -1293,9 +1293,10 @@ def upload_document(req: Dict[str, Any]):
     emp_name = emp_usr["name"] if emp_usr else "Employee"
     
     log_activity(emp_id, emp_name, "Document Uploaded", f"Uploaded credentials certificate: {doc_type.upper()}")
-    send_system_notification(None, "Document Needs Review", f"New onboarding certificate ({doc_type.upper()}) uploaded by {emp_name}. Review now.", "info")
+    send_system_notification(None, "Document Needs Review", f"New onboarding certificate ({doc_type.upper()}) uploaded by {emp_name}. Review now.", "info", sync=False)
     
-    save_database()
+    # Only sync the collections that actually changed (faster)
+    save_database(["documents", "checklists", "activityLogs", "notifications"])
     return new_doc
 
 # Document Annotations
@@ -2017,6 +2018,11 @@ def safe_view_document(doc_id: str, response: Response):
     url = doc.get("url", "")
     low_name = doc["fileName"].lower()
     
+    # Firebase Storage URLs: redirect directly — browser handles viewing natively
+    if url.startswith("https://") or url.startswith("http://"):
+        from fastapi.responses import RedirectResponse
+        return RedirectResponse(url=url, status_code=302)
+    
     is_preseed = ("TG9hZGVkIGZpbGUgdGV4dCBjb250ZW50IHNpbXVsYXRpb24=" in url) or \
                  ("U2ltdWxhdGVkIGZpbGUgZGF0YSBvbiBBZ2VudE9wcw==" in url)
                  
@@ -2068,13 +2074,13 @@ def safe_view_document(doc_id: str, response: Response):
     
     <h3>TACTICAL ABILITIES</h3>
     <ul>
-      <li>Secure Records Management & HTTPS Web Synchronization</li>
-      <li>Regulatory HR Compliance & Cross-Browser Rendering</li>
-      <li>Database Schema Integrations & Process Diagnostics</li>
+      <li>Secure Records Management &amp; HTTPS Web Synchronization</li>
+      <li>Regulatory HR Compliance &amp; Cross-Browser Rendering</li>
+      <li>Database Schema Integrations &amp; Process Diagnostics</li>
       <li>Multi-Channel Integrity Vetting</li>
     </ul>
 
-    <h3>AUDIT & INTEGRITY DECLARATION</h3>
+    <h3>AUDIT &amp; INTEGRITY DECLARATION</h3>
     <p>This document has been safely converted, formatted, and validated on the server. Compliance Signature: SHA256-{doc_id.replace("doc-", "")[:12].upper()}</p>
   </div>
 </body>
@@ -2122,7 +2128,7 @@ def safe_view_document(doc_id: str, response: Response):
     </div>
     <div class="content">{docx_html}</div>
     <div style="margin-top: 40px; border-top: 1px solid #e2e8f0; padding-top: 16px; text-align: center; font-size: 11px; color: #94a3b8; font-family: monospace;">
-      End of secure inline Word reader preview • ID Ref: {doc['id']}
+      End of secure inline Word reader preview &bull; ID Ref: {doc['id']}
     </div>
   </div>
 </body>
@@ -2175,6 +2181,12 @@ def safe_download_document(doc_id: str, response: Response):
         
     url = doc.get("url", "")
     low_name = doc["fileName"].lower()
+    
+    # Firebase Storage URLs: redirect to download directly
+    if url.startswith("https://") or url.startswith("http://"):
+        from fastapi.responses import RedirectResponse
+        # Add dl=1 or use content-disposition attachment via redirect
+        return RedirectResponse(url=url, status_code=302)
     
     is_preseed = ("TG9hZGVkIGZpbGUgdGV4dCBjb250ZW50IHNpbXVsYXRpb24=" in url) or \
                  ("U2ltdWxhdGVkIGZpbGUgZGF0YSBvbiBBZ2VudE9wcw==" in url)

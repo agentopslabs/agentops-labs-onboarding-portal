@@ -1,0 +1,16 @@
+rules_version = '2';
+service firebase.storage {
+  match /b/{bucket}/o {
+    // Allow read and write to the documents folder for authenticated employee uploads
+    // Since this app uses its own JWT auth (not Firebase Auth), we allow unauthenticated
+    // access to the documents subfolder. In production, restrict to specific origins.
+    match /documents/{employeeId}/{docType}/{allPaths=**} {
+      allow read, write: if true;
+    }
+    
+    // Default: deny everything else
+    match /{allPaths=**} {
+      allow read, write: if false;
+    }
+  }
+}

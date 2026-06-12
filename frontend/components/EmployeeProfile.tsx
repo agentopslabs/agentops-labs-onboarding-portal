@@ -26,6 +26,7 @@ import {
 } from "../types";
 import DocumentPreviewModal from "./DocumentPreviewModal";
 import { triggerDocumentDownload } from "../lib/downloadHelper";
+import { uploadDocumentToStorage } from "../lib/firebaseStorage";
 
 interface EmployeeProfileProps {
   currentUser: EmployeeUser;
@@ -204,65 +205,101 @@ export default function EmployeeProfile({
     }
   }
 
-  // Handle document upload (Read actual file to Base64 payload and send to backend)
+  // Handle document upload — uploads to Firebase Storage, then saves metadata to backend
   async function handleMockFileUpload(docType: string, file: File) {
     setErrorStatus("");
     setSuccessStatus("");
 
-    // Start progress simulation
-    setUploadProgress(prev => ({ ...prev, [docType]: 10 }));
-    const intervals = [10, 30, 60, 90, 100];
-    
-    for (let i = 0; i < intervals.length; i++) {
-      await new Promise(resolve => setTimeout(resolve, 50));
-      setUploadProgress(prev => ({ ...prev, [docType]: intervals[i] }));
+    // Validate file type
+    const allowedTypes = [
+      "application/pdf",
+      "image/jpeg",
+      "image/png",
+      "image/webp",
+      "application/msword",
+      "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+    ];
+    if (!allowedTypes.includes(file.type) && !file.name.match(/\.(pdf|jpg|jpeg|png|webp|doc|docx)$/i)) {
+      setErrorStatus("Only PDF, JPG, PNG, WEBP, DOC, and DOCX files are accepted.");
+      return;
     }
 
-    // Read the actual file uploaded by the user
-    const reader = new FileReader();
-    reader.onload = async (event) => {
-      const dataUrl = event.target?.result as string || "";
+    // Max 20MB
+    if (file.size > 20 * 1024 * 1024) {
+      setErrorStatus("File size must not exceed 20 MB.");
+      return;
+    }
+
+    // Initial progress
+    setUploadProgress(prev => ({ ...prev, [docType]: 5 }));
+
+    try {
+      // Step 1: Upload file to Firebase Storage with real progress tracking
+      const downloadURL = await uploadDocumentToStorage(
+        file,
+        currentUser.id,
+        docType,
+        (percent) => {
+          // Scale to 10–90% during upload, leave 90–100% for backend save
+          const scaled = Math.round(10 + (percent * 0.8));
+          setUploadProgress(prev => ({ ...prev, [docType]: scaled }));
+        }
+      );
+
+      setUploadProgress(prev => ({ ...prev, [docType]: 92 }));
+
+      // Step 2: Save only metadata + download URL to backend (no base64 blob!)
       const payload = {
         employeeId: currentUser.id,
         type: docType,
         fileName: file.name,
         fileSize: `${(file.size / (1024 * 1024)).toFixed(2)} MB`,
-        fileContent: dataUrl
+        // fileContent is now just the Firebase Storage HTTPS URL — tiny metadata
+        fileContent: downloadURL
       };
 
-      try {
-        const res = await fetch("/api/documents", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(payload)
-        });
+      const res = await fetch("/api/documents", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload)
+      });
 
-        if (res.ok) {
-          setSuccessStatus(`Uploaded file "${file.name}" successfully.`);
+      setUploadProgress(prev => ({ ...prev, [docType]: 100 }));
+
+      if (res.ok) {
+        const newDoc = await res.json();
+        // Optimistically update local docs state
+        setDocs(prev => {
+          const filtered = prev.filter(d => d.type !== docType);
+          return [...filtered, newDoc];
+        });
+        setSuccessStatus(`"${file.name}" uploaded successfully! Pending admin review.`);
+        setTimeout(() => {
           fetchEmployeeDocs();
           onRefreshAll();
-        } else {
-          setErrorStatus("Upload transaction dismissed by target system.");
-        }
-      } catch (e) {
-        setErrorStatus("Fileserver timeout. Try choosing a smaller file.");
-      } finally {
-        // Clear progress after a brief moment
-        setTimeout(() => {
-          setUploadProgress(prev => {
-            const updated = { ...prev };
-            delete updated[docType];
-            return updated;
-          });
         }, 1000);
+      } else {
+        const err = await res.json();
+        setErrorStatus(err.detail || "Failed to save document metadata.");
       }
-    };
-
-    reader.onerror = () => {
-      setErrorStatus("Failed to read the selected file local buffer.");
-    };
-
-    reader.readAsDataURL(file);
+    } catch (e: any) {
+      console.error("[Document Upload]", e);
+      if (e.message?.includes("storage/unauthorized")) {
+        setErrorStatus("Firebase Storage permission denied. Please contact support.");
+      } else if (e.message?.includes("storage/")) {
+        setErrorStatus(`Storage error: ${e.message}`);
+      } else {
+        setErrorStatus(e.message || "Upload failed. Please try again.");
+      }
+    } finally {
+      setTimeout(() => {
+        setUploadProgress(prev => {
+          const updated = { ...prev };
+          delete updated[docType];
+          return updated;
+        });
+      }, 1500);
+    }
   }
 
   // Choose file callbacks
