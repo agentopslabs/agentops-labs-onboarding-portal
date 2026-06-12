@@ -277,6 +277,73 @@ def atomic_write_json(file_path, data):
 load_lock = threading.Lock()
 last_synced_db = {}
 
+def deduplicate_database_state():
+    """Identify and clean up duplicate employee records from db_state and sync changes."""
+    global db_state
+    users = db_state.get("users", [])
+    if not users:
+        return
+        
+    seen_emails = {}
+    unique_users = []
+    deleted_user_ids = set()
+    
+    for u in users:
+        email = u.get("email", "").strip().lower()
+        role = u.get("role", "")
+        
+        if role == "admin":
+            unique_users.append(u)
+            continue
+            
+        if not email:
+            unique_users.append(u)
+            continue
+            
+        if email in seen_emails:
+            deleted_user_ids.add(u.get("id"))
+        else:
+            seen_emails[email] = u.get("id")
+            unique_users.append(u)
+            
+    if not deleted_user_ids:
+        return
+        
+    print(f"[Python FastAPI] Found duplicate users in database. Cleaning up {len(deleted_user_ids)} duplicates...")
+    
+    db_state["users"] = unique_users
+    
+    # Passwords
+    passwords = db_state.get("passwords", {})
+    clean_passwords = {}
+    for uid, pwd in passwords.items():
+        if uid not in deleted_user_ids:
+            clean_passwords[uid] = pwd
+    db_state["passwords"] = clean_passwords
+    
+    # Helper to filter array collections
+    def filter_coll(col_key):
+        items = db_state.get(col_key, [])
+        db_state[col_key] = [item for item in items if item.get("employeeId") not in deleted_user_ids]
+        
+    filter_coll("applications")
+    filter_coll("documents")
+    filter_coll("checklists")
+    filter_coll("assignedTests")
+    filter_coll("notifications")
+    filter_coll("messages")
+    filter_coll("taskSubmissions")
+    filter_coll("attendance")
+    filter_coll("leaves")
+    
+    # Filter activityLogs
+    activity_logs = db_state.get("activityLogs", [])
+    db_state["activityLogs"] = [log for log in activity_logs if log.get("employeeId") not in deleted_user_ids]
+    
+    # Sync the clean state back to disk and Supabase
+    save_database()
+    print("[Python FastAPI] Database deduplication and Supabase sync complete.")
+
 def load_database(silent=True):
     global db_state, last_supabase_load_time, last_synced_db
     now = time.time()
@@ -338,6 +405,8 @@ def load_database(silent=True):
     if has_no_users:
         print("[Python FastAPI] Database is empty (no users). Seeding default data...")
         seed_database()
+    else:
+        deduplicate_database_state()
 
 def _background_supabase_sync_worker(db_copy: dict, collections: set):
     """Background thread worker that syncs to Supabase without blocking the API response."""
@@ -1190,8 +1259,15 @@ def update_employee(user_id: str, req: Dict[str, Any]):
         raise HTTPException(status_code=404, detail="Employee profile not found.")
         
     user = db_state["users"][user_idx]
+    
+    email = req.get("email", user["email"])
+    if email.lower() != user["email"].lower():
+        exists = any(u["email"].lower() == email.lower() for u in db_state["users"] if u["id"] != user_id)
+        if exists:
+            raise HTTPException(status_code=400, detail="Email address is already in use by another employee.")
+            
     user["name"] = req.get("name", user["name"])
-    user["email"] = req.get("email", user["email"])
+    user["email"] = email
     user["mobile"] = req.get("mobile", user["mobile"])
     if "dob" in req:
         user["dob"] = req["dob"]
