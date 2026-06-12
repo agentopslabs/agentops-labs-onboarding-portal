@@ -103,13 +103,19 @@ export default function AdminAttendance({ employees, onRefreshAll }: AdminAttend
         body: JSON.stringify({ status, remarks })
       });
       if (res.ok) {
+        const updatedRecord = await res.json();
+        // Optimistically update local state immediately so there is no flicker
+        setAttendance(prev => prev.map(r => r.id === recordId ? updatedRecord : r));
         setRemarksMap(prev => {
           const clone = { ...prev };
           delete clone[recordId];
           return clone;
         });
-        fetchAttendanceAndLeaves();
-        onRefreshAll();
+        // Then also re-fetch to ensure eventual consistency
+        setTimeout(() => {
+          fetchAttendanceAndLeaves();
+          onRefreshAll();
+        }, 1500);
       } else {
         const err = await res.json();
         alert(err.detail || "Action failed.");
@@ -131,13 +137,19 @@ export default function AdminAttendance({ employees, onRefreshAll }: AdminAttend
         body: JSON.stringify({ status, remarks })
       });
       if (res.ok) {
+        const updatedLeave = await res.json();
+        // Optimistically update local state immediately so there is no flicker
+        setLeaves(prev => prev.map(l => l.id === leaveId ? updatedLeave : l));
         setRemarksMap(prev => {
           const clone = { ...prev };
           delete clone[leaveId];
           return clone;
         });
-        fetchAttendanceAndLeaves();
-        onRefreshAll();
+        // Then also re-fetch to ensure eventual consistency
+        setTimeout(() => {
+          fetchAttendanceAndLeaves();
+          onRefreshAll();
+        }, 1500);
       } else {
         const err = await res.json();
         alert(err.detail || "Action failed.");

@@ -177,7 +177,7 @@ export default function AdminEmployeeManagement({
 
       if (!res.ok) {
         const err = await res.json();
-        setActionError(err.error || "Failed to create employee.");
+        setActionError(err.detail || err.error || "Failed to create employee.");
         return;
       }
 
@@ -192,7 +192,10 @@ export default function AdminEmployeeManagement({
       setNewEmail("");
       setNewMobile("");
       setNewPassword("");
+      // Refresh immediately to show the new employee
       onRefreshAll();
+      // Also retry after 2 seconds to handle any Firestore propagation delay
+      setTimeout(() => onRefreshAll(), 2000);
     } catch (e) {
       setActionError("Internal SMTP client dispatch failed.");
     }

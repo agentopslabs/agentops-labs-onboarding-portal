@@ -372,8 +372,12 @@ def save_database(target_collection=None):
             from firestore_sync import sync_to_firestore
             try:
                 sync_to_firestore(db_copy, changed_collections)
-                # Invalidate read cache immediately upon a successful write so next read is fresh
-                last_firestore_load_time = 0.0
+                # CRITICAL FIX: After a successful write+sync, set last_firestore_load_time to NOW
+                # (not 0!) so subsequent reads within 4s serve the fresh in-memory state rather
+                # than re-reading Firestore before the write has been committed on the cloud side.
+                # This prevents stale-read race conditions when the frontend calls onRefreshAll()
+                # immediately after a write operation.
+                last_firestore_load_time = time.time()
                 # Update last_synced_db under db_lock
                 with db_lock:
                     for key in changed_collections:
@@ -384,10 +388,20 @@ def save_database(target_collection=None):
     except Exception as e:
         print(f"[Python FastAPI] Error occurred while saving database: {e}")
 
-# Middleware to reload the database state from disk at the beginning of every request
+# Middleware to reload the database state from disk at the beginning of every request.
+# For write operations (POST/PUT/DELETE), we skip the Firestore re-read since we just wrote
+# and have fresh data in memory. This prevents reading stale Firestore data immediately after a write.
 @app.middleware("http")
 async def db_reload_middleware(request: Request, call_next):
-    load_database(silent=True)
+    # Always load for read-only operations; skip for writes (data was just updated in memory)
+    if request.method in ("GET", "HEAD", "OPTIONS"):
+        load_database(silent=True)
+    else:
+        # For mutations, still do a lightweight empty-guard (seed if empty)
+        with db_lock:
+            has_no_users = not db_state.get("users")
+        if has_no_users:
+            load_database(silent=True)
     response = await call_next(request)
     return response
 
@@ -1099,7 +1113,8 @@ def create_employee(req: Dict[str, Any]):
         send_simulated_email(email, "Welcome to AgentOps Labs - Temporary Account Password", mail_txt, "welcome", sync=False)
         send_system_notification(new_id, "Onboarding Setup Launched", "Welcome! Please enter your dashboard, fill your Onboarding application description, and upload credentials.", "info", sync=False)
         
-        save_database()
+        # Sync only the collections that actually changed (faster Firestore write)
+        save_database(["users", "passwords", "applications", "checklists", "activityLogs", "emails", "notifications"])
         return {"user": new_user, "password": auto_pwd}
 
 # Admin PUT update employee
@@ -2393,7 +2408,7 @@ def create_attendance_request(req: Dict[str, Any]):
     )
     
     log_activity(emp_id, emp_name, "Attendance Requested", f"Checked in for daily attendance on {date_val}.", sync=False)
-    save_database()
+    save_database(["attendance", "notifications", "activityLogs"])
     return new_record
 
 @app.put("/api/attendance/{record_id}/status")
@@ -2434,7 +2449,7 @@ def update_attendance_status(record_id: str, req: Dict[str, Any]):
             f"{status.capitalize()} attendance for employee {record['employeeName']} on {record['date']}.",
             sync=False
         )
-        save_database()
+        save_database(["attendance", "notifications", "activityLogs"])
         return record
 
 
@@ -2483,7 +2498,7 @@ def create_leave_request(req: Dict[str, Any]):
     )
     
     log_activity(emp_id, emp_name, "Leave Requested", f"Applied for leave from {start_date} to {end_date} ({leave_type}).", sync=False)
-    save_database()
+    save_database(["leaves", "notifications", "activityLogs"])
     return new_request
 
 @app.put("/api/leaves/{leave_id}/status")
@@ -2524,7 +2539,7 @@ def update_leave_status(leave_id: str, req: Dict[str, Any]):
             f"{status.capitalize()} leave request for employee {leave['employeeName']} from {leave['startDate']} to {leave['endDate']}.",
             sync=False
         )
-        save_database()
+        save_database(["leaves", "notifications", "activityLogs"])
         return leave
 
 if __name__ == "__main__":
