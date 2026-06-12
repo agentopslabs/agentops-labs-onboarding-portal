@@ -138,15 +138,18 @@ def sync_to_firestore(db_state):
         print("[Python Sync] Project ID missing, bypassing Firestore sync.")
         return
     
-    print("[Python Sync] Syncing database to Firestore...")
-    for col in collections_info:
+    print("[Python Sync] Syncing database to Firestore in parallel...")
+    from concurrent.futures import ThreadPoolExecutor
+    
+    def sync_collection(col):
         col_name = col["name"]
         col_key = col["key"]
         col_type = col["type"]
         
-        # Get existing IDs from Firestore
+        # Get existing IDs and documents from Firestore
         url = f"https://firestore.googleapis.com/v1/projects/{PROJECT_ID}/databases/{DATABASE_ID}/documents/{col_name}?pageSize=1000"
         existing_ids = set()
+        existing_docs = {}
         try:
             res = requests.get(url, timeout=5)
             if res.status_code == 200:
@@ -156,6 +159,7 @@ def sync_to_firestore(db_state):
                     doc_id = d.get("name", "").split("/")[-1]
                     if doc_id:
                         existing_ids.add(doc_id)
+                        existing_docs[doc_id] = parse_firestore_doc(d)
         except Exception as e:
             print(f"[Python Sync] Failed to scan existing IDs for {col_name}: {e}")
 
@@ -170,6 +174,10 @@ def sync_to_firestore(db_state):
                     doc_id = get_item_id(item, col_name)
                     if doc_id:
                         present_ids.add(doc_id)
+                        existing_item = existing_docs.get(doc_id)
+                        if existing_item == item:
+                            continue  # Skip patch, they are identical!
+                            
                         doc_url = f"https://firestore.googleapis.com/v1/projects/{PROJECT_ID}/databases/{DATABASE_ID}/documents/{col_name}/{doc_id}"
                         payload = to_firestore_doc(item)
                         requests.patch(doc_url, json=payload, timeout=5)
@@ -186,6 +194,10 @@ def sync_to_firestore(db_state):
                 
                 # Write/update passwords
                 for user_id, pwd in passwords.items():
+                    existing_pwd = existing_docs.get(user_id, {}).get("password")
+                    if existing_pwd == pwd:
+                        continue  # Skip patch, password matches!
+                        
                     doc_url = f"https://firestore.googleapis.com/v1/projects/{PROJECT_ID}/databases/{DATABASE_ID}/documents/{col_name}/{user_id}"
                     payload = to_firestore_doc({"id": user_id, "password": pwd})
                     requests.patch(doc_url, json=payload, timeout=5)
@@ -197,5 +209,9 @@ def sync_to_firestore(db_state):
                         requests.delete(doc_url, timeout=5)
         except Exception as e:
             print(f"[Python Sync] Failed to sync collection {col_name}: {e}")
-            
+
+    with ThreadPoolExecutor(max_workers=8) as executor:
+        # Consume iterator to block until all threads finish
+        list(executor.map(sync_collection, collections_info))
+        
     print("[Python Sync] Database sync completed.")
