@@ -1,15 +1,14 @@
 /**
- * Firebase Storage uploader.
+ * Firebase Storage uploader — reads config from firebase-applet-config.json
  * 
  * Files are uploaded directly to Firebase Storage (not base64-embedded in Firestore),
- * avoiding the Firestore 1MB per-document limit that silently caused uploads to fail.
+ * avoiding the Firestore 1MB per-document limit.
  * 
  * Upload flow:
  *   1. Employee selects a file
  *   2. File is uploaded to Firebase Storage: documents/{employeeId}/{docType}/{fileName}
- *   3. A persistent download URL is returned
- *   4. The backend receives ONLY: employeeId, type, fileName, fileSize, fileUrl (the https:// URL)
- *   5. Firestore stores tiny metadata records (< 1KB each) — no more 10MB+ base64 blobs
+ *   3. A permanent download URL is returned
+ *   4. The backend stores ONLY the tiny metadata + https:// URL in Firestore
  */
 
 import { initializeApp, getApps, FirebaseApp } from "firebase/app";
@@ -21,44 +20,56 @@ import {
   FirebaseStorage
 } from "firebase/storage";
 
-// Firebase config — matches firebase-applet-config.json in the project root
-const firebaseConfig = {
-  apiKey: "AIzaSyB7s7fqLUS0sOuM7UeImheT1pFKmYIwQyk",
-  authDomain: "arcane-object-vnzsc.firebaseapp.com",
-  projectId: "arcane-object-vnzsc",
-  storageBucket: "arcane-object-vnzsc.firebasestorage.app",
-  messagingSenderId: "445946501373",
-  appId: "1:445946501373:web:d98f99d31c56c962658694"
-};
+// Load config dynamically from the project config file
+// Update firebase-applet-config.json with your AgentOps Firebase project credentials
+async function loadFirebaseConfig() {
+  try {
+    const res = await fetch("/firebase-applet-config.json");
+    if (res.ok) {
+      return await res.json();
+    }
+  } catch (e) {
+    console.error("[Firebase] Failed to load config:", e);
+  }
+  return null;
+}
 
-let app: FirebaseApp;
-let storage: FirebaseStorage;
+let storageInstance: FirebaseStorage | null = null;
+let configLoaded = false;
 
-function getFirebaseStorage(): FirebaseStorage {
-  if (!storage) {
+async function getFirebaseStorage(): Promise<FirebaseStorage | null> {
+  if (storageInstance) return storageInstance;
+
+  const config = await loadFirebaseConfig();
+  if (!config || !config.projectId || config.projectId === "YOUR_AGENTOPS_PROJECT_ID") {
+    console.error("[Firebase Storage] Not configured yet. Please set up firebase-applet-config.json with your AgentOps Firebase project.");
+    return null;
+  }
+
+  try {
+    let app: FirebaseApp;
     if (getApps().length === 0) {
-      app = initializeApp(firebaseConfig);
+      app = initializeApp({
+        apiKey: config.apiKey,
+        authDomain: config.authDomain,
+        projectId: config.projectId,
+        storageBucket: config.storageBucket,
+        messagingSenderId: config.messagingSenderId,
+        appId: config.appId
+      });
     } else {
       app = getApps()[0];
     }
-    storage = getStorage(app);
+    storageInstance = getStorage(app);
+    return storageInstance;
+  } catch (e) {
+    console.error("[Firebase Storage] Initialization failed:", e);
+    return null;
   }
-  return storage;
-}
-
-export interface UploadProgress {
-  percent: number;
-  state: "running" | "paused" | "error" | "success";
 }
 
 /**
  * Upload a file to Firebase Storage and return its permanent download URL.
- * 
- * @param file          The File object to upload
- * @param employeeId    The employee ID (used to organise storage path)
- * @param docType       The document type (resume, aadhaar, pan, photo, educational)
- * @param onProgress    Optional callback receiving upload progress (0-100)
- * @returns             Permanent HTTPS download URL
  */
 export async function uploadDocumentToStorage(
   file: File,
@@ -66,9 +77,12 @@ export async function uploadDocumentToStorage(
   docType: string,
   onProgress?: (percent: number) => void
 ): Promise<string> {
-  const st = getFirebaseStorage();
+  const st = await getFirebaseStorage();
+  
+  if (!st) {
+    throw new Error("Firebase Storage is not configured. Please set up your AgentOps Firebase project in firebase-applet-config.json.");
+  }
 
-  // Create a unique storage path to avoid collisions
   const timestamp = Date.now();
   const safeName = file.name.replace(/[^a-zA-Z0-9._-]/g, "_");
   const storagePath = `documents/${employeeId}/${docType}/${timestamp}_${safeName}`;

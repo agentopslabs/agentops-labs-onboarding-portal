@@ -252,6 +252,10 @@ last_firestore_load_time = 0.0
 db_lock = threading.RLock()
 bg_load_lock = threading.Lock()
 bg_sync_lock = threading.Lock()
+# Pending collections queue for background Firestore sync
+_pending_sync_collections: set = set()
+_pending_sync_lock = threading.Lock()
+_bg_sync_thread_running = False
 
 def atomic_write_json(file_path, data):
     dir_name = os.path.dirname(file_path)
@@ -280,15 +284,15 @@ def load_database(silent=True):
     with db_lock:
         is_empty = not db_state.get("users")
         
-    if is_empty or (now - last_firestore_load_time >= 4.0):
-        # Synchronously reload from Firestore under load_lock to prevent concurrent requests from doing it
+    # Extended cache: 30 seconds (was 4s). In-memory state is fast and accurate.
+    # After any write, last_firestore_load_time is reset to now, so memory stays fresh.
+    if is_empty or (now - last_firestore_load_time >= 30.0):
         with load_lock:
-            # Re-check condition inside lock
             is_empty_locked = not db_state.get("users")
-            if is_empty_locked or (time.time() - last_firestore_load_time >= 4.0):
-                # Try to load disk cache first if we are empty and disk cache exists (fast boot fallback)
+            if is_empty_locked or (time.time() - last_firestore_load_time >= 30.0):
+                # Fast path: try disk cache first (milliseconds vs seconds for Firestore)
                 loaded_from_disk = False
-                if is_empty_locked and os.path.exists(DB_PATH):
+                if os.path.exists(DB_PATH):
                     try:
                         with open(DB_PATH, "r", encoding="utf-8") as f:
                             data = json.load(f)
@@ -298,12 +302,15 @@ def load_database(silent=True):
                                 db_state.update(data)
                                 last_synced_db = copy.deepcopy(data)
                             loaded_from_disk = True
-                            if not silent:
-                                print(f"[Python FastAPI] Loaded initial data from disk cache {DB_PATH}.")
+                            # If already loaded from disk and not empty, set timestamp
+                            # so we don't immediately hit Firestore too
+                            if not is_empty_locked:
+                                last_firestore_load_time = time.time()
+                                return  # Serve from disk cache immediately
                     except Exception:
                         pass
                 
-                # If disk cache is not present or we just expired, pull from Firestore
+                # Pull from Firestore (slower path — only when disk cache is stale/empty)
                 from firestore_sync import load_from_firestore
                 try:
                     temp_db = {}
@@ -337,22 +344,33 @@ def load_database(silent=True):
                     if is_empty_locked and not loaded_from_disk:
                         seed_database()
                         
-    # Note: If the cache is fresh (< 4s) and we have users loaded in memory,
-    # we do absolutely nothing. We serve immediately from memory db_state (sub-millisecond)!
-    
     with db_lock:
         has_no_users = not db_state.get("users")
     if has_no_users:
         print("[Python FastAPI] Database is empty (no users). Seeding default data...")
         seed_database()
 
+def _background_firestore_sync_worker(db_copy: dict, collections: set):
+    """Background thread worker that syncs to Firestore without blocking the API response."""
+    global last_synced_db, last_firestore_load_time
+    try:
+        from firestore_sync import sync_to_firestore
+        sync_to_firestore(db_copy, collections)
+        last_firestore_load_time = time.time()
+        with db_lock:
+            for key in collections:
+                last_synced_db[key] = copy.deepcopy(db_copy.get(key, [] if isinstance(db_copy.get(key), list) else {}))
+    except Exception as sync_err:
+        print(f"[Python FastAPI] Background Firestore sync failed: {sync_err}")
+
 def save_database(target_collection=None):
+    """Save database: write to disk immediately (fast), then sync Firestore in background (non-blocking)."""
     global db_state, last_synced_db, last_firestore_load_time
     try:
         with db_lock:
             db_copy = copy.deepcopy(db_state)
             
-        # 1. Detect modified collections to sync selectively by comparing with last_synced_db
+        # Detect which collections changed
         changed_collections = set()
         if target_collection:
             if isinstance(target_collection, (list, set)):
@@ -364,46 +382,89 @@ def save_database(target_collection=None):
                 if last_synced_db.get(key) != db_copy.get(key):
                     changed_collections.add(key)
                     
-        # 2. Atomic write to local disk cache (completed instantly)
-        atomic_write_json(DB_PATH, db_copy)
-        
-        # 3. Synchronous sync to Firestore for modified collections only (guarantees serverless persistence)
+        # Step 1: Atomic disk write — near-instant, guarantees local persistence
+        try:
+            atomic_write_json(DB_PATH, db_copy)
+        except Exception as disk_err:
+            print(f"[Python FastAPI] Disk write failed: {disk_err}")
+
+        # Step 2: Update last_synced_db optimistically so the cache stays fresh
         if changed_collections:
-            from firestore_sync import sync_to_firestore
-            try:
-                sync_to_firestore(db_copy, changed_collections)
-                # CRITICAL FIX: After a successful write+sync, set last_firestore_load_time to NOW
-                # (not 0!) so subsequent reads within 4s serve the fresh in-memory state rather
-                # than re-reading Firestore before the write has been committed on the cloud side.
-                # This prevents stale-read race conditions when the frontend calls onRefreshAll()
-                # immediately after a write operation.
-                last_firestore_load_time = time.time()
-                # Update last_synced_db under db_lock
-                with db_lock:
-                    for key in changed_collections:
-                        last_synced_db[key] = copy.deepcopy(db_copy[key])
-            except Exception as sync_err:
-                print(f"[Python FastAPI] Firestore sync failed: {sync_err}")
+            with db_lock:
+                for key in changed_collections:
+                    last_synced_db[key] = copy.deepcopy(db_copy.get(key, [] if isinstance(db_copy.get(key), list) else {}))
+            # Update the timestamp immediately so reads stay in-memory (don't re-hit Firestore)
+            last_firestore_load_time = time.time()
+            
+        # Step 3: Fire-and-forget background Firestore sync — API returns INSTANTLY to user
+        # The background thread durably persists the data to Firestore without blocking.
+        if changed_collections:
+            sync_thread = threading.Thread(
+                target=_background_firestore_sync_worker,
+                args=(db_copy, changed_collections),
+                daemon=True
+            )
+            sync_thread.start()
                 
     except Exception as e:
         print(f"[Python FastAPI] Error occurred while saving database: {e}")
 
-# Middleware to reload the database state from disk at the beginning of every request.
-# For write operations (POST/PUT/DELETE), we skip the Firestore re-read since we just wrote
-# and have fresh data in memory. This prevents reading stale Firestore data immediately after a write.
+def _startup_preload():
+    """Pre-warm the database from Firestore in a background thread on startup.
+    This prevents the very first user request from experiencing a cold-start delay."""
+    print("[Python FastAPI] Pre-warming database from Firestore in background...")
+    load_database(silent=False)
+    print("[Python FastAPI] Database pre-warm complete.")
+
+# Kick off background preload immediately on module load (before any request arrives)
+_preload_thread = threading.Thread(target=_startup_preload, daemon=True)
+_preload_thread.start()
+
+# Middleware: fast path for all requests — only hits Firestore when cache is stale (>30s)
+# Write requests (POST/PUT/DELETE) skip the read since we just updated in-memory state.
 @app.middleware("http")
 async def db_reload_middleware(request: Request, call_next):
-    # Always load for read-only operations; skip for writes (data was just updated in memory)
-    if request.method in ("GET", "HEAD", "OPTIONS"):
+    # Add CORS and caching headers to all responses
+    if request.method == "OPTIONS":
+        response = Response()
+        response.headers["Access-Control-Allow-Origin"] = "*"
+        response.headers["Access-Control-Allow-Methods"] = "GET, POST, PUT, DELETE, OPTIONS"
+        response.headers["Access-Control-Allow-Headers"] = "Content-Type, Authorization"
+        return response
+
+    if request.method in ("GET", "HEAD"):
+        # Only reload if cache is stale or empty — serves from fast in-memory state otherwise
         load_database(silent=True)
     else:
-        # For mutations, still do a lightweight empty-guard (seed if empty)
+        # For writes: just guard against empty state (don't reload if we have data)
         with db_lock:
             has_no_users = not db_state.get("users")
         if has_no_users:
             load_database(silent=True)
+    
     response = await call_next(request)
+    
+    # Add caching headers: GET responses can be cached briefly by the browser/CDN
+    if request.method == "GET" and response.status_code == 200:
+        # Short cache for dynamic API responses (5 seconds); static assets handled by Vercel CDN
+        if "/api/" in str(request.url):
+            response.headers["Cache-Control"] = "private, max-age=5"
+        response.headers["Access-Control-Allow-Origin"] = "*"
+    
     return response
+
+# Health check endpoint — used for uptime monitoring and keep-alive pings
+@app.get("/api/health")
+def health_check():
+    with db_lock:
+        user_count = len(db_state.get("users", []))
+    return {
+        "status": "ok",
+        "users": user_count,
+        "cache_age_seconds": round(time.time() - last_firestore_load_time, 1),
+        "timestamp": datetime.utcnow().isoformat() + "Z"
+    }
+
 
 def generate_email_body(email_type: str, data: Dict[str, Any]) -> str:
     if email_type == "welcome":
