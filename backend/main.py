@@ -6,6 +6,9 @@ import json
 import base64
 import time
 import random
+import threading
+import copy
+import tempfile
 from datetime import datetime, date
 from typing import List, Dict, Any, Optional, Union
 from enum import Enum
@@ -246,67 +249,150 @@ db_state = {
 # Token reset secure store
 active_reset_tokens = {}
 last_firestore_load_time = 0.0
+db_lock = threading.Lock()
+bg_load_lock = threading.Lock()
+bg_sync_lock = threading.Lock()
+
+def atomic_write_json(file_path, data):
+    dir_name = os.path.dirname(file_path)
+    if not os.path.exists(dir_name) and dir_name:
+        os.makedirs(dir_name, exist_ok=True)
+    with tempfile.NamedTemporaryFile('w', dir=dir_name, delete=False, encoding='utf-8') as tf:
+        json.dump(data, tf, indent=2, ensure_ascii=False)
+        temp_name = tf.name
+    try:
+        os.replace(temp_name, file_path)
+    except Exception as e:
+        if os.path.exists(temp_name):
+            try:
+                os.unlink(temp_name)
+            except Exception:
+                pass
+        raise e
 
 def load_database(silent=True):
     global db_state, last_firestore_load_time
     now = time.time()
     
-    # Try Firestore loading first (cached for 30 seconds to prevent blocking requests)
-    firestore_loaded = False
-    if now - last_firestore_load_time >= 30.0 or not db_state.get("users"):
-        # Set timestamp immediately to prevent concurrent requests from entering this block
-        last_firestore_load_time = now
-        from firestore_sync import load_from_firestore
-        try:
-            firestore_loaded = load_from_firestore(db_state)
-            if not firestore_loaded:
-                # Reset if failed so next requests can retry
-                last_firestore_load_time = 0.0
-        except Exception as e:
-            print(f"[Python FastAPI] Firestore load crashed: {e}")
-            last_firestore_load_time = 0.0
+    with db_lock:
+        is_empty = not db_state.get("users")
         
-    if firestore_loaded:
-        # Save Firestore state to local cache
-        try:
-            with open(DB_PATH, "w", encoding="utf-8") as f:
-                json.dump(db_state, f, indent=2, ensure_ascii=False)
-        except Exception:
-            pass
-    else:
-        # Fallback to local DB_PATH if exists
+    if is_empty:
+        # Initial synchronous boot sequence
+        loaded_from_disk = False
         if os.path.exists(DB_PATH):
             try:
                 with open(DB_PATH, "r", encoding="utf-8") as f:
                     data = json.load(f)
-                    for key in db_state.keys():
-                        if key not in data:
-                            data[key] = [] if isinstance(db_state[key], list) else {}
-                    db_state = data
-                if not silent:
-                    print(f"[Python FastAPI] Database state restored from {DB_PATH}.")
+                if data.get("users"):
+                    with db_lock:
+                        db_state.clear()
+                        db_state.update(data)
+                    loaded_from_disk = True
+                    if not silent:
+                        print(f"[Python FastAPI] Seeded in-memory database from disk cache {DB_PATH}.")
+            except Exception:
+                pass
+                
+        if not loaded_from_disk:
+            # Sync load from Firestore if disk cache is unavailable
+            from firestore_sync import load_from_firestore
+            try:
+                temp_db = {}
+                for key in db_state.keys():
+                    temp_db[key] = [] if isinstance(db_state[key], list) else {}
+                firestore_loaded = load_from_firestore(temp_db)
+                if firestore_loaded and temp_db.get("users"):
+                    with db_lock:
+                        db_state.clear()
+                        db_state.update(temp_db)
+                    try:
+                        atomic_write_json(DB_PATH, temp_db)
+                    except Exception:
+                        pass
+                else:
+                    seed_database()
             except Exception as e:
-                print(f"[Python FastAPI] Fails parsing database. Triggering default seed. Error: {e}")
+                print(f"[Python FastAPI] Initial Firestore load failed, seeding: {e}")
                 seed_database()
-        else:
-            seed_database()
-            
-    if not db_state.get("users"):
+                
+        last_firestore_load_time = now
+        
+    elif now - last_firestore_load_time >= 30.0:
+        # Trigger non-blocking background reload from Firestore
+        last_firestore_load_time = now
+        
+        def bg_load_task():
+            if not bg_load_lock.acquire(blocking=False):
+                return
+            try:
+                from firestore_sync import load_from_firestore
+                temp_db = {}
+                for key in db_state.keys():
+                    temp_db[key] = [] if isinstance(db_state[key], list) else {}
+                if load_from_firestore(temp_db) and temp_db.get("users"):
+                    with db_lock:
+                        db_state.clear()
+                        db_state.update(temp_db)
+                    try:
+                        atomic_write_json(DB_PATH, temp_db)
+                    except Exception:
+                        pass
+                    if not silent:
+                        print("[Python FastAPI] Background database reload from Firestore completed.")
+            except Exception as e:
+                print(f"[Python FastAPI] Background Firestore load failed: {e}")
+            finally:
+                bg_load_lock.release()
+                
+        threading.Thread(target=bg_load_task, daemon=True).start()
+        
+        # Load immediately from local disk cache to serve request instantly
+        if os.path.exists(DB_PATH):
+            try:
+                with open(DB_PATH, "r", encoding="utf-8") as f:
+                    data = json.load(f)
+                with db_lock:
+                    db_state.clear()
+                    db_state.update(data)
+            except Exception:
+                pass
+    else:
+        # Serve immediately from local disk cache
+        if os.path.exists(DB_PATH):
+            try:
+                with open(DB_PATH, "r", encoding="utf-8") as f:
+                    data = json.load(f)
+                with db_lock:
+                    db_state.clear()
+                    db_state.update(data)
+            except Exception:
+                pass
+                
+    with db_lock:
+        has_no_users = not db_state.get("users")
+    if has_no_users:
         print("[Python FastAPI] Database is empty (no users). Seeding default data...")
         seed_database()
 
 def save_database(target_collection=None):
     global db_state
     try:
-        with open(DB_PATH, "w", encoding="utf-8") as f:
-            json.dump(db_state, f, indent=2, ensure_ascii=False)
-            
-        # Sync to Firestore
-        from firestore_sync import sync_to_firestore
-        try:
-            sync_to_firestore(db_state, target_collection)
-        except Exception as sync_err:
-            print(f"[Python FastAPI] Firestore sync crashed: {sync_err}")
+        # 1. Atomic write to local disk (completed instantly)
+        with db_lock:
+            db_copy = copy.deepcopy(db_state)
+        atomic_write_json(DB_PATH, db_copy)
+        
+        # 2. Asynchronous write to Firestore in serialized background thread
+        def run_bg_sync():
+            with bg_sync_lock:
+                from firestore_sync import sync_to_firestore
+                try:
+                    sync_to_firestore(db_copy, target_collection)
+                except Exception as sync_err:
+                    print(f"[Python FastAPI] Background Firestore sync failed: {sync_err}")
+                    
+        threading.Thread(target=run_bg_sync, daemon=True).start()
     except Exception as e:
         print(f"[Python FastAPI] Error occurred while saving database: {e}")
 

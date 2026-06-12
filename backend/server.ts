@@ -141,17 +141,7 @@ function startPythonFastAPI() {
 
 const app = express();
 
-// Set up API request pipeline forwarding layer
-app.use("/api", async (req, res) => {
-  // Pause request stream during asynchronous Firestore fetch to avoid losing body chunks
-  req.pause();
-  try {
-    await loadDatabaseFromFirestore(true);
-  } catch (err) {
-    console.error("[Node Server] Failed to pull database on request:", err);
-  }
-  req.resume();
-
+app.use("/api", (req, res) => {
   const targetPath = `/api${req.url}`;
   
   // Clean request headers to target local FastAPI server
@@ -167,33 +157,7 @@ app.use("/api", async (req, res) => {
   }, (proxyRes) => {
     // Write headers and statuses directly to response
     res.writeHead(proxyRes.statusCode || 200, proxyRes.headers);
-
-    const isWrite = ["POST", "PUT", "DELETE"].includes(req.method || "");
-
-    if (isWrite) {
-      // Collect response body chunk-by-chunk to ensure request has completely ended before syncing disk modifications
-      proxyRes.on("data", (chunk) => {
-        res.write(chunk);
-      });
-      proxyRes.on("end", async () => {
-        res.end();
-        // Read updated datastore from shared disk and push modifications to Firestore
-        try {
-          if (fs.existsSync(DB_PATH)) {
-            const fileData = fs.readFileSync(DB_PATH, "utf-8");
-            const newDb = JSON.parse(fileData);
-            db = newDb;
-            await syncToFirestore(db);
-            console.log("[Node Sync Engine] Datastore cleanly updated and synchronized to Google Firestore.");
-          }
-        } catch (syncErr) {
-          console.error("[Node Sync Engine] Firestore synchronization failed:", syncErr);
-        }
-      });
-    } else {
-      // Directly stream read responses instantly
-      proxyRes.pipe(res);
-    }
+    proxyRes.pipe(res);
   });
 
   proxyReq.on("error", (err) => {

@@ -177,7 +177,7 @@ export default function Login({ onLoginSuccess, initialError }: LoginProps) {
         {/* Header Branding */}
         <div className="space-y-2">
           <Logo className="h-9 text-slate-900 mx-auto scale-100" />
-          <p className="text-xs text-slate-500 font-medium">Onboarding & Internal Credential Audits</p>
+          <p className="text-xs text-slate-500 font-medium">Employee Onboarding & Assessment Management Portal</p>
         </div>
  
         {/* Core Profile Credentials Card */}
