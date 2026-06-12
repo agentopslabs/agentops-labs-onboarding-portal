@@ -57,6 +57,18 @@ let db: Database = {
 async function loadDatabaseFromFirestore(silent = false) {
   if (!silent) console.log("[Node Server] Pulling database from Firestore...");
   
+  if (isServerless && !fs.existsSync(DB_PATH)) {
+    const baselinePath = path.join(process.cwd(), "db_agentops.json");
+    if (fs.existsSync(baselinePath)) {
+      try {
+        fs.copyFileSync(baselinePath, DB_PATH);
+        if (!silent) console.log("[Node Server] Seeded /tmp database from git baseline.");
+      } catch (copyErr) {
+        console.error("[Node Server] Failed to seed /tmp database from baseline:", copyErr);
+      }
+    }
+  }
+
   // First, pre-load existing disk file cache to preserve local-only fallback collections
   try {
     if (fs.existsSync(DB_PATH)) {
