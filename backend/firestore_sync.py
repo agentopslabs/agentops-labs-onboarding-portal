@@ -90,9 +90,10 @@ def load_from_firestore(db_state):
         print("[Python Sync] Project ID missing, bypassing Firestore load.")
         return False
     
-    print("[Python Sync] Downloading database from Firestore...")
-    loaded_any = False
-    for col in collections_info:
+    print("[Python Sync] Downloading database from Firestore in parallel...")
+    from concurrent.futures import ThreadPoolExecutor
+    
+    def load_collection(col):
         col_name = col["name"]
         col_key = col["key"]
         col_type = col["type"]
@@ -103,25 +104,32 @@ def load_from_firestore(db_state):
                 data = res.json()
                 documents = data.get("documents", [])
                 if col_type == "array":
-                    db_state[col_key] = [parse_firestore_doc(d) for d in documents]
+                    parsed_docs = [parse_firestore_doc(d) for d in documents]
                 else:
-                    # Passwords mapping
-                    db_state[col_key] = {}
+                    parsed_docs = {}
                     for d in documents:
                         parsed = parse_firestore_doc(d)
-                        # Extract userId from document name (projects/.../databases/.../documents/passwords/{userId})
                         doc_id = d.get("name", "").split("/")[-1]
                         if doc_id:
-                            db_state[col_key][doc_id] = parsed.get("password", "")
-                loaded_any = True
+                            parsed_docs[doc_id] = parsed.get("password", "")
+                return col_key, parsed_docs, True
             else:
-                # If collection doesn't exist yet, it's fine, ensure initialized
-                if col_key not in db_state:
-                    db_state[col_key] = [] if col_type == "array" else {}
+                return col_key, ([] if col_type == "array" else {}), False
         except Exception as e:
             print(f"[Python Sync] Failed to load collection {col_name}: {e}")
-            if col_key not in db_state:
-                db_state[col_key] = [] if col_type == "array" else {}
+            return col_key, ([] if col_type == "array" else {}), False
+
+    loaded_any = False
+    with ThreadPoolExecutor(max_workers=10) as executor:
+        results = executor.map(load_collection, collections_info)
+        
+    for col_key, parsed_data, success in results:
+        if success:
+            db_state[col_key] = parsed_data
+            loaded_any = True
+        else:
+            if col_key not in db_state or not db_state[col_key]:
+                db_state[col_key] = parsed_data
                 
     return loaded_any
 

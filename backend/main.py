@@ -4,6 +4,7 @@ sys.path.insert(0, os.path.dirname(__file__))
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), "python_packages"))
 import json
 import base64
+import time
 import random
 from datetime import datetime, date
 from typing import List, Dict, Any, Optional, Union
@@ -244,17 +245,22 @@ db_state = {
 
 # Token reset secure store
 active_reset_tokens = {}
+last_firestore_load_time = 0.0
 
 def load_database(silent=True):
-    global db_state
+    global db_state, last_firestore_load_time
+    now = time.time()
     
-    # Try Firestore loading first
-    from firestore_sync import load_from_firestore
+    # Try Firestore loading first (cached for 30 seconds to prevent blocking requests)
     firestore_loaded = False
-    try:
-        firestore_loaded = load_from_firestore(db_state)
-    except Exception as e:
-        print(f"[Python FastAPI] Firestore load crashed: {e}")
+    if now - last_firestore_load_time >= 30.0 or not db_state.get("users"):
+        from firestore_sync import load_from_firestore
+        try:
+            firestore_loaded = load_from_firestore(db_state)
+            if firestore_loaded:
+                last_firestore_load_time = now
+        except Exception as e:
+            print(f"[Python FastAPI] Firestore load crashed: {e}")
         
     if firestore_loaded:
         # Save Firestore state to local cache
