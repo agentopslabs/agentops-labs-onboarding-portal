@@ -249,7 +249,7 @@ db_state = {
 # Token reset secure store
 active_reset_tokens = {}
 last_firestore_load_time = 0.0
-db_lock = threading.Lock()
+db_lock = threading.RLock()
 bg_load_lock = threading.Lock()
 bg_sync_lock = threading.Lock()
 
@@ -1017,89 +1017,90 @@ def list_employees():
 # Admin POST user
 @app.post("/api/users", status_code=201)
 def create_employee(req: Dict[str, Any]):
-    name = req.get("name")
-    email = req.get("email")
-    mobile = req.get("mobile")
-    pwd = req.get("password")
-    dob = req.get("dob")
-    
-    if not name or not email or not mobile:
-        raise HTTPException(status_code=400, detail="Employee Name, Email, and Mobile are required.")
+    with db_lock:
+        name = req.get("name")
+        email = req.get("email")
+        mobile = req.get("mobile")
+        pwd = req.get("password")
+        dob = req.get("dob")
         
-    exists = any(u["email"].lower() == email.lower() for u in db_state["users"])
-    if exists:
-        raise HTTPException(status_code=400, detail="Email already registered in system.")
+        if not name or not email or not mobile:
+            raise HTTPException(status_code=400, detail="Employee Name, Email, and Mobile are required.")
+            
+        exists = any(u["email"].lower() == email.lower() for u in db_state["users"])
+        if exists:
+            raise HTTPException(status_code=400, detail="Email already registered in system.")
+            
+        new_id = f"emp-{int(datetime.now().timestamp() * 1000)}"
+        auto_pwd = pwd if (pwd and pwd.strip()) else f"AO@{random.randint(1000, 9999)}"
         
-    new_id = f"emp-{int(datetime.now().timestamp() * 1000)}"
-    auto_pwd = pwd if (pwd and pwd.strip()) else f"AO@{random.randint(1000, 9999)}"
-    
-    new_user = {
-        "id": new_id,
-        "name": name,
-        "email": email,
-        "mobile": mobile,
-        "role": "employee",
-        "status": "active",
-        "createdAt": datetime.utcnow().isoformat() + "Z"
-    }
-    if dob:
-        new_user["dob"] = dob
-        
-    db_state["users"].append(new_user)
-    db_state["passwords"][new_id] = auto_pwd
-    
-    # Empty application seed
-    new_app = {
-        "employeeId": new_id,
-        "fullName": name,
-        "email": email,
-        "mobile": mobile,
-        "gender": "",
-        "highestQualification": "",
-        "collegeName": "",
-        "yearOfPassing": "",
-        "technicalSkills": [],
-        "otherSkills": [],
-        "status": "not_started",
-        "updatedAt": datetime.utcnow().isoformat() + "Z"
-    }
-    db_state["applications"].append(new_app)
-    
-    # Checklists
-    now_iso = datetime.utcnow().isoformat() + "Z"
-    checklist_texts = [
-        ("application", "Application Submitted"),
-        ("documents", "Resume Uploaded"),
-        ("documents", "Aadhaar Uploaded"),
-        ("documents", "PAN Uploaded"),
-        ("documents", "Passport Photo Uploaded"),
-        ("documents", "Educational Certificates Uploaded"),
-        ("assessments", "Test Assigned"),
-        ("assessments", "Test Completed"),
-        ("assessments", "Passed Assessment"),
-        ("approval", "HR Review Completed"),
-        ("approval", "Final Approval Completed")
-    ]
-    
-    for i, (cat, txt) in enumerate(checklist_texts):
-        item = {
-            "id": f"chk-{int(datetime.now().timestamp() * 1000)}-{i}",
-            "employeeId": new_id,
-            "category": cat,
-            "text": txt,
-            "isCompleted": False,
-            "updatedAt": now_iso
+        new_user = {
+            "id": new_id,
+            "name": name,
+            "email": email,
+            "mobile": mobile,
+            "role": "employee",
+            "status": "active",
+            "createdAt": datetime.utcnow().isoformat() + "Z"
         }
-        db_state["checklists"].append(item)
+        if dob:
+            new_user["dob"] = dob
+            
+        db_state["users"].append(new_user)
+        db_state["passwords"][new_id] = auto_pwd
         
-    log_activity("admin-1", "Admin Olivia Vance", "Account Provisioned", f"Created employee account: {name} ({email})", sync=False)
-    
-    mail_txt = generate_email_body("welcome", {"name": name, "email": email, "password": auto_pwd})
-    send_simulated_email(email, "Welcome to AgentOps Labs - Temporary Account Password", mail_txt, "welcome", sync=False)
-    send_system_notification(new_id, "Onboarding Setup Launched", "Welcome! Please enter your dashboard, fill your Onboarding application description, and upload credentials.", "info", sync=False)
-    
-    save_database()
-    return {"user": new_user, "password": auto_pwd}
+        # Empty application seed
+        new_app = {
+            "employeeId": new_id,
+            "fullName": name,
+            "email": email,
+            "mobile": mobile,
+            "gender": "",
+            "highestQualification": "",
+            "collegeName": "",
+            "yearOfPassing": "",
+            "technicalSkills": [],
+            "otherSkills": [],
+            "status": "not_started",
+            "updatedAt": datetime.utcnow().isoformat() + "Z"
+        }
+        db_state["applications"].append(new_app)
+        
+        # Checklists
+        now_iso = datetime.utcnow().isoformat() + "Z"
+        checklist_texts = [
+            ("application", "Application Submitted"),
+            ("documents", "Resume Uploaded"),
+            ("documents", "Aadhaar Uploaded"),
+            ("documents", "PAN Uploaded"),
+            ("documents", "Passport Photo Uploaded"),
+            ("documents", "Educational Certificates Uploaded"),
+            ("assessments", "Test Assigned"),
+            ("assessments", "Test Completed"),
+            ("assessments", "Passed Assessment"),
+            ("approval", "HR Review Completed"),
+            ("approval", "Final Approval Completed")
+        ]
+        
+        for i, (cat, txt) in enumerate(checklist_texts):
+            item = {
+                "id": f"chk-{int(datetime.now().timestamp() * 1000)}-{i}",
+                "employeeId": new_id,
+                "category": cat,
+                "text": txt,
+                "isCompleted": False,
+                "updatedAt": now_iso
+            }
+            db_state["checklists"].append(item)
+            
+        log_activity("admin-1", "Admin Olivia Vance", "Account Provisioned", f"Created employee account: {name} ({email})", sync=False)
+        
+        mail_txt = generate_email_body("welcome", {"name": name, "email": email, "password": auto_pwd})
+        send_simulated_email(email, "Welcome to AgentOps Labs - Temporary Account Password", mail_txt, "welcome", sync=False)
+        send_system_notification(new_id, "Onboarding Setup Launched", "Welcome! Please enter your dashboard, fill your Onboarding application description, and upload credentials.", "info", sync=False)
+        
+        save_database()
+        return {"user": new_user, "password": auto_pwd}
 
 # Admin PUT update employee
 @app.put("/api/users/{user_id}")
@@ -2397,43 +2398,44 @@ def create_attendance_request(req: Dict[str, Any]):
 
 @app.put("/api/attendance/{record_id}/status")
 def update_attendance_status(record_id: str, req: Dict[str, Any]):
-    status = req.get("status")  # "approved" or "rejected"
-    remarks = req.get("remarks", "")
-    
-    if status not in ["approved", "rejected"]:
-        raise HTTPException(status_code=400, detail="Invalid attendance status.")
+    with db_lock:
+        status = req.get("status")  # "approved" or "rejected"
+        remarks = req.get("remarks", "")
         
-    record = next((r for r in db_state.get("attendance", []) if r["id"] == record_id), None)
-    if not record:
-        raise HTTPException(status_code=404, detail="Attendance record not found.")
+        if status not in ["approved", "rejected"]:
+            raise HTTPException(status_code=400, detail="Invalid attendance status.")
+            
+        record = next((r for r in db_state.get("attendance", []) if r["id"] == record_id), None)
+        if not record:
+            raise HTTPException(status_code=404, detail="Attendance record not found.")
+            
+        record["status"] = status
+        record["remarks"] = remarks
+        record["approvedAt"] = datetime.utcnow().isoformat() + "Z"
         
-    record["status"] = status
-    record["remarks"] = remarks
-    record["approvedAt"] = datetime.utcnow().isoformat() + "Z"
-    
-    # Notify Employee
-    notif_title = "Attendance Approved" if status == "approved" else "Attendance Rejected"
-    notif_msg = f"Your daily check-in for {record['date']} has been {status.upper()} by Admin."
-    if remarks:
-        notif_msg += f" Remarks: {remarks}"
+        # Notify Employee
+        notif_title = "Attendance Approved" if status == "approved" else "Attendance Rejected"
+        notif_msg = f"Your daily check-in for {record['date']} has been {status.upper()} by Admin."
+        if remarks:
+            notif_msg += f" Remarks: {remarks}"
+            
+        send_system_notification(
+            record["employeeId"],
+            notif_title,
+            notif_msg,
+            "success" if status == "approved" else "alert",
+            sync=False
+        )
         
-    send_system_notification(
-        record["employeeId"],
-        notif_title,
-        notif_msg,
-        "success" if status == "approved" else "alert",
-        sync=False
-    )
-    
-    log_activity(
-        "admin-1",
-        "Admin Olivia Vance",
-        f"Attendance {status.capitalize()}",
-        f"{status.capitalize()} attendance for employee {record['employeeName']} on {record['date']}.",
-        sync=False
-    )
-    save_database()
-    return record
+        log_activity(
+            "admin-1",
+            "Admin Olivia Vance",
+            f"Attendance {status.capitalize()}",
+            f"{status.capitalize()} attendance for employee {record['employeeName']} on {record['date']}.",
+            sync=False
+        )
+        save_database()
+        return record
 
 
 # Leave Endpoints
@@ -2486,43 +2488,44 @@ def create_leave_request(req: Dict[str, Any]):
 
 @app.put("/api/leaves/{leave_id}/status")
 def update_leave_status(leave_id: str, req: Dict[str, Any]):
-    status = req.get("status")  # "approved" or "rejected"
-    remarks = req.get("remarks", "")
-    
-    if status not in ["approved", "rejected"]:
-        raise HTTPException(status_code=400, detail="Invalid leave status.")
+    with db_lock:
+        status = req.get("status")  # "approved" or "rejected"
+        remarks = req.get("remarks", "")
         
-    leave = next((l for l in db_state.get("leaves", []) if l["id"] == leave_id), None)
-    if not leave:
-        raise HTTPException(status_code=404, detail="Leave request not found.")
+        if status not in ["approved", "rejected"]:
+            raise HTTPException(status_code=400, detail="Invalid leave status.")
+            
+        leave = next((l for l in db_state.get("leaves", []) if l["id"] == leave_id), None)
+        if not leave:
+            raise HTTPException(status_code=404, detail="Leave request not found.")
+            
+        leave["status"] = status
+        leave["remarks"] = remarks
+        leave["reviewedAt"] = datetime.utcnow().isoformat() + "Z"
         
-    leave["status"] = status
-    leave["remarks"] = remarks
-    leave["reviewedAt"] = datetime.utcnow().isoformat() + "Z"
-    
-    # Notify Employee
-    notif_title = "Leave Approved" if status == "approved" else "Leave Rejected"
-    notif_msg = f"Your leave request from {leave['startDate']} to {leave['endDate']} has been {status.upper()} by Admin."
-    if remarks:
-        notif_msg += f" Remarks: {remarks}"
+        # Notify Employee
+        notif_title = "Leave Approved" if status == "approved" else "Leave Rejected"
+        notif_msg = f"Your leave request from {leave['startDate']} to {leave['endDate']} has been {status.upper()} by Admin."
+        if remarks:
+            notif_msg += f" Remarks: {remarks}"
+            
+        send_system_notification(
+            leave["employeeId"],
+            notif_title,
+            notif_msg,
+            "success" if status == "approved" else "alert",
+            sync=False
+        )
         
-    send_system_notification(
-        leave["employeeId"],
-        notif_title,
-        notif_msg,
-        "success" if status == "approved" else "alert",
-        sync=False
-    )
-    
-    log_activity(
-        "admin-1",
-        "Admin Olivia Vance",
-        f"Leave {status.capitalize()}",
-        f"{status.capitalize()} leave request for employee {leave['employeeName']} from {leave['startDate']} to {leave['endDate']}.",
-        sync=False
-    )
-    save_database()
-    return leave
+        log_activity(
+            "admin-1",
+            "Admin Olivia Vance",
+            f"Leave {status.capitalize()}",
+            f"{status.capitalize()} leave request for employee {leave['employeeName']} from {leave['startDate']} to {leave['endDate']}.",
+            sync=False
+        )
+        save_database()
+        return leave
 
 if __name__ == "__main__":
     import uvicorn
