@@ -311,9 +311,8 @@ def load_database(silent=True):
                 # Pull from Supabase
                 from supabase_sync import load_from_supabase
                 try:
-                    temp_db = {}
-                    for key in db_state.keys():
-                        temp_db[key] = [] if isinstance(db_state[key], list) else {}
+                    with db_lock:
+                        temp_db = copy.deepcopy(db_state)
                     supabase_loaded = load_from_supabase(temp_db)
                     if supabase_loaded and temp_db.get("users"):
                         with db_lock:

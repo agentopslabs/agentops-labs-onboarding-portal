@@ -71,22 +71,19 @@ def load_from_supabase(db_state):
                 return col_key, parsed_docs, True
             else:
                 print(f"[Supabase Sync] Failed to load table {col_name}: {res.status_code} - {res.text}")
-                return col_key, ([] if col_type == "array" else {}), False
+                return col_key, None, False
         except Exception as e:
             print(f"[Supabase Sync] Failed to load collection {col_name}: {e}")
-            return col_key, ([] if col_type == "array" else {}), False
+            return col_key, None, False
 
     loaded_any = False
     with ThreadPoolExecutor(max_workers=10) as executor:
         results = executor.map(load_collection, collections_info)
 
     for col_key, parsed_data, success in results:
-        if success:
+        if success and parsed_data is not None:
             db_state[col_key] = parsed_data
             loaded_any = True
-        else:
-            if col_key not in db_state or not db_state[col_key]:
-                db_state[col_key] = parsed_data
 
     return loaded_any
 

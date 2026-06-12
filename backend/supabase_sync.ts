@@ -69,6 +69,8 @@ export async function loadFromFirestore(memoryDb: any): Promise<boolean> {
               }
             });
           }
+        } else {
+          console.warn(`[Supabase Sync] Failed to load table "${colInfo.name}" (status ${res.status})`);
         }
       } catch (colErr: any) {
         console.warn(`[Supabase Sync] Failed to load table "${colInfo.name}":`, colErr.message || colErr);
