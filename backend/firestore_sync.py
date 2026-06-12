@@ -133,14 +133,19 @@ def load_from_firestore(db_state):
                 
     return loaded_any
 
-def sync_to_firestore(db_state):
+def sync_to_firestore(db_state, target_collection=None):
     if not PROJECT_ID:
         print("[Python Sync] Project ID missing, bypassing Firestore sync.")
         return
     
-    print("[Python Sync] Syncing database to Firestore in parallel...")
+    print(f"[Python Sync] Syncing database to Firestore in parallel (target={target_collection or 'all'})...")
     from concurrent.futures import ThreadPoolExecutor
     
+    # Filter collections based on target_collection if provided
+    collections_to_sync = collections_info
+    if target_collection:
+        collections_to_sync = [c for c in collections_info if c["name"] == target_collection or c["key"] == target_collection]
+        
     def sync_collection(col):
         col_name = col["name"]
         col_key = col["key"]
@@ -212,6 +217,6 @@ def sync_to_firestore(db_state):
 
     with ThreadPoolExecutor(max_workers=8) as executor:
         # Consume iterator to block until all threads finish
-        list(executor.map(sync_collection, collections_info))
+        list(executor.map(sync_collection, collections_to_sync))
         
     print("[Python Sync] Database sync completed.")

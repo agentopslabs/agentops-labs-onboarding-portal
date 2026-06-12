@@ -254,13 +254,17 @@ def load_database(silent=True):
     # Try Firestore loading first (cached for 30 seconds to prevent blocking requests)
     firestore_loaded = False
     if now - last_firestore_load_time >= 30.0 or not db_state.get("users"):
+        # Set timestamp immediately to prevent concurrent requests from entering this block
+        last_firestore_load_time = now
         from firestore_sync import load_from_firestore
         try:
             firestore_loaded = load_from_firestore(db_state)
-            if firestore_loaded:
-                last_firestore_load_time = now
+            if not firestore_loaded:
+                # Reset if failed so next requests can retry
+                last_firestore_load_time = 0.0
         except Exception as e:
             print(f"[Python FastAPI] Firestore load crashed: {e}")
+            last_firestore_load_time = 0.0
         
     if firestore_loaded:
         # Save Firestore state to local cache
@@ -291,7 +295,7 @@ def load_database(silent=True):
         print("[Python FastAPI] Database is empty (no users). Seeding default data...")
         seed_database()
 
-def save_database():
+def save_database(target_collection=None):
     global db_state
     try:
         with open(DB_PATH, "w", encoding="utf-8") as f:
@@ -300,7 +304,7 @@ def save_database():
         # Sync to Firestore
         from firestore_sync import sync_to_firestore
         try:
-            sync_to_firestore(db_state)
+            sync_to_firestore(db_state, target_collection)
         except Exception as sync_err:
             print(f"[Python FastAPI] Firestore sync crashed: {sync_err}")
     except Exception as e:
@@ -342,7 +346,7 @@ def log_activity(employee_id: str, employee_name: str, action: str, details: str
         "timestamp": datetime.utcnow().isoformat() + "Z"
     }
     db_state["activityLogs"].insert(0, log)
-    save_database()
+    save_database("activityLogs")
 
 def send_system_notification(employee_id: Optional[str], title: str, message: str, notif_type: str = "info"):
     notif = {
@@ -355,7 +359,7 @@ def send_system_notification(employee_id: Optional[str], title: str, message: st
         "type": notif_type
     }
     db_state["notifications"].insert(0, notif)
-    save_database()
+    save_database("notifications")
 
 def send_simulated_email(to: str, subject: str, body: str, email_type: str):
     email = {
@@ -367,7 +371,7 @@ def send_simulated_email(to: str, subject: str, body: str, email_type: str):
         "type": email_type
     }
     db_state["emails"].insert(0, email)
-    save_database()
+    save_database("emails")
 
 def check_birthdays_and_notify_admin():
     try:
@@ -708,7 +712,7 @@ def auth_login(req: LoginRequest):
     # Update stored in case mismatch occurred
     if stored_pwd != password:
         db_state["passwords"][matched_user["id"]] = password
-        save_database()
+        save_database("passwords")
         
     log_activity(matched_user["id"], matched_user["name"], "User Sign-In", "Successful authentication via credentials.")
     
