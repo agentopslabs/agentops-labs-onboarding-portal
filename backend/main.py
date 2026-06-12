@@ -280,12 +280,12 @@ def load_database(silent=True):
     with db_lock:
         is_empty = not db_state.get("users")
         
-    if is_empty or (now - last_firestore_load_time >= 30.0):
+    if is_empty or (now - last_firestore_load_time >= 4.0):
         # Synchronously reload from Firestore under load_lock to prevent concurrent requests from doing it
         with load_lock:
             # Re-check condition inside lock
             is_empty_locked = not db_state.get("users")
-            if is_empty_locked or (time.time() - last_firestore_load_time >= 30.0):
+            if is_empty_locked or (time.time() - last_firestore_load_time >= 4.0):
                 # Try to load disk cache first if we are empty and disk cache exists (fast boot fallback)
                 loaded_from_disk = False
                 if is_empty_locked and os.path.exists(DB_PATH):
@@ -337,7 +337,7 @@ def load_database(silent=True):
                     if is_empty_locked and not loaded_from_disk:
                         seed_database()
                         
-    # Note: If the cache is fresh (< 30s) and we have users loaded in memory,
+    # Note: If the cache is fresh (< 4s) and we have users loaded in memory,
     # we do absolutely nothing. We serve immediately from memory db_state (sub-millisecond)!
     
     with db_lock:
@@ -347,7 +347,7 @@ def load_database(silent=True):
         seed_database()
 
 def save_database(target_collection=None):
-    global db_state, last_synced_db
+    global db_state, last_synced_db, last_firestore_load_time
     try:
         with db_lock:
             db_copy = copy.deepcopy(db_state)
@@ -372,6 +372,8 @@ def save_database(target_collection=None):
             from firestore_sync import sync_to_firestore
             try:
                 sync_to_firestore(db_copy, changed_collections)
+                # Invalidate read cache immediately upon a successful write so next read is fresh
+                last_firestore_load_time = 0.0
                 # Update last_synced_db under db_lock
                 with db_lock:
                     for key in changed_collections:
