@@ -2,50 +2,260 @@
   "users": [
     {
       "name": "G Venkat (HR Lead)",
-      "role": "admin",
-      "status": "active",
-      "email": "agentopslabs@gmail.com",
-      "id": "admin-1",
       "mobile": "+1 (555) 019-2834",
-      "createdAt": "2026-06-12T09:19:46.377303Z"
+      "status": "active",
+      "id": "admin-1",
+      "createdAt": "2026-06-12T09:19:46.377303Z",
+      "email": "agentopslabs@gmail.com",
+      "role": "admin"
     },
     {
-      "email": "bharathsathyasaijanga@gmail.com",
+      "mobile": "7670845590",
       "status": "active",
+      "dob": "1998-06-12",
       "name": "Bharath",
       "role": "employee",
-      "mobile": "7670845590",
+      "email": "bharathsathyasaijanga@gmail.com",
       "createdAt": "2026-06-12T09:19:46.377303Z",
-      "dob": "1998-06-12",
       "id": "emp-1"
     },
     {
-      "email": "rajeshkumar@gmail.com",
-      "status": "active",
-      "name": "Rajesh Kumar",
+      "email": "shriyachary0810@gmail.com",
       "role": "employee",
-      "mobile": "9876543210",
-      "createdAt": "2026-06-12T09:19:46.377303Z",
+      "id": "emp-1781264493152",
+      "createdAt": "2026-06-12T11:41:33.152128Z",
+      "status": "active",
+      "mobile": "7981908645",
+      "name": "shriya"
+    },
+    {
+      "role": "employee",
+      "email": "shriyachary0810@gmail.com",
+      "createdAt": "2026-06-12T11:41:39.123046Z",
+      "id": "emp-1781264499123",
+      "mobile": "7981908645",
+      "status": "active",
+      "name": "shriya"
+    },
+    {
+      "mobile": "7981908645",
+      "status": "active",
+      "name": "shriya",
+      "role": "employee",
+      "email": "shriyachary0810@gmail.com",
+      "createdAt": "2026-06-12T11:41:40.973880Z",
+      "id": "emp-1781264500973"
+    },
+    {
+      "mobile": "7981908645",
+      "status": "active",
+      "name": "shriya",
+      "role": "employee",
+      "email": "shriyachary0810@gmail.com",
+      "createdAt": "2026-06-12T11:41:41.567596Z",
+      "id": "emp-1781264501567"
+    },
+    {
+      "createdAt": "2026-06-12T11:41:41.713961Z",
+      "id": "emp-1781264501713",
+      "role": "employee",
+      "email": "shriyachary0810@gmail.com",
+      "name": "shriya",
+      "status": "active",
+      "mobile": "7981908645"
+    },
+    {
+      "role": "employee",
+      "email": "shriyachary0810@gmail.com",
+      "createdAt": "2026-06-12T11:41:42.143932Z",
+      "id": "emp-1781264502143",
+      "status": "active",
+      "mobile": "7981908645",
+      "name": "shriya"
+    },
+    {
+      "name": "shriya",
+      "mobile": "7981908645",
+      "status": "active",
+      "id": "emp-1781264502166",
+      "createdAt": "2026-06-12T11:41:42.166974Z",
+      "email": "shriyachary0810@gmail.com",
+      "role": "employee"
+    },
+    {
+      "role": "employee",
+      "email": "shriyachary0810@gmail.com",
+      "createdAt": "2026-06-12T11:41:42.397240Z",
+      "id": "emp-1781264502397",
+      "mobile": "7981908645",
+      "status": "active",
+      "name": "shriya"
+    },
+    {
+      "email": "shriyachary0810@gmail.com",
+      "role": "employee",
+      "id": "emp-1781264503796",
+      "createdAt": "2026-06-12T11:41:43.796408Z",
+      "mobile": "7981908645",
+      "status": "active",
+      "name": "shriya"
+    },
+    {
+      "createdAt": "2026-06-12T11:41:46.844291Z",
+      "id": "emp-1781264506844",
+      "role": "employee",
+      "email": "shriyachary0810@gmail.com",
+      "name": "shriya",
+      "mobile": "7981908645",
+      "status": "active"
+    },
+    {
+      "name": "shriya",
+      "mobile": "7981908645",
+      "status": "active",
+      "createdAt": "2026-06-12T11:41:51.246204Z",
+      "id": "emp-1781264511246",
+      "role": "employee",
+      "email": "shriyachary0810@gmail.com"
+    },
+    {
+      "name": "shriya",
+      "mobile": "7981908645",
+      "status": "active",
+      "createdAt": "2026-06-12T11:41:53.383318Z",
+      "id": "emp-1781264513383",
+      "role": "employee",
+      "email": "shriyachary0810@gmail.com"
+    },
+    {
+      "role": "employee",
+      "email": "shriyachary0810@gmail.com",
+      "createdAt": "2026-06-12T11:41:57.516453Z",
+      "id": "emp-1781264517516",
+      "status": "active",
+      "mobile": "7981908645",
+      "name": "shriya"
+    },
+    {
+      "id": "emp-1781264517533",
+      "createdAt": "2026-06-12T11:41:57.533906Z",
+      "email": "shriyachary0810@gmail.com",
+      "role": "employee",
+      "name": "shriya",
+      "mobile": "7981908645",
+      "status": "active"
+    },
+    {
+      "name": "shriya",
+      "mobile": "7981908645",
+      "status": "active",
+      "createdAt": "2026-06-12T11:41:57.761073Z",
+      "id": "emp-1781264517761",
+      "role": "employee",
+      "email": "shriyachary0810@gmail.com"
+    },
+    {
+      "id": "emp-1781264517771",
+      "createdAt": "2026-06-12T11:41:57.771117Z",
+      "email": "shriyachary0810@gmail.com",
+      "role": "employee",
+      "name": "shriya",
+      "mobile": "7981908645",
+      "status": "active"
+    },
+    {
+      "createdAt": "2026-06-12T11:41:58.551516Z",
+      "id": "emp-1781264518551",
+      "role": "employee",
+      "email": "shriyachary0810@gmail.com",
+      "name": "shriya",
+      "mobile": "7981908645",
+      "status": "active"
+    },
+    {
+      "email": "shriyachary0810@gmail.com",
+      "role": "employee",
+      "id": "emp-1781264518767",
+      "createdAt": "2026-06-12T11:41:58.767386Z",
+      "status": "active",
+      "mobile": "7981908645",
+      "name": "shriya"
+    },
+    {
+      "status": "active",
+      "mobile": "7981908645",
+      "name": "shriya",
+      "role": "employee",
+      "email": "shriyachary0810@gmail.com",
+      "createdAt": "2026-06-12T11:41:59.926857Z",
+      "id": "emp-1781264519926"
+    },
+    {
+      "role": "employee",
+      "email": "shriyachary0810@gmail.com",
+      "createdAt": "2026-06-12T11:41:59.952663Z",
+      "id": "emp-1781264519952",
+      "mobile": "7981908645",
+      "status": "active",
+      "name": "shriya"
+    },
+    {
+      "mobile": "7981908645",
+      "status": "active",
+      "name": "shriya",
+      "role": "employee",
+      "email": "shriyachary0810@gmail.com",
+      "createdAt": "2026-06-12T11:42:00.871854Z",
+      "id": "emp-1781264520871"
+    },
+    {
+      "name": "Rajesh Kumar",
       "dob": "2000-06-18",
-      "id": "emp-2"
+      "mobile": "9876543210",
+      "status": "active",
+      "id": "emp-2",
+      "createdAt": "2026-06-12T09:19:46.377303Z",
+      "email": "rajeshkumar@gmail.com",
+      "role": "employee"
     }
   ],
   "passwords": {
     "admin-1": "Gvenkat@123",
     "emp-1": "Bharath@767",
+    "emp-1781264493152": "Shriya@123",
+    "emp-1781264499123": "Shriya@123",
+    "emp-1781264500973": "Shriya@123",
+    "emp-1781264501567": "Shriya@123",
+    "emp-1781264501713": "Shriya@123",
+    "emp-1781264502143": "Shriya@123",
+    "emp-1781264502166": "Shriya@123",
+    "emp-1781264502397": "Shriya@123",
+    "emp-1781264503796": "Shriya@123",
+    "emp-1781264506844": "Shriya@123",
+    "emp-1781264511246": "Shriya@123",
+    "emp-1781264513383": "Shriya@123",
+    "emp-1781264517516": "Shriya@123",
+    "emp-1781264517533": "Shriya@123",
+    "emp-1781264517761": "Shriya@123",
+    "emp-1781264517771": "Shriya@123",
+    "emp-1781264518551": "Shriya@123",
+    "emp-1781264518767": "Shriya@123",
+    "emp-1781264519926": "Shriya@123",
+    "emp-1781264519952": "Shriya@123",
+    "emp-1781264520871": "Shriya@123",
     "emp-2": "Rajesh@767"
   },
   "applications": [
     {
-      "highestQualification": "B.Tech in Computer Science",
-      "status": "submitted",
-      "mobile": "7670845590",
-      "updatedAt": "2026-06-12T09:34:55.821818Z",
+      "email": "bharathsathyasaijanga@gmail.com",
+      "percentageOrCgpa": "10 cgpa",
+      "submittedAt": "2026-06-12T09:34:55.821818Z",
       "otherSkills": [
         "Product Management",
         "Team Leadership"
       ],
-      "percentageOrCgpa": "10 cgpa",
+      "updatedAt": "2026-06-12T09:34:55.821818Z",
+      "highestQualification": "B.Tech in Computer Science",
       "technicalSkills": [
         "React",
         "TypeScript",
@@ -53,22 +263,318 @@
         "Express",
         "python"
       ],
+      "status": "submitted",
       "collegeName": "Stanford University",
-      "employeeId": "emp-1",
-      "email": "bharathsathyasaijanga@gmail.com",
-      "fullName": "Bharath",
-      "yearOfPassing": "2024",
       "gender": "Male",
-      "submittedAt": "2026-06-12T09:34:55.821818Z"
+      "fullName": "Bharath",
+      "mobile": "7670845590",
+      "employeeId": "emp-1",
+      "yearOfPassing": "2024"
+    },
+    {
+      "gender": "",
+      "updatedAt": "2026-06-12T11:41:33.152142Z",
+      "fullName": "shriya",
+      "mobile": "7981908645",
+      "yearOfPassing": "",
+      "highestQualification": "",
+      "employeeId": "emp-1781264493152",
+      "email": "shriyachary0810@gmail.com",
+      "technicalSkills": [],
+      "otherSkills": [],
+      "status": "not_started",
+      "collegeName": ""
+    },
+    {
+      "updatedAt": "2026-06-12T11:41:39.123061Z",
+      "fullName": "shriya",
+      "gender": "",
+      "yearOfPassing": "",
+      "highestQualification": "",
+      "employeeId": "emp-1781264499123",
+      "mobile": "7981908645",
+      "technicalSkills": [],
+      "email": "shriyachary0810@gmail.com",
+      "collegeName": "",
+      "otherSkills": [],
+      "status": "not_started"
+    },
+    {
+      "technicalSkills": [],
+      "email": "shriyachary0810@gmail.com",
+      "collegeName": "",
+      "status": "not_started",
+      "otherSkills": [],
+      "fullName": "shriya",
+      "updatedAt": "2026-06-12T11:41:40.973896Z",
+      "gender": "",
+      "employeeId": "emp-1781264500973",
+      "yearOfPassing": "",
+      "highestQualification": "",
+      "mobile": "7981908645"
+    },
+    {
+      "yearOfPassing": "",
+      "highestQualification": "",
+      "employeeId": "emp-1781264501567",
+      "mobile": "7981908645",
+      "updatedAt": "2026-06-12T11:41:41.567612Z",
+      "fullName": "shriya",
+      "gender": "",
+      "collegeName": "",
+      "otherSkills": [],
+      "status": "not_started",
+      "technicalSkills": [],
+      "email": "shriyachary0810@gmail.com"
+    },
+    {
+      "otherSkills": [],
+      "status": "not_started",
+      "collegeName": "",
+      "email": "shriyachary0810@gmail.com",
+      "technicalSkills": [],
+      "mobile": "7981908645",
+      "highestQualification": "",
+      "yearOfPassing": "",
+      "employeeId": "emp-1781264501713",
+      "gender": "",
+      "updatedAt": "2026-06-12T11:41:41.713977Z",
+      "fullName": "shriya"
+    },
+    {
+      "otherSkills": [],
+      "status": "not_started",
+      "collegeName": "",
+      "email": "shriyachary0810@gmail.com",
+      "technicalSkills": [],
+      "mobile": "7981908645",
+      "yearOfPassing": "",
+      "highestQualification": "",
+      "employeeId": "emp-1781264502143",
+      "gender": "",
+      "updatedAt": "2026-06-12T11:41:42.143948Z",
+      "fullName": "shriya"
+    },
+    {
+      "status": "not_started",
+      "otherSkills": [],
+      "collegeName": "",
+      "email": "shriyachary0810@gmail.com",
+      "technicalSkills": [],
+      "mobile": "7981908645",
+      "employeeId": "emp-1781264502166",
+      "yearOfPassing": "",
+      "highestQualification": "",
+      "gender": "",
+      "fullName": "shriya",
+      "updatedAt": "2026-06-12T11:41:42.166988Z"
+    },
+    {
+      "updatedAt": "2026-06-12T11:41:42.397255Z",
+      "fullName": "shriya",
+      "gender": "",
+      "yearOfPassing": "",
+      "highestQualification": "",
+      "employeeId": "emp-1781264502397",
+      "mobile": "7981908645",
+      "technicalSkills": [],
+      "email": "shriyachary0810@gmail.com",
+      "collegeName": "",
+      "otherSkills": [],
+      "status": "not_started"
+    },
+    {
+      "employeeId": "emp-1781264503796",
+      "highestQualification": "",
+      "yearOfPassing": "",
+      "mobile": "7981908645",
+      "fullName": "shriya",
+      "updatedAt": "2026-06-12T11:41:43.796424Z",
+      "gender": "",
+      "collegeName": "",
+      "status": "not_started",
+      "otherSkills": [],
+      "technicalSkills": [],
+      "email": "shriyachary0810@gmail.com"
+    },
+    {
+      "status": "not_started",
+      "otherSkills": [],
+      "collegeName": "",
+      "email": "shriyachary0810@gmail.com",
+      "technicalSkills": [],
+      "mobile": "7981908645",
+      "employeeId": "emp-1781264506844",
+      "yearOfPassing": "",
+      "highestQualification": "",
+      "gender": "",
+      "fullName": "shriya",
+      "updatedAt": "2026-06-12T11:41:46.844307Z"
+    },
+    {
+      "gender": "",
+      "updatedAt": "2026-06-12T11:41:51.246219Z",
+      "fullName": "shriya",
+      "mobile": "7981908645",
+      "highestQualification": "",
+      "yearOfPassing": "",
+      "employeeId": "emp-1781264511246",
+      "email": "shriyachary0810@gmail.com",
+      "technicalSkills": [],
+      "otherSkills": [],
+      "status": "not_started",
+      "collegeName": ""
+    },
+    {
+      "email": "shriyachary0810@gmail.com",
+      "technicalSkills": [],
+      "otherSkills": [],
+      "status": "not_started",
+      "collegeName": "",
+      "gender": "",
+      "updatedAt": "2026-06-12T11:41:53.383331Z",
+      "fullName": "shriya",
+      "mobile": "7981908645",
+      "yearOfPassing": "",
+      "highestQualification": "",
+      "employeeId": "emp-1781264513383"
+    },
+    {
+      "email": "shriyachary0810@gmail.com",
+      "technicalSkills": [],
+      "status": "not_started",
+      "otherSkills": [],
+      "collegeName": "",
+      "gender": "",
+      "fullName": "shriya",
+      "updatedAt": "2026-06-12T11:41:57.516469Z",
+      "mobile": "7981908645",
+      "employeeId": "emp-1781264517516",
+      "highestQualification": "",
+      "yearOfPassing": ""
+    },
+    {
+      "email": "shriyachary0810@gmail.com",
+      "technicalSkills": [],
+      "status": "not_started",
+      "otherSkills": [],
+      "collegeName": "",
+      "gender": "",
+      "fullName": "shriya",
+      "updatedAt": "2026-06-12T11:41:57.533921Z",
+      "mobile": "7981908645",
+      "employeeId": "emp-1781264517533",
+      "yearOfPassing": "",
+      "highestQualification": ""
+    },
+    {
+      "mobile": "7981908645",
+      "employeeId": "emp-1781264517761",
+      "highestQualification": "",
+      "yearOfPassing": "",
+      "gender": "",
+      "fullName": "shriya",
+      "updatedAt": "2026-06-12T11:41:57.761087Z",
+      "status": "not_started",
+      "otherSkills": [],
+      "collegeName": "",
+      "email": "shriyachary0810@gmail.com",
+      "technicalSkills": []
+    },
+    {
+      "fullName": "shriya",
+      "updatedAt": "2026-06-12T11:41:57.771133Z",
+      "gender": "",
+      "employeeId": "emp-1781264517771",
+      "yearOfPassing": "",
+      "highestQualification": "",
+      "mobile": "7981908645",
+      "technicalSkills": [],
+      "email": "shriyachary0810@gmail.com",
+      "collegeName": "",
+      "status": "not_started",
+      "otherSkills": []
+    },
+    {
+      "collegeName": "",
+      "status": "not_started",
+      "otherSkills": [],
+      "technicalSkills": [],
+      "email": "shriyachary0810@gmail.com",
+      "employeeId": "emp-1781264518551",
+      "highestQualification": "",
+      "yearOfPassing": "",
+      "mobile": "7981908645",
+      "fullName": "shriya",
+      "updatedAt": "2026-06-12T11:41:58.551531Z",
+      "gender": ""
+    },
+    {
+      "mobile": "7981908645",
+      "highestQualification": "",
+      "yearOfPassing": "",
+      "employeeId": "emp-1781264518767",
+      "gender": "",
+      "updatedAt": "2026-06-12T11:41:58.767402Z",
+      "fullName": "shriya",
+      "otherSkills": [],
+      "status": "not_started",
+      "collegeName": "",
+      "email": "shriyachary0810@gmail.com",
+      "technicalSkills": []
+    },
+    {
+      "otherSkills": [],
+      "status": "not_started",
+      "collegeName": "",
+      "email": "shriyachary0810@gmail.com",
+      "technicalSkills": [],
+      "mobile": "7981908645",
+      "yearOfPassing": "",
+      "highestQualification": "",
+      "employeeId": "emp-1781264519926",
+      "gender": "",
+      "updatedAt": "2026-06-12T11:41:59.926868Z",
+      "fullName": "shriya"
+    },
+    {
+      "technicalSkills": [],
+      "email": "shriyachary0810@gmail.com",
+      "collegeName": "",
+      "status": "not_started",
+      "otherSkills": [],
+      "fullName": "shriya",
+      "updatedAt": "2026-06-12T11:41:59.952676Z",
+      "gender": "",
+      "employeeId": "emp-1781264519952",
+      "yearOfPassing": "",
+      "highestQualification": "",
+      "mobile": "7981908645"
+    },
+    {
+      "mobile": "7981908645",
+      "highestQualification": "",
+      "yearOfPassing": "",
+      "employeeId": "emp-1781264520871",
+      "gender": "",
+      "updatedAt": "2026-06-12T11:42:00.871870Z",
+      "fullName": "shriya",
+      "otherSkills": [],
+      "status": "not_started",
+      "collegeName": "",
+      "email": "shriyachary0810@gmail.com",
+      "technicalSkills": []
     }
   ],
   "documents": [],
   "tests": [
     {
-      "passingMarks": 70,
-      "name": "test",
       "questions": [
         {
+          "id": "q-1781256803586-1",
+          "text": "Sample Single Match Question?",
+          "moduleName": "General",
+          "type": "single_choice",
           "options": [
             "Option A",
             "Option B",
@@ -77,30 +583,26 @@
           ],
           "correctAnswers": [
             0
+          ]
+        },
+        {
+          "id": "q-1781256813835-92",
+          "correctAnswers": [
+            0
           ],
-          "text": "Sample Single Match Question?",
+          "options": [
+            "True",
+            "False"
+          ],
+          "text": "New Option Question Details?",
           "type": "single_choice",
-          "id": "q-1781256803586-1",
           "moduleName": "General"
         },
         {
-          "text": "New Option Question Details?",
-          "options": [
-            "True",
-            "False"
-          ],
-          "correctAnswers": [
-            0
-          ],
-          "moduleName": "General",
-          "type": "single_choice",
-          "id": "q-1781256813835-92"
-        },
-        {
-          "type": "single_choice",
           "id": "q-1781256825153-70",
           "moduleName": "sub",
           "text": "New Option Question Details?",
+          "type": "single_choice",
           "correctAnswers": [
             0
           ],
@@ -110,97 +612,96 @@
           ]
         },
         {
-          "moduleName": "sub",
-          "type": "single_choice",
           "id": "q-1781256825407-56",
-          "correctAnswers": [
-            0
-          ],
-          "options": [
-            "True",
-            "False"
-          ],
-          "text": "New Option Question Details?"
-        },
-        {
-          "id": "q-1781256825649-93",
           "moduleName": "sub",
-          "type": "single_choice",
           "text": "New Option Question Details?",
+          "type": "single_choice",
+          "correctAnswers": [
+            0
+          ],
+          "options": [
+            "True",
+            "False"
+          ]
+        },
+        {
+          "correctAnswers": [
+            0
+          ],
           "options": [
             "True",
             "False"
           ],
-          "correctAnswers": [
-            0
-          ]
+          "type": "single_choice",
+          "moduleName": "sub",
+          "text": "New Option Question Details?",
+          "id": "q-1781256825649-93"
         },
         {
-          "type": "single_choice",
           "id": "q-1781256825898-29",
-          "moduleName": "ab",
-          "text": "New Option Question Details?",
           "correctAnswers": [
             0
           ],
           "options": [
             "True",
             "False"
-          ]
-        },
-        {
+          ],
           "type": "single_choice",
-          "id": "q-1781256845750-97",
           "moduleName": "ab",
-          "correctAnswers": [
-            0
-          ],
-          "options": [
-            "True",
-            "False"
-          ],
           "text": "New Option Question Details?"
         },
         {
+          "id": "q-1781256845750-97",
+          "text": "New Option Question Details?",
+          "moduleName": "ab",
+          "type": "single_choice",
           "options": [
             "True",
             "False"
           ],
           "correctAnswers": [
             0
-          ],
-          "text": "New Option Question Details?",
-          "type": "single_choice",
+          ]
+        },
+        {
           "id": "q-1781256845985-74",
-          "moduleName": "ab"
+          "text": "New Option Question Details?",
+          "moduleName": "ab",
+          "type": "single_choice",
+          "correctAnswers": [
+            0
+          ],
+          "options": [
+            "True",
+            "False"
+          ]
         }
       ],
-      "isPublished": true,
       "createdAt": "2026-06-12T09:34:25.336010Z",
       "id": "test-1781256865335",
-      "duration": 15
+      "passingMarks": 70,
+      "isPublished": true,
+      "duration": 15,
+      "name": "test"
     },
     {
-      "passingMarks": 70,
-      "name": "AgentOps Core React & Node Assessment",
-      "isPublished": true,
       "questions": [
         {
           "text": "What is the primary purpose of the Virtual DOM in React?",
+          "type": "single_choice",
+          "correctAnswers": [
+            1
+          ],
           "options": [
             "To directly modify the browser's hardware visual canvas.",
             "To keep a lightweight virtual copy of the DOM in memory, enabling lightning fast batch updates through reconciliation.",
             "To sandbox external iframes from executing malicious scripts.",
             "To establish permanent SQLite client connections inside Chrome."
           ],
-          "correctAnswers": [
-            1
-          ],
-          "type": "single_choice",
           "id": "q1"
         },
         {
-          "text": "Which hook should you implement to memoize expensive computations between re-renders?",
+          "id": "q2",
           "correctAnswers": [
             2
           ],
@@ -210,8 +711,8 @@
             "useMemo",
             "useRef"
           ],
-          "type": "single_choice",
-          "id": "q2"
+          "text": "Which hook should you implement to memoize expensive computations between re-renders?",
+          "type": "single_choice"
         },
         {
           "correctAnswers": [
@@ -224,48 +725,53 @@
             "Minimal active RAM overhead when waiting for DB replies.",
             "Eliminates the possibility of memory leaks entirely."
           ],
-          "text": "Select all valid advantages of Node.js event-driven, non-blocking I/O model (Select multiple):",
           "type": "multiple_choice",
+          "text": "Select all valid advantages of Node.js event-driven, non-blocking I/O model (Select multiple):",
           "id": "q3"
         },
         {
-          "text": "FastAPI is built on top of Starlette for web parts and Pydantic for data parts.",
-          "correctAnswers": [
-            0
-          ],
           "options": [
             "True",
             "False"
           ],
+          "correctAnswers": [
+            0
+          ],
+          "text": "FastAPI is built on top of Starlette for web parts and Pydantic for data parts.",
           "type": "true_false",
           "id": "q4"
         }
       ],
       "createdAt": "2026-06-12T09:19:46.377303Z",
+      "passingMarks": 70,
       "id": "test-react-node",
-      "duration": 15
+      "isPublished": true,
+      "duration": 15,
+      "name": "AgentOps Core React & Node Assessment"
     },
     {
-      "id": "test-system-safety",
+      "name": "Enterprise Security & Compliance Quiz",
+      "isPublished": true,
       "duration": 10,
       "createdAt": "2026-06-12T09:19:46.377303Z",
       "passingMarks": 100,
+      "id": "test-system-safety",
       "questions": [
         {
-          "type": "true_false",
-          "id": "sec-q1",
           "text": "Is it permissible to share temporary JWT tokens or passwords with fellow team members via Slack?",
+          "type": "true_false",
+          "correctAnswers": [
+            1
+          ],
           "options": [
             "True (Yes, provided it's an internal private channel)",
             "False (Never permissible under any compliance circumstance)"
           ],
-          "correctAnswers": [
-            1
-          ]
+          "id": "sec-q1"
         },
         {
           "type": "single_choice",
-          "id": "sec-q2",
+          "text": "What protocol must be used for transferring all external customer files?",
           "correctAnswers": [
             2
           ],
@@ -275,346 +781,2874 @@
             "Secure HTTPS / SFTP channels with multi-factor authentication",
             "Physical USB storage mailed via DHL couriers"
           ],
-          "text": "What protocol must be used for transferring all external customer files?"
+          "id": "sec-q2"
         }
-      ],
-      "isPublished": true,
-      "name": "Enterprise Security & Compliance Quiz"
+      ]
     }
   ],
   "assignedTests": [
     {
-      "testId": "test-react-node",
+      "employeeId": "emp-1",
       "status": "not_started",
       "id": "assign-1",
-      "employeeId": "emp-1",
+      "testId": "test-react-node",
       "testName": "AgentOps Core React & Node Assessment"
     },
     {
-      "remainingTime": 864,
-      "testName": "test",
       "startedAt": "2026-06-12T09:36:09.952981Z",
       "employeeId": "emp-1",
-      "id": "assign-1781256877473-175",
-      "answers": {},
       "status": "not_started",
-      "testId": "test-1781256865335"
+      "remainingTime": 864,
+      "id": "assign-1781256877473-175",
+      "testId": "test-1781256865335",
+      "answers": {},
+      "testName": "test"
     }
   ],
   "checklists": [
     {
-      "id": "chk-1",
       "updatedAt": "2026-06-12T09:34:55.821818Z",
-      "employeeId": "emp-1",
+      "id": "chk-1",
+      "text": "Application Submitted",
       "isCompleted": true,
+      "employeeId": "emp-1",
+      "category": "application"
+    },
+    {
+      "updatedAt": "2026-06-12T09:19:46.377303Z",
+      "id": "chk-10",
+      "employeeId": "emp-1",
+      "category": "approval",
+      "isCompleted": false,
+      "text": "HR Review Completed"
+    },
+    {
+      "updatedAt": "2026-06-12T09:19:46.377303Z",
+      "id": "chk-11",
+      "employeeId": "emp-1",
+      "category": "approval",
+      "isCompleted": false,
+      "text": "Final Approval Completed"
+    },
+    {
+      "updatedAt": "2026-06-12T11:41:33.152149Z",
+      "id": "chk-1781264493152-0",
+      "employeeId": "emp-1781264493152",
       "category": "application",
+      "isCompleted": false,
       "text": "Application Submitted"
     },
     {
-      "text": "HR Review Completed",
-      "category": "approval",
-      "isCompleted": false,
-      "employeeId": "emp-1",
-      "id": "chk-10",
-      "updatedAt": "2026-06-12T09:19:46.377303Z"
-    },
-    {
-      "text": "Final Approval Completed",
-      "category": "approval",
-      "employeeId": "emp-1",
-      "isCompleted": false,
-      "updatedAt": "2026-06-12T09:19:46.377303Z",
-      "id": "chk-11"
-    },
-    {
-      "category": "documents",
       "text": "Resume Uploaded",
-      "updatedAt": "2026-06-12T09:19:46.377303Z",
-      "id": "chk-2",
-      "employeeId": "emp-1",
-      "isCompleted": false
+      "isCompleted": false,
+      "category": "documents",
+      "employeeId": "emp-1781264493152",
+      "updatedAt": "2026-06-12T11:41:33.152149Z",
+      "id": "chk-1781264493152-1"
     },
     {
-      "category": "documents",
-      "text": "Aadhaar Uploaded",
-      "id": "chk-3",
-      "updatedAt": "2026-06-12T09:19:46.377303Z",
+      "employeeId": "emp-1781264493152",
+      "category": "approval",
       "isCompleted": false,
-      "employeeId": "emp-1"
+      "text": "Final Approval Completed",
+      "updatedAt": "2026-06-12T11:41:33.152149Z",
+      "id": "chk-1781264493152-10"
+    },
+    {
+      "id": "chk-1781264493152-2",
+      "updatedAt": "2026-06-12T11:41:33.152149Z",
+      "text": "Aadhaar Uploaded",
+      "isCompleted": false,
+      "category": "documents",
+      "employeeId": "emp-1781264493152"
     },
     {
       "text": "PAN Uploaded",
-      "category": "documents",
-      "employeeId": "emp-1",
       "isCompleted": false,
-      "updatedAt": "2026-06-12T09:19:46.377303Z",
-      "id": "chk-4"
+      "category": "documents",
+      "employeeId": "emp-1781264493152",
+      "id": "chk-1781264493152-3",
+      "updatedAt": "2026-06-12T11:41:33.152149Z"
+    },
+    {
+      "id": "chk-1781264493152-4",
+      "updatedAt": "2026-06-12T11:41:33.152149Z",
+      "employeeId": "emp-1781264493152",
+      "category": "documents",
+      "isCompleted": false,
+      "text": "Passport Photo Uploaded"
+    },
+    {
+      "updatedAt": "2026-06-12T11:41:33.152149Z",
+      "id": "chk-1781264493152-5",
+      "employeeId": "emp-1781264493152",
+      "category": "documents",
+      "isCompleted": false,
+      "text": "Educational Certificates Uploaded"
+    },
+    {
+      "id": "chk-1781264493152-6",
+      "updatedAt": "2026-06-12T11:41:33.152149Z",
+      "employeeId": "emp-1781264493152",
+      "category": "assessments",
+      "isCompleted": false,
+      "text": "Test Assigned"
+    },
+    {
+      "employeeId": "emp-1781264493152",
+      "category": "assessments",
+      "isCompleted": false,
+      "text": "Test Completed",
+      "id": "chk-1781264493152-7",
+      "updatedAt": "2026-06-12T11:41:33.152149Z"
+    },
+    {
+      "updatedAt": "2026-06-12T11:41:33.152149Z",
+      "id": "chk-1781264493152-8",
+      "text": "Passed Assessment",
+      "isCompleted": false,
+      "category": "assessments",
+      "employeeId": "emp-1781264493152"
+    },
+    {
+      "text": "HR Review Completed",
+      "isCompleted": false,
+      "category": "approval",
+      "employeeId": "emp-1781264493152",
+      "updatedAt": "2026-06-12T11:41:33.152149Z",
+      "id": "chk-1781264493152-9"
+    },
+    {
+      "updatedAt": "2026-06-12T11:41:39.123066Z",
+      "id": "chk-1781264499123-0",
+      "text": "Application Submitted",
+      "isCompleted": false,
+      "category": "application",
+      "employeeId": "emp-1781264499123"
+    },
+    {
+      "text": "Resume Uploaded",
+      "isCompleted": false,
+      "category": "documents",
+      "employeeId": "emp-1781264499123",
+      "updatedAt": "2026-06-12T11:41:39.123066Z",
+      "id": "chk-1781264499123-1"
+    },
+    {
+      "text": "Final Approval Completed",
+      "isCompleted": false,
+      "category": "approval",
+      "employeeId": "emp-1781264499123",
+      "updatedAt": "2026-06-12T11:41:39.123066Z",
+      "id": "chk-1781264499123-10"
+    },
+    {
+      "employeeId": "emp-1781264499123",
+      "category": "documents",
+      "isCompleted": false,
+      "text": "Aadhaar Uploaded",
+      "id": "chk-1781264499123-2",
+      "updatedAt": "2026-06-12T11:41:39.123066Z"
+    },
+    {
+      "employeeId": "emp-1781264499123",
+      "category": "documents",
+      "isCompleted": false,
+      "text": "PAN Uploaded",
+      "id": "chk-1781264499123-3",
+      "updatedAt": "2026-06-12T11:41:39.123066Z"
+    },
+    {
+      "updatedAt": "2026-06-12T11:41:39.123066Z",
+      "id": "chk-1781264499123-4",
+      "text": "Passport Photo Uploaded",
+      "isCompleted": false,
+      "category": "documents",
+      "employeeId": "emp-1781264499123"
+    },
+    {
+      "updatedAt": "2026-06-12T11:41:39.123066Z",
+      "id": "chk-1781264499123-5",
+      "employeeId": "emp-1781264499123",
+      "category": "documents",
+      "isCompleted": false,
+      "text": "Educational Certificates Uploaded"
+    },
+    {
+      "id": "chk-1781264499123-6",
+      "updatedAt": "2026-06-12T11:41:39.123066Z",
+      "text": "Test Assigned",
+      "isCompleted": false,
+      "category": "assessments",
+      "employeeId": "emp-1781264499123"
+    },
+    {
+      "employeeId": "emp-1781264499123",
+      "category": "assessments",
+      "isCompleted": false,
+      "text": "Test Completed",
+      "id": "chk-1781264499123-7",
+      "updatedAt": "2026-06-12T11:41:39.123066Z"
+    },
+    {
+      "id": "chk-1781264499123-8",
+      "updatedAt": "2026-06-12T11:41:39.123066Z",
+      "text": "Passed Assessment",
+      "isCompleted": false,
+      "category": "assessments",
+      "employeeId": "emp-1781264499123"
+    },
+    {
+      "id": "chk-1781264499123-9",
+      "updatedAt": "2026-06-12T11:41:39.123066Z",
+      "employeeId": "emp-1781264499123",
+      "category": "approval",
+      "isCompleted": false,
+      "text": "HR Review Completed"
+    },
+    {
+      "updatedAt": "2026-06-12T11:41:40.973902Z",
+      "id": "chk-1781264500973-0",
+      "text": "Application Submitted",
+      "isCompleted": false,
+      "category": "application",
+      "employeeId": "emp-1781264500973"
+    },
+    {
+      "employeeId": "emp-1781264500973",
+      "category": "documents",
+      "isCompleted": false,
+      "text": "Resume Uploaded",
+      "updatedAt": "2026-06-12T11:41:40.973902Z",
+      "id": "chk-1781264500973-1"
+    },
+    {
+      "id": "chk-1781264500973-2",
+      "updatedAt": "2026-06-12T11:41:40.973902Z",
+      "text": "Aadhaar Uploaded",
+      "isCompleted": false,
+      "category": "documents",
+      "employeeId": "emp-1781264500973"
+    },
+    {
+      "id": "chk-1781264500973-3",
+      "updatedAt": "2026-06-12T11:41:40.973902Z",
+      "text": "PAN Uploaded",
+      "isCompleted": false,
+      "category": "documents",
+      "employeeId": "emp-1781264500973"
     },
     {
       "text": "Passport Photo Uploaded",
+      "isCompleted": false,
+      "category": "documents",
+      "employeeId": "emp-1781264500973",
+      "updatedAt": "2026-06-12T11:41:40.973902Z",
+      "id": "chk-1781264500973-4"
+    },
+    {
+      "id": "chk-1781264500973-5",
+      "updatedAt": "2026-06-12T11:41:40.973902Z",
+      "text": "Educational Certificates Uploaded",
+      "isCompleted": false,
+      "category": "documents",
+      "employeeId": "emp-1781264500973"
+    },
+    {
+      "updatedAt": "2026-06-12T11:41:40.973902Z",
+      "id": "chk-1781264500973-6",
+      "employeeId": "emp-1781264500973",
+      "category": "assessments",
+      "isCompleted": false,
+      "text": "Test Assigned"
+    },
+    {
+      "updatedAt": "2026-06-12T11:41:40.973902Z",
+      "id": "chk-1781264500973-7",
+      "employeeId": "emp-1781264500973",
+      "category": "assessments",
+      "isCompleted": false,
+      "text": "Test Completed"
+    },
+    {
+      "updatedAt": "2026-06-12T11:41:40.973902Z",
+      "id": "chk-1781264500974-10",
+      "employeeId": "emp-1781264500973",
+      "category": "approval",
+      "isCompleted": false,
+      "text": "Final Approval Completed"
+    },
+    {
+      "text": "Passed Assessment",
+      "isCompleted": false,
+      "category": "assessments",
+      "employeeId": "emp-1781264500973",
+      "updatedAt": "2026-06-12T11:41:40.973902Z",
+      "id": "chk-1781264500974-8"
+    },
+    {
+      "employeeId": "emp-1781264500973",
+      "category": "approval",
+      "isCompleted": false,
+      "text": "HR Review Completed",
+      "id": "chk-1781264500974-9",
+      "updatedAt": "2026-06-12T11:41:40.973902Z"
+    },
+    {
+      "id": "chk-1781264501567-0",
+      "updatedAt": "2026-06-12T11:41:41.567617Z",
+      "text": "Application Submitted",
+      "isCompleted": false,
+      "category": "application",
+      "employeeId": "emp-1781264501567"
+    },
+    {
+      "updatedAt": "2026-06-12T11:41:41.567617Z",
+      "id": "chk-1781264501567-1",
+      "text": "Resume Uploaded",
+      "isCompleted": false,
+      "category": "documents",
+      "employeeId": "emp-1781264501567"
+    },
+    {
+      "id": "chk-1781264501567-10",
+      "updatedAt": "2026-06-12T11:41:41.567617Z",
+      "text": "Final Approval Completed",
+      "isCompleted": false,
+      "category": "approval",
+      "employeeId": "emp-1781264501567"
+    },
+    {
+      "employeeId": "emp-1781264501567",
       "category": "documents",
       "isCompleted": false,
+      "text": "Aadhaar Uploaded",
+      "id": "chk-1781264501567-2",
+      "updatedAt": "2026-06-12T11:41:41.567617Z"
+    },
+    {
+      "employeeId": "emp-1781264501567",
+      "category": "documents",
+      "isCompleted": false,
+      "text": "PAN Uploaded",
+      "updatedAt": "2026-06-12T11:41:41.567617Z",
+      "id": "chk-1781264501567-3"
+    },
+    {
+      "employeeId": "emp-1781264501567",
+      "category": "documents",
+      "isCompleted": false,
+      "text": "Passport Photo Uploaded",
+      "id": "chk-1781264501567-4",
+      "updatedAt": "2026-06-12T11:41:41.567617Z"
+    },
+    {
+      "updatedAt": "2026-06-12T11:41:41.567617Z",
+      "id": "chk-1781264501567-5",
+      "employeeId": "emp-1781264501567",
+      "category": "documents",
+      "isCompleted": false,
+      "text": "Educational Certificates Uploaded"
+    },
+    {
+      "text": "Test Assigned",
+      "isCompleted": false,
+      "category": "assessments",
+      "employeeId": "emp-1781264501567",
+      "updatedAt": "2026-06-12T11:41:41.567617Z",
+      "id": "chk-1781264501567-6"
+    },
+    {
+      "employeeId": "emp-1781264501567",
+      "category": "assessments",
+      "isCompleted": false,
+      "text": "Test Completed",
+      "updatedAt": "2026-06-12T11:41:41.567617Z",
+      "id": "chk-1781264501567-7"
+    },
+    {
+      "text": "Passed Assessment",
+      "isCompleted": false,
+      "category": "assessments",
+      "employeeId": "emp-1781264501567",
+      "id": "chk-1781264501567-8",
+      "updatedAt": "2026-06-12T11:41:41.567617Z"
+    },
+    {
+      "id": "chk-1781264501567-9",
+      "updatedAt": "2026-06-12T11:41:41.567617Z",
+      "employeeId": "emp-1781264501567",
+      "category": "approval",
+      "isCompleted": false,
+      "text": "HR Review Completed"
+    },
+    {
+      "employeeId": "emp-1781264501713",
+      "category": "application",
+      "isCompleted": false,
+      "text": "Application Submitted",
+      "id": "chk-1781264501713-0",
+      "updatedAt": "2026-06-12T11:41:41.713984Z"
+    },
+    {
+      "updatedAt": "2026-06-12T11:41:41.713984Z",
+      "id": "chk-1781264501713-1",
+      "employeeId": "emp-1781264501713",
+      "category": "documents",
+      "isCompleted": false,
+      "text": "Resume Uploaded"
+    },
+    {
+      "id": "chk-1781264501713-2",
+      "updatedAt": "2026-06-12T11:41:41.713984Z",
+      "employeeId": "emp-1781264501713",
+      "category": "documents",
+      "isCompleted": false,
+      "text": "Aadhaar Uploaded"
+    },
+    {
+      "id": "chk-1781264501713-3",
+      "updatedAt": "2026-06-12T11:41:41.713984Z",
+      "employeeId": "emp-1781264501713",
+      "category": "documents",
+      "isCompleted": false,
+      "text": "PAN Uploaded"
+    },
+    {
+      "updatedAt": "2026-06-12T11:41:41.713984Z",
+      "id": "chk-1781264501714-10",
+      "employeeId": "emp-1781264501713",
+      "category": "approval",
+      "isCompleted": false,
+      "text": "Final Approval Completed"
+    },
+    {
+      "id": "chk-1781264501714-4",
+      "updatedAt": "2026-06-12T11:41:41.713984Z",
+      "employeeId": "emp-1781264501713",
+      "category": "documents",
+      "isCompleted": false,
+      "text": "Passport Photo Uploaded"
+    },
+    {
+      "updatedAt": "2026-06-12T11:41:41.713984Z",
+      "id": "chk-1781264501714-5",
+      "text": "Educational Certificates Uploaded",
+      "isCompleted": false,
+      "category": "documents",
+      "employeeId": "emp-1781264501713"
+    },
+    {
+      "id": "chk-1781264501714-6",
+      "updatedAt": "2026-06-12T11:41:41.713984Z",
+      "text": "Test Assigned",
+      "isCompleted": false,
+      "category": "assessments",
+      "employeeId": "emp-1781264501713"
+    },
+    {
+      "employeeId": "emp-1781264501713",
+      "category": "assessments",
+      "isCompleted": false,
+      "text": "Test Completed",
+      "id": "chk-1781264501714-7",
+      "updatedAt": "2026-06-12T11:41:41.713984Z"
+    },
+    {
+      "text": "Passed Assessment",
+      "isCompleted": false,
+      "category": "assessments",
+      "employeeId": "emp-1781264501713",
+      "updatedAt": "2026-06-12T11:41:41.713984Z",
+      "id": "chk-1781264501714-8"
+    },
+    {
+      "updatedAt": "2026-06-12T11:41:41.713984Z",
+      "id": "chk-1781264501714-9",
+      "text": "HR Review Completed",
+      "isCompleted": false,
+      "category": "approval",
+      "employeeId": "emp-1781264501713"
+    },
+    {
+      "employeeId": "emp-1781264502143",
+      "category": "application",
+      "isCompleted": false,
+      "text": "Application Submitted",
+      "id": "chk-1781264502143-0",
+      "updatedAt": "2026-06-12T11:41:42.143993Z"
+    },
+    {
+      "id": "chk-1781264502144-1",
+      "updatedAt": "2026-06-12T11:41:42.143993Z",
+      "text": "Resume Uploaded",
+      "isCompleted": false,
+      "category": "documents",
+      "employeeId": "emp-1781264502143"
+    },
+    {
+      "employeeId": "emp-1781264502143",
+      "category": "approval",
+      "isCompleted": false,
+      "text": "Final Approval Completed",
+      "id": "chk-1781264502144-10",
+      "updatedAt": "2026-06-12T11:41:42.143993Z"
+    },
+    {
+      "text": "Aadhaar Uploaded",
+      "isCompleted": false,
+      "category": "documents",
+      "employeeId": "emp-1781264502143",
+      "updatedAt": "2026-06-12T11:41:42.143993Z",
+      "id": "chk-1781264502144-2"
+    },
+    {
+      "employeeId": "emp-1781264502143",
+      "category": "documents",
+      "isCompleted": false,
+      "text": "PAN Uploaded",
+      "updatedAt": "2026-06-12T11:41:42.143993Z",
+      "id": "chk-1781264502144-3"
+    },
+    {
+      "employeeId": "emp-1781264502143",
+      "category": "documents",
+      "isCompleted": false,
+      "text": "Passport Photo Uploaded",
+      "updatedAt": "2026-06-12T11:41:42.143993Z",
+      "id": "chk-1781264502144-4"
+    },
+    {
+      "id": "chk-1781264502144-5",
+      "updatedAt": "2026-06-12T11:41:42.143993Z",
+      "employeeId": "emp-1781264502143",
+      "category": "documents",
+      "isCompleted": false,
+      "text": "Educational Certificates Uploaded"
+    },
+    {
+      "employeeId": "emp-1781264502143",
+      "category": "assessments",
+      "isCompleted": false,
+      "text": "Test Assigned",
+      "updatedAt": "2026-06-12T11:41:42.143993Z",
+      "id": "chk-1781264502144-6"
+    },
+    {
+      "id": "chk-1781264502144-7",
+      "updatedAt": "2026-06-12T11:41:42.143993Z",
+      "text": "Test Completed",
+      "isCompleted": false,
+      "category": "assessments",
+      "employeeId": "emp-1781264502143"
+    },
+    {
+      "id": "chk-1781264502144-8",
+      "updatedAt": "2026-06-12T11:41:42.143993Z",
+      "text": "Passed Assessment",
+      "isCompleted": false,
+      "category": "assessments",
+      "employeeId": "emp-1781264502143"
+    },
+    {
+      "employeeId": "emp-1781264502143",
+      "category": "approval",
+      "isCompleted": false,
+      "text": "HR Review Completed",
+      "id": "chk-1781264502144-9",
+      "updatedAt": "2026-06-12T11:41:42.143993Z"
+    },
+    {
+      "updatedAt": "2026-06-12T11:41:42.166994Z",
+      "id": "chk-1781264502166-0",
+      "employeeId": "emp-1781264502166",
+      "category": "application",
+      "isCompleted": false,
+      "text": "Application Submitted"
+    },
+    {
+      "employeeId": "emp-1781264502166",
+      "category": "documents",
+      "isCompleted": false,
+      "text": "Resume Uploaded",
+      "updatedAt": "2026-06-12T11:41:42.166994Z",
+      "id": "chk-1781264502167-1"
+    },
+    {
+      "employeeId": "emp-1781264502166",
+      "category": "approval",
+      "isCompleted": false,
+      "text": "Final Approval Completed",
+      "updatedAt": "2026-06-12T11:41:42.166994Z",
+      "id": "chk-1781264502167-10"
+    },
+    {
+      "text": "Aadhaar Uploaded",
+      "isCompleted": false,
+      "category": "documents",
+      "employeeId": "emp-1781264502166",
+      "updatedAt": "2026-06-12T11:41:42.166994Z",
+      "id": "chk-1781264502167-2"
+    },
+    {
+      "text": "PAN Uploaded",
+      "isCompleted": false,
+      "category": "documents",
+      "employeeId": "emp-1781264502166",
+      "id": "chk-1781264502167-3",
+      "updatedAt": "2026-06-12T11:41:42.166994Z"
+    },
+    {
+      "id": "chk-1781264502167-4",
+      "updatedAt": "2026-06-12T11:41:42.166994Z",
+      "text": "Passport Photo Uploaded",
+      "isCompleted": false,
+      "category": "documents",
+      "employeeId": "emp-1781264502166"
+    },
+    {
+      "employeeId": "emp-1781264502166",
+      "category": "documents",
+      "isCompleted": false,
+      "text": "Educational Certificates Uploaded",
+      "updatedAt": "2026-06-12T11:41:42.166994Z",
+      "id": "chk-1781264502167-5"
+    },
+    {
+      "id": "chk-1781264502167-6",
+      "updatedAt": "2026-06-12T11:41:42.166994Z",
+      "employeeId": "emp-1781264502166",
+      "category": "assessments",
+      "isCompleted": false,
+      "text": "Test Assigned"
+    },
+    {
+      "updatedAt": "2026-06-12T11:41:42.166994Z",
+      "id": "chk-1781264502167-7",
+      "text": "Test Completed",
+      "isCompleted": false,
+      "category": "assessments",
+      "employeeId": "emp-1781264502166"
+    },
+    {
+      "text": "Passed Assessment",
+      "isCompleted": false,
+      "category": "assessments",
+      "employeeId": "emp-1781264502166",
+      "updatedAt": "2026-06-12T11:41:42.166994Z",
+      "id": "chk-1781264502167-8"
+    },
+    {
+      "id": "chk-1781264502167-9",
+      "updatedAt": "2026-06-12T11:41:42.166994Z",
+      "text": "HR Review Completed",
+      "isCompleted": false,
+      "category": "approval",
+      "employeeId": "emp-1781264502166"
+    },
+    {
+      "id": "chk-1781264502397-0",
+      "updatedAt": "2026-06-12T11:41:42.397261Z",
+      "text": "Application Submitted",
+      "isCompleted": false,
+      "category": "application",
+      "employeeId": "emp-1781264502397"
+    },
+    {
+      "updatedAt": "2026-06-12T11:41:42.397261Z",
+      "id": "chk-1781264502397-1",
+      "text": "Resume Uploaded",
+      "isCompleted": false,
+      "category": "documents",
+      "employeeId": "emp-1781264502397"
+    },
+    {
+      "text": "Final Approval Completed",
+      "isCompleted": false,
+      "category": "approval",
+      "employeeId": "emp-1781264502397",
+      "id": "chk-1781264502397-10",
+      "updatedAt": "2026-06-12T11:41:42.397261Z"
+    },
+    {
+      "id": "chk-1781264502397-2",
+      "updatedAt": "2026-06-12T11:41:42.397261Z",
+      "text": "Aadhaar Uploaded",
+      "isCompleted": false,
+      "category": "documents",
+      "employeeId": "emp-1781264502397"
+    },
+    {
+      "text": "PAN Uploaded",
+      "isCompleted": false,
+      "category": "documents",
+      "employeeId": "emp-1781264502397",
+      "id": "chk-1781264502397-3",
+      "updatedAt": "2026-06-12T11:41:42.397261Z"
+    },
+    {
+      "updatedAt": "2026-06-12T11:41:42.397261Z",
+      "id": "chk-1781264502397-4",
+      "employeeId": "emp-1781264502397",
+      "category": "documents",
+      "isCompleted": false,
+      "text": "Passport Photo Uploaded"
+    },
+    {
+      "updatedAt": "2026-06-12T11:41:42.397261Z",
+      "id": "chk-1781264502397-5",
+      "employeeId": "emp-1781264502397",
+      "category": "documents",
+      "isCompleted": false,
+      "text": "Educational Certificates Uploaded"
+    },
+    {
+      "updatedAt": "2026-06-12T11:41:42.397261Z",
+      "id": "chk-1781264502397-6",
+      "employeeId": "emp-1781264502397",
+      "category": "assessments",
+      "isCompleted": false,
+      "text": "Test Assigned"
+    },
+    {
+      "updatedAt": "2026-06-12T11:41:42.397261Z",
+      "id": "chk-1781264502397-7",
+      "text": "Test Completed",
+      "isCompleted": false,
+      "category": "assessments",
+      "employeeId": "emp-1781264502397"
+    },
+    {
+      "id": "chk-1781264502397-8",
+      "updatedAt": "2026-06-12T11:41:42.397261Z",
+      "text": "Passed Assessment",
+      "isCompleted": false,
+      "category": "assessments",
+      "employeeId": "emp-1781264502397"
+    },
+    {
+      "updatedAt": "2026-06-12T11:41:42.397261Z",
+      "id": "chk-1781264502397-9",
+      "employeeId": "emp-1781264502397",
+      "category": "approval",
+      "isCompleted": false,
+      "text": "HR Review Completed"
+    },
+    {
+      "updatedAt": "2026-06-12T11:41:43.796430Z",
+      "id": "chk-1781264503796-0",
+      "employeeId": "emp-1781264503796",
+      "category": "application",
+      "isCompleted": false,
+      "text": "Application Submitted"
+    },
+    {
+      "employeeId": "emp-1781264503796",
+      "category": "documents",
+      "isCompleted": false,
+      "text": "Resume Uploaded",
+      "id": "chk-1781264503796-1",
+      "updatedAt": "2026-06-12T11:41:43.796430Z"
+    },
+    {
+      "updatedAt": "2026-06-12T11:41:43.796430Z",
+      "id": "chk-1781264503796-10",
+      "text": "Final Approval Completed",
+      "isCompleted": false,
+      "category": "approval",
+      "employeeId": "emp-1781264503796"
+    },
+    {
+      "updatedAt": "2026-06-12T11:41:43.796430Z",
+      "id": "chk-1781264503796-2",
+      "employeeId": "emp-1781264503796",
+      "category": "documents",
+      "isCompleted": false,
+      "text": "Aadhaar Uploaded"
+    },
+    {
+      "employeeId": "emp-1781264503796",
+      "category": "documents",
+      "isCompleted": false,
+      "text": "PAN Uploaded",
+      "id": "chk-1781264503796-3",
+      "updatedAt": "2026-06-12T11:41:43.796430Z"
+    },
+    {
+      "text": "Passport Photo Uploaded",
+      "isCompleted": false,
+      "category": "documents",
+      "employeeId": "emp-1781264503796",
+      "id": "chk-1781264503796-4",
+      "updatedAt": "2026-06-12T11:41:43.796430Z"
+    },
+    {
+      "employeeId": "emp-1781264503796",
+      "category": "documents",
+      "isCompleted": false,
+      "text": "Educational Certificates Uploaded",
+      "updatedAt": "2026-06-12T11:41:43.796430Z",
+      "id": "chk-1781264503796-5"
+    },
+    {
+      "text": "Test Assigned",
+      "isCompleted": false,
+      "category": "assessments",
+      "employeeId": "emp-1781264503796",
+      "id": "chk-1781264503796-6",
+      "updatedAt": "2026-06-12T11:41:43.796430Z"
+    },
+    {
+      "id": "chk-1781264503796-7",
+      "updatedAt": "2026-06-12T11:41:43.796430Z",
+      "text": "Test Completed",
+      "isCompleted": false,
+      "category": "assessments",
+      "employeeId": "emp-1781264503796"
+    },
+    {
+      "updatedAt": "2026-06-12T11:41:43.796430Z",
+      "id": "chk-1781264503796-8",
+      "employeeId": "emp-1781264503796",
+      "category": "assessments",
+      "isCompleted": false,
+      "text": "Passed Assessment"
+    },
+    {
+      "updatedAt": "2026-06-12T11:41:43.796430Z",
+      "id": "chk-1781264503796-9",
+      "employeeId": "emp-1781264503796",
+      "category": "approval",
+      "isCompleted": false,
+      "text": "HR Review Completed"
+    },
+    {
+      "employeeId": "emp-1781264506844",
+      "category": "application",
+      "isCompleted": false,
+      "text": "Application Submitted",
+      "id": "chk-1781264506844-0",
+      "updatedAt": "2026-06-12T11:41:46.844312Z"
+    },
+    {
+      "employeeId": "emp-1781264506844",
+      "category": "documents",
+      "isCompleted": false,
+      "text": "Resume Uploaded",
+      "updatedAt": "2026-06-12T11:41:46.844312Z",
+      "id": "chk-1781264506844-1"
+    },
+    {
+      "text": "Final Approval Completed",
+      "isCompleted": false,
+      "category": "approval",
+      "employeeId": "emp-1781264506844",
+      "id": "chk-1781264506844-10",
+      "updatedAt": "2026-06-12T11:41:46.844312Z"
+    },
+    {
+      "id": "chk-1781264506844-2",
+      "updatedAt": "2026-06-12T11:41:46.844312Z",
+      "text": "Aadhaar Uploaded",
+      "isCompleted": false,
+      "category": "documents",
+      "employeeId": "emp-1781264506844"
+    },
+    {
+      "id": "chk-1781264506844-3",
+      "updatedAt": "2026-06-12T11:41:46.844312Z",
+      "text": "PAN Uploaded",
+      "isCompleted": false,
+      "category": "documents",
+      "employeeId": "emp-1781264506844"
+    },
+    {
+      "employeeId": "emp-1781264506844",
+      "category": "documents",
+      "isCompleted": false,
+      "text": "Passport Photo Uploaded",
+      "id": "chk-1781264506844-4",
+      "updatedAt": "2026-06-12T11:41:46.844312Z"
+    },
+    {
+      "text": "Educational Certificates Uploaded",
+      "isCompleted": false,
+      "category": "documents",
+      "employeeId": "emp-1781264506844",
+      "updatedAt": "2026-06-12T11:41:46.844312Z",
+      "id": "chk-1781264506844-5"
+    },
+    {
+      "employeeId": "emp-1781264506844",
+      "category": "assessments",
+      "isCompleted": false,
+      "text": "Test Assigned",
+      "id": "chk-1781264506844-6",
+      "updatedAt": "2026-06-12T11:41:46.844312Z"
+    },
+    {
+      "employeeId": "emp-1781264506844",
+      "category": "assessments",
+      "isCompleted": false,
+      "text": "Test Completed",
+      "updatedAt": "2026-06-12T11:41:46.844312Z",
+      "id": "chk-1781264506844-7"
+    },
+    {
+      "text": "Passed Assessment",
+      "isCompleted": false,
+      "category": "assessments",
+      "employeeId": "emp-1781264506844",
+      "updatedAt": "2026-06-12T11:41:46.844312Z",
+      "id": "chk-1781264506844-8"
+    },
+    {
+      "updatedAt": "2026-06-12T11:41:46.844312Z",
+      "id": "chk-1781264506844-9",
+      "text": "HR Review Completed",
+      "isCompleted": false,
+      "category": "approval",
+      "employeeId": "emp-1781264506844"
+    },
+    {
+      "updatedAt": "2026-06-12T11:41:51.246225Z",
+      "id": "chk-1781264511246-0",
+      "employeeId": "emp-1781264511246",
+      "category": "application",
+      "isCompleted": false,
+      "text": "Application Submitted"
+    },
+    {
+      "employeeId": "emp-1781264511246",
+      "category": "documents",
+      "isCompleted": false,
+      "text": "Resume Uploaded",
+      "id": "chk-1781264511246-1",
+      "updatedAt": "2026-06-12T11:41:51.246225Z"
+    },
+    {
+      "text": "Final Approval Completed",
+      "isCompleted": false,
+      "category": "approval",
+      "employeeId": "emp-1781264511246",
+      "id": "chk-1781264511246-10",
+      "updatedAt": "2026-06-12T11:41:51.246225Z"
+    },
+    {
+      "employeeId": "emp-1781264511246",
+      "category": "documents",
+      "isCompleted": false,
+      "text": "Aadhaar Uploaded",
+      "id": "chk-1781264511246-2",
+      "updatedAt": "2026-06-12T11:41:51.246225Z"
+    },
+    {
+      "updatedAt": "2026-06-12T11:41:51.246225Z",
+      "id": "chk-1781264511246-3",
+      "text": "PAN Uploaded",
+      "isCompleted": false,
+      "category": "documents",
+      "employeeId": "emp-1781264511246"
+    },
+    {
+      "id": "chk-1781264511246-4",
+      "updatedAt": "2026-06-12T11:41:51.246225Z",
+      "employeeId": "emp-1781264511246",
+      "category": "documents",
+      "isCompleted": false,
+      "text": "Passport Photo Uploaded"
+    },
+    {
+      "employeeId": "emp-1781264511246",
+      "category": "documents",
+      "isCompleted": false,
+      "text": "Educational Certificates Uploaded",
+      "updatedAt": "2026-06-12T11:41:51.246225Z",
+      "id": "chk-1781264511246-5"
+    },
+    {
+      "text": "Test Assigned",
+      "isCompleted": false,
+      "category": "assessments",
+      "employeeId": "emp-1781264511246",
+      "updatedAt": "2026-06-12T11:41:51.246225Z",
+      "id": "chk-1781264511246-6"
+    },
+    {
+      "text": "Test Completed",
+      "isCompleted": false,
+      "category": "assessments",
+      "employeeId": "emp-1781264511246",
+      "id": "chk-1781264511246-7",
+      "updatedAt": "2026-06-12T11:41:51.246225Z"
+    },
+    {
+      "updatedAt": "2026-06-12T11:41:51.246225Z",
+      "id": "chk-1781264511246-8",
+      "text": "Passed Assessment",
+      "isCompleted": false,
+      "category": "assessments",
+      "employeeId": "emp-1781264511246"
+    },
+    {
+      "employeeId": "emp-1781264511246",
+      "category": "approval",
+      "isCompleted": false,
+      "text": "HR Review Completed",
+      "updatedAt": "2026-06-12T11:41:51.246225Z",
+      "id": "chk-1781264511246-9"
+    },
+    {
+      "id": "chk-1781264513383-0",
+      "updatedAt": "2026-06-12T11:41:53.383337Z",
+      "employeeId": "emp-1781264513383",
+      "category": "application",
+      "isCompleted": false,
+      "text": "Application Submitted"
+    },
+    {
+      "text": "Resume Uploaded",
+      "isCompleted": false,
+      "category": "documents",
+      "employeeId": "emp-1781264513383",
+      "id": "chk-1781264513383-1",
+      "updatedAt": "2026-06-12T11:41:53.383337Z"
+    },
+    {
+      "updatedAt": "2026-06-12T11:41:53.383337Z",
+      "id": "chk-1781264513383-10",
+      "text": "Final Approval Completed",
+      "isCompleted": false,
+      "category": "approval",
+      "employeeId": "emp-1781264513383"
+    },
+    {
+      "text": "Aadhaar Uploaded",
+      "isCompleted": false,
+      "category": "documents",
+      "employeeId": "emp-1781264513383",
+      "updatedAt": "2026-06-12T11:41:53.383337Z",
+      "id": "chk-1781264513383-2"
+    },
+    {
+      "employeeId": "emp-1781264513383",
+      "category": "documents",
+      "isCompleted": false,
+      "text": "PAN Uploaded",
+      "id": "chk-1781264513383-3",
+      "updatedAt": "2026-06-12T11:41:53.383337Z"
+    },
+    {
+      "updatedAt": "2026-06-12T11:41:53.383337Z",
+      "id": "chk-1781264513383-4",
+      "employeeId": "emp-1781264513383",
+      "category": "documents",
+      "isCompleted": false,
+      "text": "Passport Photo Uploaded"
+    },
+    {
+      "id": "chk-1781264513383-5",
+      "updatedAt": "2026-06-12T11:41:53.383337Z",
+      "text": "Educational Certificates Uploaded",
+      "isCompleted": false,
+      "category": "documents",
+      "employeeId": "emp-1781264513383"
+    },
+    {
+      "employeeId": "emp-1781264513383",
+      "category": "assessments",
+      "isCompleted": false,
+      "text": "Test Assigned",
+      "id": "chk-1781264513383-6",
+      "updatedAt": "2026-06-12T11:41:53.383337Z"
+    },
+    {
+      "id": "chk-1781264513383-7",
+      "updatedAt": "2026-06-12T11:41:53.383337Z",
+      "text": "Test Completed",
+      "isCompleted": false,
+      "category": "assessments",
+      "employeeId": "emp-1781264513383"
+    },
+    {
+      "employeeId": "emp-1781264513383",
+      "category": "assessments",
+      "isCompleted": false,
+      "text": "Passed Assessment",
+      "id": "chk-1781264513383-8",
+      "updatedAt": "2026-06-12T11:41:53.383337Z"
+    },
+    {
+      "updatedAt": "2026-06-12T11:41:53.383337Z",
+      "id": "chk-1781264513383-9",
+      "employeeId": "emp-1781264513383",
+      "category": "approval",
+      "isCompleted": false,
+      "text": "HR Review Completed"
+    },
+    {
+      "updatedAt": "2026-06-12T11:41:57.516475Z",
+      "id": "chk-1781264517516-0",
+      "text": "Application Submitted",
+      "isCompleted": false,
+      "category": "application",
+      "employeeId": "emp-1781264517516"
+    },
+    {
+      "text": "Resume Uploaded",
+      "isCompleted": false,
+      "category": "documents",
+      "employeeId": "emp-1781264517516",
+      "updatedAt": "2026-06-12T11:41:57.516475Z",
+      "id": "chk-1781264517516-1"
+    },
+    {
+      "updatedAt": "2026-06-12T11:41:57.516475Z",
+      "id": "chk-1781264517516-10",
+      "text": "Final Approval Completed",
+      "isCompleted": false,
+      "category": "approval",
+      "employeeId": "emp-1781264517516"
+    },
+    {
+      "text": "Aadhaar Uploaded",
+      "isCompleted": false,
+      "category": "documents",
+      "employeeId": "emp-1781264517516",
+      "updatedAt": "2026-06-12T11:41:57.516475Z",
+      "id": "chk-1781264517516-2"
+    },
+    {
+      "text": "PAN Uploaded",
+      "isCompleted": false,
+      "category": "documents",
+      "employeeId": "emp-1781264517516",
+      "updatedAt": "2026-06-12T11:41:57.516475Z",
+      "id": "chk-1781264517516-3"
+    },
+    {
+      "id": "chk-1781264517516-4",
+      "updatedAt": "2026-06-12T11:41:57.516475Z",
+      "text": "Passport Photo Uploaded",
+      "isCompleted": false,
+      "category": "documents",
+      "employeeId": "emp-1781264517516"
+    },
+    {
+      "updatedAt": "2026-06-12T11:41:57.516475Z",
+      "id": "chk-1781264517516-5",
+      "employeeId": "emp-1781264517516",
+      "category": "documents",
+      "isCompleted": false,
+      "text": "Educational Certificates Uploaded"
+    },
+    {
+      "updatedAt": "2026-06-12T11:41:57.516475Z",
+      "id": "chk-1781264517516-6",
+      "employeeId": "emp-1781264517516",
+      "category": "assessments",
+      "isCompleted": false,
+      "text": "Test Assigned"
+    },
+    {
+      "id": "chk-1781264517516-7",
+      "updatedAt": "2026-06-12T11:41:57.516475Z",
+      "text": "Test Completed",
+      "isCompleted": false,
+      "category": "assessments",
+      "employeeId": "emp-1781264517516"
+    },
+    {
+      "id": "chk-1781264517516-8",
+      "updatedAt": "2026-06-12T11:41:57.516475Z",
+      "text": "Passed Assessment",
+      "isCompleted": false,
+      "category": "assessments",
+      "employeeId": "emp-1781264517516"
+    },
+    {
+      "id": "chk-1781264517516-9",
+      "updatedAt": "2026-06-12T11:41:57.516475Z",
+      "employeeId": "emp-1781264517516",
+      "category": "approval",
+      "isCompleted": false,
+      "text": "HR Review Completed"
+    },
+    {
+      "text": "Application Submitted",
+      "isCompleted": false,
+      "category": "application",
+      "employeeId": "emp-1781264517533",
+      "id": "chk-1781264517533-0",
+      "updatedAt": "2026-06-12T11:41:57.533926Z"
+    },
+    {
+      "employeeId": "emp-1781264517533",
+      "category": "documents",
+      "isCompleted": false,
+      "text": "Resume Uploaded",
+      "updatedAt": "2026-06-12T11:41:57.533926Z",
+      "id": "chk-1781264517533-1"
+    },
+    {
+      "updatedAt": "2026-06-12T11:41:57.533926Z",
+      "id": "chk-1781264517533-10",
+      "text": "Final Approval Completed",
+      "isCompleted": false,
+      "category": "approval",
+      "employeeId": "emp-1781264517533"
+    },
+    {
+      "employeeId": "emp-1781264517533",
+      "category": "documents",
+      "isCompleted": false,
+      "text": "Aadhaar Uploaded",
+      "id": "chk-1781264517533-2",
+      "updatedAt": "2026-06-12T11:41:57.533926Z"
+    },
+    {
+      "updatedAt": "2026-06-12T11:41:57.533926Z",
+      "id": "chk-1781264517533-3",
+      "text": "PAN Uploaded",
+      "isCompleted": false,
+      "category": "documents",
+      "employeeId": "emp-1781264517533"
+    },
+    {
+      "id": "chk-1781264517533-4",
+      "updatedAt": "2026-06-12T11:41:57.533926Z",
+      "text": "Passport Photo Uploaded",
+      "isCompleted": false,
+      "category": "documents",
+      "employeeId": "emp-1781264517533"
+    },
+    {
+      "employeeId": "emp-1781264517533",
+      "category": "documents",
+      "isCompleted": false,
+      "text": "Educational Certificates Uploaded",
+      "id": "chk-1781264517533-5",
+      "updatedAt": "2026-06-12T11:41:57.533926Z"
+    },
+    {
+      "updatedAt": "2026-06-12T11:41:57.533926Z",
+      "id": "chk-1781264517533-6",
+      "text": "Test Assigned",
+      "isCompleted": false,
+      "category": "assessments",
+      "employeeId": "emp-1781264517533"
+    },
+    {
+      "updatedAt": "2026-06-12T11:41:57.533926Z",
+      "id": "chk-1781264517533-7",
+      "employeeId": "emp-1781264517533",
+      "category": "assessments",
+      "isCompleted": false,
+      "text": "Test Completed"
+    },
+    {
+      "id": "chk-1781264517533-8",
+      "updatedAt": "2026-06-12T11:41:57.533926Z",
+      "employeeId": "emp-1781264517533",
+      "category": "assessments",
+      "isCompleted": false,
+      "text": "Passed Assessment"
+    },
+    {
+      "updatedAt": "2026-06-12T11:41:57.533926Z",
+      "id": "chk-1781264517533-9",
+      "employeeId": "emp-1781264517533",
+      "category": "approval",
+      "isCompleted": false,
+      "text": "HR Review Completed"
+    },
+    {
+      "text": "Application Submitted",
+      "isCompleted": false,
+      "category": "application",
+      "employeeId": "emp-1781264517761",
+      "id": "chk-1781264517761-0",
+      "updatedAt": "2026-06-12T11:41:57.761094Z"
+    },
+    {
+      "text": "Resume Uploaded",
+      "isCompleted": false,
+      "category": "documents",
+      "employeeId": "emp-1781264517761",
+      "updatedAt": "2026-06-12T11:41:57.761094Z",
+      "id": "chk-1781264517761-1"
+    },
+    {
+      "employeeId": "emp-1781264517761",
+      "category": "approval",
+      "isCompleted": false,
+      "text": "Final Approval Completed",
+      "id": "chk-1781264517761-10",
+      "updatedAt": "2026-06-12T11:41:57.761094Z"
+    },
+    {
+      "text": "Aadhaar Uploaded",
+      "isCompleted": false,
+      "category": "documents",
+      "employeeId": "emp-1781264517761",
+      "id": "chk-1781264517761-2",
+      "updatedAt": "2026-06-12T11:41:57.761094Z"
+    },
+    {
+      "updatedAt": "2026-06-12T11:41:57.761094Z",
+      "id": "chk-1781264517761-3",
+      "employeeId": "emp-1781264517761",
+      "category": "documents",
+      "isCompleted": false,
+      "text": "PAN Uploaded"
+    },
+    {
+      "updatedAt": "2026-06-12T11:41:57.761094Z",
+      "id": "chk-1781264517761-4",
+      "employeeId": "emp-1781264517761",
+      "category": "documents",
+      "isCompleted": false,
+      "text": "Passport Photo Uploaded"
+    },
+    {
+      "employeeId": "emp-1781264517761",
+      "category": "documents",
+      "isCompleted": false,
+      "text": "Educational Certificates Uploaded",
+      "id": "chk-1781264517761-5",
+      "updatedAt": "2026-06-12T11:41:57.761094Z"
+    },
+    {
+      "employeeId": "emp-1781264517761",
+      "category": "assessments",
+      "isCompleted": false,
+      "text": "Test Assigned",
+      "updatedAt": "2026-06-12T11:41:57.761094Z",
+      "id": "chk-1781264517761-6"
+    },
+    {
+      "employeeId": "emp-1781264517761",
+      "category": "assessments",
+      "isCompleted": false,
+      "text": "Test Completed",
+      "id": "chk-1781264517761-7",
+      "updatedAt": "2026-06-12T11:41:57.761094Z"
+    },
+    {
+      "employeeId": "emp-1781264517761",
+      "category": "assessments",
+      "isCompleted": false,
+      "text": "Passed Assessment",
+      "id": "chk-1781264517761-8",
+      "updatedAt": "2026-06-12T11:41:57.761094Z"
+    },
+    {
+      "id": "chk-1781264517761-9",
+      "updatedAt": "2026-06-12T11:41:57.761094Z",
+      "employeeId": "emp-1781264517761",
+      "category": "approval",
+      "isCompleted": false,
+      "text": "HR Review Completed"
+    },
+    {
+      "updatedAt": "2026-06-12T11:41:57.771139Z",
+      "id": "chk-1781264517771-0",
+      "text": "Application Submitted",
+      "isCompleted": false,
+      "category": "application",
+      "employeeId": "emp-1781264517771"
+    },
+    {
+      "updatedAt": "2026-06-12T11:41:57.771139Z",
+      "id": "chk-1781264517771-1",
+      "text": "Resume Uploaded",
+      "isCompleted": false,
+      "category": "documents",
+      "employeeId": "emp-1781264517771"
+    },
+    {
+      "updatedAt": "2026-06-12T11:41:57.771139Z",
+      "id": "chk-1781264517771-10",
+      "text": "Final Approval Completed",
+      "isCompleted": false,
+      "category": "approval",
+      "employeeId": "emp-1781264517771"
+    },
+    {
+      "id": "chk-1781264517771-2",
+      "updatedAt": "2026-06-12T11:41:57.771139Z",
+      "text": "Aadhaar Uploaded",
+      "isCompleted": false,
+      "category": "documents",
+      "employeeId": "emp-1781264517771"
+    },
+    {
+      "employeeId": "emp-1781264517771",
+      "category": "documents",
+      "isCompleted": false,
+      "text": "PAN Uploaded",
+      "updatedAt": "2026-06-12T11:41:57.771139Z",
+      "id": "chk-1781264517771-3"
+    },
+    {
+      "text": "Passport Photo Uploaded",
+      "isCompleted": false,
+      "category": "documents",
+      "employeeId": "emp-1781264517771",
+      "id": "chk-1781264517771-4",
+      "updatedAt": "2026-06-12T11:41:57.771139Z"
+    },
+    {
+      "id": "chk-1781264517771-5",
+      "updatedAt": "2026-06-12T11:41:57.771139Z",
+      "text": "Educational Certificates Uploaded",
+      "isCompleted": false,
+      "category": "documents",
+      "employeeId": "emp-1781264517771"
+    },
+    {
+      "employeeId": "emp-1781264517771",
+      "category": "assessments",
+      "isCompleted": false,
+      "text": "Test Assigned",
+      "id": "chk-1781264517771-6",
+      "updatedAt": "2026-06-12T11:41:57.771139Z"
+    },
+    {
+      "updatedAt": "2026-06-12T11:41:57.771139Z",
+      "id": "chk-1781264517771-7",
+      "text": "Test Completed",
+      "isCompleted": false,
+      "category": "assessments",
+      "employeeId": "emp-1781264517771"
+    },
+    {
+      "text": "Passed Assessment",
+      "isCompleted": false,
+      "category": "assessments",
+      "employeeId": "emp-1781264517771",
+      "id": "chk-1781264517771-8",
+      "updatedAt": "2026-06-12T11:41:57.771139Z"
+    },
+    {
+      "employeeId": "emp-1781264517771",
+      "category": "approval",
+      "isCompleted": false,
+      "text": "HR Review Completed",
+      "id": "chk-1781264517771-9",
+      "updatedAt": "2026-06-12T11:41:57.771139Z"
+    },
+    {
+      "updatedAt": "2026-06-12T11:41:58.551538Z",
+      "id": "chk-1781264518551-0",
+      "employeeId": "emp-1781264518551",
+      "category": "application",
+      "isCompleted": false,
+      "text": "Application Submitted"
+    },
+    {
+      "employeeId": "emp-1781264518551",
+      "category": "documents",
+      "isCompleted": false,
+      "text": "Resume Uploaded",
+      "id": "chk-1781264518551-1",
+      "updatedAt": "2026-06-12T11:41:58.551538Z"
+    },
+    {
+      "id": "chk-1781264518551-10",
+      "updatedAt": "2026-06-12T11:41:58.551538Z",
+      "employeeId": "emp-1781264518551",
+      "category": "approval",
+      "isCompleted": false,
+      "text": "Final Approval Completed"
+    },
+    {
+      "id": "chk-1781264518551-2",
+      "updatedAt": "2026-06-12T11:41:58.551538Z",
+      "text": "Aadhaar Uploaded",
+      "isCompleted": false,
+      "category": "documents",
+      "employeeId": "emp-1781264518551"
+    },
+    {
+      "id": "chk-1781264518551-3",
+      "updatedAt": "2026-06-12T11:41:58.551538Z",
+      "employeeId": "emp-1781264518551",
+      "category": "documents",
+      "isCompleted": false,
+      "text": "PAN Uploaded"
+    },
+    {
+      "text": "Passport Photo Uploaded",
+      "isCompleted": false,
+      "category": "documents",
+      "employeeId": "emp-1781264518551",
+      "updatedAt": "2026-06-12T11:41:58.551538Z",
+      "id": "chk-1781264518551-4"
+    },
+    {
+      "updatedAt": "2026-06-12T11:41:58.551538Z",
+      "id": "chk-1781264518551-5",
+      "text": "Educational Certificates Uploaded",
+      "isCompleted": false,
+      "category": "documents",
+      "employeeId": "emp-1781264518551"
+    },
+    {
+      "employeeId": "emp-1781264518551",
+      "category": "assessments",
+      "isCompleted": false,
+      "text": "Test Assigned",
+      "updatedAt": "2026-06-12T11:41:58.551538Z",
+      "id": "chk-1781264518551-6"
+    },
+    {
+      "text": "Test Completed",
+      "isCompleted": false,
+      "category": "assessments",
+      "employeeId": "emp-1781264518551",
+      "updatedAt": "2026-06-12T11:41:58.551538Z",
+      "id": "chk-1781264518551-7"
+    },
+    {
+      "employeeId": "emp-1781264518551",
+      "category": "assessments",
+      "isCompleted": false,
+      "text": "Passed Assessment",
+      "updatedAt": "2026-06-12T11:41:58.551538Z",
+      "id": "chk-1781264518551-8"
+    },
+    {
+      "id": "chk-1781264518551-9",
+      "updatedAt": "2026-06-12T11:41:58.551538Z",
+      "employeeId": "emp-1781264518551",
+      "category": "approval",
+      "isCompleted": false,
+      "text": "HR Review Completed"
+    },
+    {
+      "updatedAt": "2026-06-12T11:41:58.767408Z",
+      "id": "chk-1781264518767-0",
+      "text": "Application Submitted",
+      "isCompleted": false,
+      "category": "application",
+      "employeeId": "emp-1781264518767"
+    },
+    {
+      "id": "chk-1781264518767-1",
+      "updatedAt": "2026-06-12T11:41:58.767408Z",
+      "employeeId": "emp-1781264518767",
+      "category": "documents",
+      "isCompleted": false,
+      "text": "Resume Uploaded"
+    },
+    {
+      "updatedAt": "2026-06-12T11:41:58.767408Z",
+      "id": "chk-1781264518767-10",
+      "employeeId": "emp-1781264518767",
+      "category": "approval",
+      "isCompleted": false,
+      "text": "Final Approval Completed"
+    },
+    {
+      "id": "chk-1781264518767-2",
+      "updatedAt": "2026-06-12T11:41:58.767408Z",
+      "employeeId": "emp-1781264518767",
+      "category": "documents",
+      "isCompleted": false,
+      "text": "Aadhaar Uploaded"
+    },
+    {
+      "updatedAt": "2026-06-12T11:41:58.767408Z",
+      "id": "chk-1781264518767-3",
+      "employeeId": "emp-1781264518767",
+      "category": "documents",
+      "isCompleted": false,
+      "text": "PAN Uploaded"
+    },
+    {
+      "updatedAt": "2026-06-12T11:41:58.767408Z",
+      "id": "chk-1781264518767-4",
+      "text": "Passport Photo Uploaded",
+      "isCompleted": false,
+      "category": "documents",
+      "employeeId": "emp-1781264518767"
+    },
+    {
+      "employeeId": "emp-1781264518767",
+      "category": "documents",
+      "isCompleted": false,
+      "text": "Educational Certificates Uploaded",
+      "id": "chk-1781264518767-5",
+      "updatedAt": "2026-06-12T11:41:58.767408Z"
+    },
+    {
+      "updatedAt": "2026-06-12T11:41:58.767408Z",
+      "id": "chk-1781264518767-6",
+      "text": "Test Assigned",
+      "isCompleted": false,
+      "category": "assessments",
+      "employeeId": "emp-1781264518767"
+    },
+    {
+      "employeeId": "emp-1781264518767",
+      "category": "assessments",
+      "isCompleted": false,
+      "text": "Test Completed",
+      "id": "chk-1781264518767-7",
+      "updatedAt": "2026-06-12T11:41:58.767408Z"
+    },
+    {
+      "employeeId": "emp-1781264518767",
+      "category": "assessments",
+      "isCompleted": false,
+      "text": "Passed Assessment",
+      "id": "chk-1781264518767-8",
+      "updatedAt": "2026-06-12T11:41:58.767408Z"
+    },
+    {
+      "text": "HR Review Completed",
+      "isCompleted": false,
+      "category": "approval",
+      "employeeId": "emp-1781264518767",
+      "updatedAt": "2026-06-12T11:41:58.767408Z",
+      "id": "chk-1781264518767-9"
+    },
+    {
+      "employeeId": "emp-1781264519926",
+      "category": "application",
+      "isCompleted": false,
+      "text": "Application Submitted",
+      "updatedAt": "2026-06-12T11:41:59.926873Z",
+      "id": "chk-1781264519926-0"
+    },
+    {
+      "text": "Resume Uploaded",
+      "isCompleted": false,
+      "category": "documents",
+      "employeeId": "emp-1781264519926",
+      "id": "chk-1781264519926-1",
+      "updatedAt": "2026-06-12T11:41:59.926873Z"
+    },
+    {
+      "employeeId": "emp-1781264519926",
+      "category": "approval",
+      "isCompleted": false,
+      "text": "Final Approval Completed",
+      "id": "chk-1781264519926-10",
+      "updatedAt": "2026-06-12T11:41:59.926873Z"
+    },
+    {
+      "updatedAt": "2026-06-12T11:41:59.926873Z",
+      "id": "chk-1781264519926-2",
+      "text": "Aadhaar Uploaded",
+      "isCompleted": false,
+      "category": "documents",
+      "employeeId": "emp-1781264519926"
+    },
+    {
+      "id": "chk-1781264519926-3",
+      "updatedAt": "2026-06-12T11:41:59.926873Z",
+      "employeeId": "emp-1781264519926",
+      "category": "documents",
+      "isCompleted": false,
+      "text": "PAN Uploaded"
+    },
+    {
+      "text": "Passport Photo Uploaded",
+      "isCompleted": false,
+      "category": "documents",
+      "employeeId": "emp-1781264519926",
+      "id": "chk-1781264519926-4",
+      "updatedAt": "2026-06-12T11:41:59.926873Z"
+    },
+    {
+      "id": "chk-1781264519926-5",
+      "updatedAt": "2026-06-12T11:41:59.926873Z",
+      "text": "Educational Certificates Uploaded",
+      "isCompleted": false,
+      "category": "documents",
+      "employeeId": "emp-1781264519926"
+    },
+    {
+      "updatedAt": "2026-06-12T11:41:59.926873Z",
+      "id": "chk-1781264519926-6",
+      "employeeId": "emp-1781264519926",
+      "category": "assessments",
+      "isCompleted": false,
+      "text": "Test Assigned"
+    },
+    {
+      "employeeId": "emp-1781264519926",
+      "category": "assessments",
+      "isCompleted": false,
+      "text": "Test Completed",
+      "updatedAt": "2026-06-12T11:41:59.926873Z",
+      "id": "chk-1781264519926-7"
+    },
+    {
+      "updatedAt": "2026-06-12T11:41:59.926873Z",
+      "id": "chk-1781264519926-8",
+      "text": "Passed Assessment",
+      "isCompleted": false,
+      "category": "assessments",
+      "employeeId": "emp-1781264519926"
+    },
+    {
+      "employeeId": "emp-1781264519926",
+      "category": "approval",
+      "isCompleted": false,
+      "text": "HR Review Completed",
+      "id": "chk-1781264519926-9",
+      "updatedAt": "2026-06-12T11:41:59.926873Z"
+    },
+    {
+      "updatedAt": "2026-06-12T11:41:59.952683Z",
+      "id": "chk-1781264519952-0",
+      "text": "Application Submitted",
+      "isCompleted": false,
+      "category": "application",
+      "employeeId": "emp-1781264519952"
+    },
+    {
+      "employeeId": "emp-1781264519952",
+      "category": "documents",
+      "isCompleted": false,
+      "text": "Resume Uploaded",
+      "id": "chk-1781264519952-1",
+      "updatedAt": "2026-06-12T11:41:59.952683Z"
+    },
+    {
+      "text": "Final Approval Completed",
+      "isCompleted": false,
+      "category": "approval",
+      "employeeId": "emp-1781264519952",
+      "id": "chk-1781264519952-10",
+      "updatedAt": "2026-06-12T11:41:59.952683Z"
+    },
+    {
+      "id": "chk-1781264519952-2",
+      "updatedAt": "2026-06-12T11:41:59.952683Z",
+      "text": "Aadhaar Uploaded",
+      "isCompleted": false,
+      "category": "documents",
+      "employeeId": "emp-1781264519952"
+    },
+    {
+      "text": "PAN Uploaded",
+      "isCompleted": false,
+      "category": "documents",
+      "employeeId": "emp-1781264519952",
+      "updatedAt": "2026-06-12T11:41:59.952683Z",
+      "id": "chk-1781264519952-3"
+    },
+    {
+      "employeeId": "emp-1781264519952",
+      "category": "documents",
+      "isCompleted": false,
+      "text": "Passport Photo Uploaded",
+      "updatedAt": "2026-06-12T11:41:59.952683Z",
+      "id": "chk-1781264519952-4"
+    },
+    {
+      "id": "chk-1781264519952-5",
+      "updatedAt": "2026-06-12T11:41:59.952683Z",
+      "employeeId": "emp-1781264519952",
+      "category": "documents",
+      "isCompleted": false,
+      "text": "Educational Certificates Uploaded"
+    },
+    {
+      "text": "Test Assigned",
+      "isCompleted": false,
+      "category": "assessments",
+      "employeeId": "emp-1781264519952",
+      "id": "chk-1781264519952-6",
+      "updatedAt": "2026-06-12T11:41:59.952683Z"
+    },
+    {
+      "id": "chk-1781264519952-7",
+      "updatedAt": "2026-06-12T11:41:59.952683Z",
+      "employeeId": "emp-1781264519952",
+      "category": "assessments",
+      "isCompleted": false,
+      "text": "Test Completed"
+    },
+    {
+      "text": "Passed Assessment",
+      "isCompleted": false,
+      "category": "assessments",
+      "employeeId": "emp-1781264519952",
+      "updatedAt": "2026-06-12T11:41:59.952683Z",
+      "id": "chk-1781264519952-8"
+    },
+    {
+      "employeeId": "emp-1781264519952",
+      "category": "approval",
+      "isCompleted": false,
+      "text": "HR Review Completed",
+      "id": "chk-1781264519952-9",
+      "updatedAt": "2026-06-12T11:41:59.952683Z"
+    },
+    {
+      "text": "Application Submitted",
+      "isCompleted": false,
+      "category": "application",
+      "employeeId": "emp-1781264520871",
+      "id": "chk-1781264520871-0",
+      "updatedAt": "2026-06-12T11:42:00.871876Z"
+    },
+    {
+      "employeeId": "emp-1781264520871",
+      "category": "documents",
+      "isCompleted": false,
+      "text": "Resume Uploaded",
+      "id": "chk-1781264520871-1",
+      "updatedAt": "2026-06-12T11:42:00.871876Z"
+    },
+    {
+      "updatedAt": "2026-06-12T11:42:00.871876Z",
+      "id": "chk-1781264520871-10",
+      "employeeId": "emp-1781264520871",
+      "category": "approval",
+      "isCompleted": false,
+      "text": "Final Approval Completed"
+    },
+    {
+      "text": "Aadhaar Uploaded",
+      "isCompleted": false,
+      "category": "documents",
+      "employeeId": "emp-1781264520871",
+      "id": "chk-1781264520871-2",
+      "updatedAt": "2026-06-12T11:42:00.871876Z"
+    },
+    {
+      "id": "chk-1781264520871-3",
+      "updatedAt": "2026-06-12T11:42:00.871876Z",
+      "text": "PAN Uploaded",
+      "isCompleted": false,
+      "category": "documents",
+      "employeeId": "emp-1781264520871"
+    },
+    {
+      "text": "Passport Photo Uploaded",
+      "isCompleted": false,
+      "category": "documents",
+      "employeeId": "emp-1781264520871",
+      "updatedAt": "2026-06-12T11:42:00.871876Z",
+      "id": "chk-1781264520871-4"
+    },
+    {
+      "id": "chk-1781264520871-5",
+      "updatedAt": "2026-06-12T11:42:00.871876Z",
+      "employeeId": "emp-1781264520871",
+      "category": "documents",
+      "isCompleted": false,
+      "text": "Educational Certificates Uploaded"
+    },
+    {
+      "employeeId": "emp-1781264520871",
+      "category": "assessments",
+      "isCompleted": false,
+      "text": "Test Assigned",
+      "id": "chk-1781264520871-6",
+      "updatedAt": "2026-06-12T11:42:00.871876Z"
+    },
+    {
+      "employeeId": "emp-1781264520871",
+      "category": "assessments",
+      "isCompleted": false,
+      "text": "Test Completed",
+      "id": "chk-1781264520871-7",
+      "updatedAt": "2026-06-12T11:42:00.871876Z"
+    },
+    {
+      "employeeId": "emp-1781264520871",
+      "category": "assessments",
+      "isCompleted": false,
+      "text": "Passed Assessment",
+      "updatedAt": "2026-06-12T11:42:00.871876Z",
+      "id": "chk-1781264520871-8"
+    },
+    {
+      "text": "HR Review Completed",
+      "isCompleted": false,
+      "category": "approval",
+      "employeeId": "emp-1781264520871",
+      "id": "chk-1781264520871-9",
+      "updatedAt": "2026-06-12T11:42:00.871876Z"
+    },
+    {
+      "id": "chk-2",
+      "updatedAt": "2026-06-12T09:19:46.377303Z",
       "employeeId": "emp-1",
-      "id": "chk-5",
+      "category": "documents",
+      "isCompleted": false,
+      "text": "Resume Uploaded"
+    },
+    {
+      "text": "Aadhaar Uploaded",
+      "isCompleted": false,
+      "category": "documents",
+      "employeeId": "emp-1",
+      "updatedAt": "2026-06-12T09:19:46.377303Z",
+      "id": "chk-3"
+    },
+    {
+      "text": "PAN Uploaded",
+      "isCompleted": false,
+      "category": "documents",
+      "employeeId": "emp-1",
+      "id": "chk-4",
       "updatedAt": "2026-06-12T09:19:46.377303Z"
     },
     {
-      "employeeId": "emp-1",
-      "isCompleted": false,
+      "id": "chk-5",
       "updatedAt": "2026-06-12T09:19:46.377303Z",
-      "id": "chk-6",
-      "text": "Educational Certificates Uploaded",
-      "category": "documents"
+      "employeeId": "emp-1",
+      "category": "documents",
+      "isCompleted": false,
+      "text": "Passport Photo Uploaded"
     },
     {
       "employeeId": "emp-1",
-      "isCompleted": true,
-      "updatedAt": "2026-06-12T09:34:37.473605Z",
+      "category": "documents",
+      "isCompleted": false,
+      "text": "Educational Certificates Uploaded",
+      "updatedAt": "2026-06-12T09:19:46.377303Z",
+      "id": "chk-6"
+    },
+    {
       "id": "chk-7",
+      "updatedAt": "2026-06-12T09:34:37.473605Z",
       "text": "Test Assigned",
+      "isCompleted": true,
+      "employeeId": "emp-1",
       "category": "assessments"
     },
     {
       "text": "Test Completed",
-      "category": "assessments",
       "isCompleted": false,
+      "category": "assessments",
       "employeeId": "emp-1",
-      "id": "chk-8",
-      "updatedAt": "2026-06-12T09:19:46.377303Z"
+      "updatedAt": "2026-06-12T09:19:46.377303Z",
+      "id": "chk-8"
     },
     {
       "id": "chk-9",
       "updatedAt": "2026-06-12T09:19:46.377303Z",
-      "isCompleted": false,
       "employeeId": "emp-1",
       "category": "assessments",
+      "isCompleted": false,
       "text": "Passed Assessment"
     }
   ],
   "activityLogs": [
     {
       "employeeId": "emp-1",
-      "id": "log-1",
+      "employeeName": "Bharath",
       "timestamp": "2026-06-12T09:19:46.377303Z",
+      "id": "log-1",
       "action": "Account Provisioned",
-      "details": "Welcome profile automatically generated by system default seeds.",
-      "employeeName": "Bharath"
+      "details": "Welcome profile automatically generated by system default seeds."
     },
     {
-      "details": "Approved leave request for employee Bharath from 2026-06-15 to 2026-06-19.",
-      "employeeName": "Admin Olivia Vance",
-      "timestamp": "2026-06-12T09:19:46.480215Z",
-      "id": "log-1781255986480-52526",
       "employeeId": "admin-1",
-      "action": "Leave Approved"
+      "timestamp": "2026-06-12T09:19:46.480215Z",
+      "employeeName": "Admin Olivia Vance",
+      "action": "Leave Approved",
+      "details": "Approved leave request for employee Bharath from 2026-06-15 to 2026-06-19.",
+      "id": "log-1781255986480-52526"
     },
     {
       "employeeId": "emp-1",
-      "id": "log-1781256038893-94831",
       "timestamp": "2026-06-12T09:20:38.893758Z",
+      "employeeName": "Bharath",
       "action": "User Sign-In",
       "details": "Successful authentication via credentials.",
-      "employeeName": "Bharath"
+      "id": "log-1781256038893-94831"
     },
     {
+      "employeeId": "admin-1",
+      "details": "Successful authentication via credentials.",
       "action": "User Sign-In",
-      "timestamp": "2026-06-12T09:21:25.012441Z",
       "id": "log-1781256085012-47480",
-      "employeeId": "admin-1",
-      "employeeName": "G Venkat (HR Lead)",
-      "details": "Successful authentication via credentials."
+      "timestamp": "2026-06-12T09:21:25.012441Z",
+      "employeeName": "G Venkat (HR Lead)"
     },
     {
-      "timestamp": "2026-06-12T09:34:25.340327Z",
-      "id": "log-1781256865340-16030",
       "employeeId": "admin-1",
-      "action": "Assessment Created",
       "details": "Created new exam standard: \"test\"",
-      "employeeName": "Admin Olivia Vance"
+      "action": "Assessment Created",
+      "id": "log-1781256865340-16030",
+      "employeeName": "Admin Olivia Vance",
+      "timestamp": "2026-06-12T09:34:25.340327Z"
     },
     {
       "employeeId": "admin-1",
-      "id": "log-1781256877473-58498",
-      "timestamp": "2026-06-12T09:34:37.473700Z",
       "action": "Assigned Test Standard",
       "details": "Drafted exam deployment [test] to Bharath",
+      "id": "log-1781256877473-58498",
+      "timestamp": "2026-06-12T09:34:37.473700Z",
       "employeeName": "Admin Olivia Vance"
     },
     {
-      "employeeName": "Bharath",
+      "employeeId": "emp-1",
+      "id": "log-1781256885175-36969",
       "details": "Successful authentication via credentials.",
       "action": "User Sign-In",
-      "employeeId": "emp-1",
-      "timestamp": "2026-06-12T09:34:45.175695Z",
-      "id": "log-1781256885175-36969"
+      "employeeName": "Bharath",
+      "timestamp": "2026-06-12T09:34:45.175695Z"
     },
     {
       "employeeId": "emp-1",
-      "timestamp": "2026-06-12T09:34:55.821968Z",
-      "id": "log-1781256895821-55329",
-      "action": "Onboarding Profile Submitted",
       "details": "Submitted complete onboarding profile and validated checklists.",
+      "action": "Onboarding Profile Submitted",
+      "id": "log-1781256895821-55329",
+      "timestamp": "2026-06-12T09:34:55.821968Z",
       "employeeName": "Bharath"
     },
     {
+      "employeeId": "emp-1",
+      "details": "Checked in for daily attendance on 2026-06-12.",
       "action": "Attendance Requested",
-      "timestamp": "2026-06-12T09:35:01.314132Z",
       "id": "log-1781256901314-44521",
-      "employeeId": "emp-1",
       "employeeName": "Bharath",
-      "details": "Checked in for daily attendance on 2026-06-12."
+      "timestamp": "2026-06-12T09:35:01.314132Z"
     },
     {
-      "details": "Began taking quiz assignment: \"test\"",
-      "employeeName": "Bharath",
-      "employeeId": "emp-1",
-      "id": "log-1781256916731-35285",
       "timestamp": "2026-06-12T09:35:16.731560Z",
-      "action": "Exam Commenced"
+      "employeeName": "Bharath",
+      "details": "Began taking quiz assignment: \"test\"",
+      "action": "Exam Commenced",
+      "id": "log-1781256916731-35285",
+      "employeeId": "emp-1"
     },
     {
-      "action": "Exam Commenced",
       "employeeId": "emp-1",
-      "timestamp": "2026-06-12T09:35:19.524030Z",
-      "id": "log-1781256919523-72019",
       "employeeName": "Bharath",
+      "timestamp": "2026-06-12T09:35:19.524030Z",
+      "details": "Began taking quiz assignment: \"test\"",
+      "action": "Exam Commenced",
+      "id": "log-1781256919523-72019"
+    },
+    {
+      "employeeId": "emp-1",
+      "id": "log-1781256956358-15506",
+      "details": "Paused taking quiz assignment: \"test\"",
+      "action": "Exam Paused",
+      "employeeName": "Bharath",
+      "timestamp": "2026-06-12T09:35:56.358673Z"
+    },
+    {
+      "timestamp": "2026-06-12T09:36:00.437022Z",
+      "employeeName": "Bharath",
+      "id": "log-1781256960436-99492",
+      "action": "Exam Paused",
+      "details": "Paused taking quiz assignment: \"test\"",
+      "employeeId": "emp-1"
+    },
+    {
+      "timestamp": "2026-06-12T09:36:06.847945Z",
+      "employeeName": "Bharath",
+      "action": "Exam Commenced",
+      "details": "Began taking quiz assignment: \"test\"",
+      "id": "log-1781256966847-40564",
+      "employeeId": "emp-1"
+    },
+    {
+      "employeeId": "emp-1",
+      "timestamp": "2026-06-12T09:36:09.968440Z",
+      "employeeName": "Bharath",
+      "id": "log-1781256969968-96983",
+      "action": "Exam Commenced",
       "details": "Began taking quiz assignment: \"test\""
     },
     {
-      "action": "Exam Paused",
-      "id": "log-1781256956358-15506",
-      "timestamp": "2026-06-12T09:35:56.358673Z",
       "employeeId": "emp-1",
-      "employeeName": "Bharath",
-      "details": "Paused taking quiz assignment: \"test\""
-    },
-    {
-      "employeeName": "Bharath",
-      "details": "Paused taking quiz assignment: \"test\"",
-      "action": "Exam Paused",
-      "employeeId": "emp-1",
-      "id": "log-1781256960436-99492",
-      "timestamp": "2026-06-12T09:36:00.437022Z"
-    },
-    {
-      "details": "Began taking quiz assignment: \"test\"",
-      "employeeName": "Bharath",
-      "timestamp": "2026-06-12T09:36:06.847945Z",
-      "id": "log-1781256966847-40564",
-      "employeeId": "emp-1",
-      "action": "Exam Commenced"
-    },
-    {
-      "employeeName": "Bharath",
-      "details": "Began taking quiz assignment: \"test\"",
-      "action": "Exam Commenced",
-      "id": "log-1781256969968-96983",
-      "timestamp": "2026-06-12T09:36:09.968440Z",
-      "employeeId": "emp-1"
-    },
-    {
-      "employeeName": "Bharath",
+      "id": "log-1781256977719-36553",
       "details": "Paused taking quiz assignment: \"test\"",
       "action": "Exam Paused",
       "timestamp": "2026-06-12T09:36:17.719366Z",
-      "id": "log-1781256977719-36553",
-      "employeeId": "emp-1"
+      "employeeName": "Bharath"
     },
     {
-      "action": "Exam Paused",
       "timestamp": "2026-06-12T09:36:21.170626Z",
-      "id": "log-1781256981170-88372",
-      "employeeId": "emp-1",
-      "employeeName": "Bharath",
-      "details": "Paused taking quiz assignment: \"test\""
-    },
-    {
       "employeeName": "Bharath",
       "details": "Paused taking quiz assignment: \"test\"",
       "action": "Exam Paused",
+      "id": "log-1781256981170-88372",
+      "employeeId": "emp-1"
+    },
+    {
       "timestamp": "2026-06-12T09:36:25.798328Z",
+      "employeeName": "Bharath",
       "id": "log-1781256985798-99904",
+      "action": "Exam Paused",
+      "details": "Paused taking quiz assignment: \"test\"",
       "employeeId": "emp-1"
     },
     {
       "details": "Successful authentication via credentials.",
+      "action": "User Sign-In",
+      "id": "log-1781257697019-89520",
       "employeeName": "Bharath",
       "timestamp": "2026-06-12T09:48:17.019656Z",
-      "id": "log-1781257697019-89520",
-      "employeeId": "emp-1",
-      "action": "User Sign-In"
+      "employeeId": "emp-1"
     },
     {
       "details": "Checked in for daily attendance on 2026-06-12.",
-      "employeeName": "Bharath",
+      "action": "Attendance Requested",
       "id": "log-1781257714776-14392",
+      "employeeName": "Bharath",
       "timestamp": "2026-06-12T09:48:34.776663Z",
+      "employeeId": "emp-1"
+    },
+    {
+      "employeeId": "admin-1",
+      "employeeName": "G Venkat (HR Lead)",
+      "timestamp": "2026-06-12T11:28:15.821448Z",
+      "id": "log-1781263695821-80144",
+      "action": "User Sign-In",
+      "details": "Successful authentication via credentials."
+    },
+    {
+      "timestamp": "2026-06-12T11:28:53.546329Z",
+      "employeeName": "Bharath",
+      "details": "Successful authentication via credentials.",
+      "action": "User Sign-In",
+      "id": "log-1781263733546-18015",
+      "employeeId": "emp-1"
+    },
+    {
+      "employeeId": "admin-1",
+      "employeeName": "G Venkat (HR Lead)",
+      "timestamp": "2026-06-12T11:32:08.403531Z",
+      "id": "log-1781263928403-48390",
+      "details": "Successful authentication via credentials.",
+      "action": "User Sign-In"
+    },
+    {
+      "employeeName": "G Venkat (HR Lead)",
+      "timestamp": "2026-06-12T11:35:15.626342Z",
+      "id": "log-1781264115626-99827",
+      "details": "Successful authentication via credentials.",
+      "action": "User Sign-In",
+      "employeeId": "admin-1"
+    },
+    {
+      "employeeId": "admin-1",
+      "timestamp": "2026-06-12T11:39:11.682470Z",
+      "employeeName": "G Venkat (HR Lead)",
+      "id": "log-1781264351682-62325",
+      "action": "User Sign-In",
+      "details": "Successful authentication via credentials."
+    },
+    {
+      "action": "Account Provisioned",
+      "details": "Created employee account: shriya (shriyachary0810@gmail.com)",
+      "id": "log-1781264493152-36035",
+      "timestamp": "2026-06-12T11:41:33.152194Z",
+      "employeeName": "Admin Olivia Vance",
+      "employeeId": "admin-1"
+    },
+    {
+      "employeeId": "admin-1",
+      "employeeName": "Admin Olivia Vance",
+      "timestamp": "2026-06-12T11:41:39.123112Z",
+      "action": "Account Provisioned",
+      "details": "Created employee account: shriya (shriyachary0810@gmail.com)",
+      "id": "log-1781264499123-18946"
+    },
+    {
+      "employeeId": "admin-1",
+      "timestamp": "2026-06-12T11:41:40.974039Z",
+      "employeeName": "Admin Olivia Vance",
+      "id": "log-1781264500974-60105",
+      "action": "Account Provisioned",
+      "details": "Created employee account: shriya (shriyachary0810@gmail.com)"
+    },
+    {
+      "employeeName": "Admin Olivia Vance",
+      "timestamp": "2026-06-12T11:41:41.567663Z",
+      "action": "Account Provisioned",
+      "details": "Created employee account: shriya (shriyachary0810@gmail.com)",
+      "id": "log-1781264501567-78231",
+      "employeeId": "admin-1"
+    },
+    {
+      "details": "Created employee account: shriya (shriyachary0810@gmail.com)",
+      "action": "Account Provisioned",
+      "id": "log-1781264501714-85553",
+      "employeeName": "Admin Olivia Vance",
+      "timestamp": "2026-06-12T11:41:41.714034Z",
+      "employeeId": "admin-1"
+    },
+    {
+      "employeeId": "admin-1",
+      "action": "Account Provisioned",
+      "details": "Created employee account: shriya (shriyachary0810@gmail.com)",
+      "id": "log-1781264502144-87380",
+      "employeeName": "Admin Olivia Vance",
+      "timestamp": "2026-06-12T11:41:42.144045Z"
+    },
+    {
+      "employeeId": "admin-1",
+      "timestamp": "2026-06-12T11:41:42.167040Z",
+      "employeeName": "Admin Olivia Vance",
+      "id": "log-1781264502167-74073",
+      "details": "Created employee account: shriya (shriyachary0810@gmail.com)",
+      "action": "Account Provisioned"
+    },
+    {
+      "employeeId": "admin-1",
+      "action": "Account Provisioned",
+      "details": "Created employee account: shriya (shriyachary0810@gmail.com)",
+      "id": "log-1781264502397-22359",
+      "timestamp": "2026-06-12T11:41:42.397305Z",
+      "employeeName": "Admin Olivia Vance"
+    },
+    {
+      "employeeId": "admin-1",
+      "timestamp": "2026-06-12T11:41:43.796479Z",
+      "employeeName": "Admin Olivia Vance",
+      "id": "log-1781264503796-98089",
+      "details": "Created employee account: shriya (shriyachary0810@gmail.com)",
+      "action": "Account Provisioned"
+    },
+    {
+      "details": "Created employee account: shriya (shriyachary0810@gmail.com)",
+      "action": "Account Provisioned",
+      "id": "log-1781264506844-53515",
+      "timestamp": "2026-06-12T11:41:46.844359Z",
+      "employeeName": "Admin Olivia Vance",
+      "employeeId": "admin-1"
+    },
+    {
+      "employeeName": "Admin Olivia Vance",
+      "timestamp": "2026-06-12T11:41:51.246271Z",
+      "details": "Created employee account: shriya (shriyachary0810@gmail.com)",
+      "action": "Account Provisioned",
+      "id": "log-1781264511246-60562",
+      "employeeId": "admin-1"
+    },
+    {
+      "employeeId": "admin-1",
+      "id": "log-1781264513383-58061",
+      "details": "Created employee account: shriya (shriyachary0810@gmail.com)",
+      "action": "Account Provisioned",
+      "timestamp": "2026-06-12T11:41:53.383381Z",
+      "employeeName": "Admin Olivia Vance"
+    },
+    {
+      "employeeId": "admin-1",
+      "employeeName": "Admin Olivia Vance",
+      "timestamp": "2026-06-12T11:41:57.516522Z",
+      "details": "Created employee account: shriya (shriyachary0810@gmail.com)",
+      "action": "Account Provisioned",
+      "id": "log-1781264517516-33552"
+    },
+    {
+      "employeeId": "admin-1",
+      "details": "Created employee account: shriya (shriyachary0810@gmail.com)",
+      "action": "Account Provisioned",
+      "id": "log-1781264517533-24449",
+      "employeeName": "Admin Olivia Vance",
+      "timestamp": "2026-06-12T11:41:57.533973Z"
+    },
+    {
+      "details": "Created employee account: shriya (shriyachary0810@gmail.com)",
+      "action": "Account Provisioned",
+      "id": "log-1781264517761-27247",
+      "timestamp": "2026-06-12T11:41:57.761141Z",
+      "employeeName": "Admin Olivia Vance",
+      "employeeId": "admin-1"
+    },
+    {
+      "employeeName": "Admin Olivia Vance",
+      "timestamp": "2026-06-12T11:41:57.771188Z",
+      "action": "Account Provisioned",
+      "details": "Created employee account: shriya (shriyachary0810@gmail.com)",
+      "id": "log-1781264517771-72962",
+      "employeeId": "admin-1"
+    },
+    {
+      "timestamp": "2026-06-12T11:41:58.551588Z",
+      "employeeName": "Admin Olivia Vance",
+      "id": "log-1781264518551-93840",
+      "action": "Account Provisioned",
+      "details": "Created employee account: shriya (shriyachary0810@gmail.com)",
+      "employeeId": "admin-1"
+    },
+    {
+      "timestamp": "2026-06-12T11:41:58.767455Z",
+      "employeeName": "Admin Olivia Vance",
+      "id": "log-1781264518767-76481",
+      "details": "Created employee account: shriya (shriyachary0810@gmail.com)",
+      "action": "Account Provisioned",
+      "employeeId": "admin-1"
+    },
+    {
+      "employeeId": "admin-1",
+      "employeeName": "Admin Olivia Vance",
+      "timestamp": "2026-06-12T11:41:59.926910Z",
+      "action": "Account Provisioned",
+      "details": "Created employee account: shriya (shriyachary0810@gmail.com)",
+      "id": "log-1781264519926-82074"
+    },
+    {
+      "timestamp": "2026-06-12T11:41:59.952730Z",
+      "employeeName": "Admin Olivia Vance",
+      "details": "Created employee account: shriya (shriyachary0810@gmail.com)",
+      "action": "Account Provisioned",
+      "id": "log-1781264519952-24378",
+      "employeeId": "admin-1"
+    },
+    {
+      "timestamp": "2026-06-12T11:42:00.871923Z",
+      "employeeName": "Admin Olivia Vance",
+      "action": "Account Provisioned",
+      "details": "Created employee account: shriya (shriyachary0810@gmail.com)",
+      "id": "log-1781264520871-42137",
+      "employeeId": "admin-1"
+    },
+    {
+      "employeeId": "emp-1781264519952",
+      "timestamp": "2026-06-12T11:43:49.701340Z",
+      "employeeName": "shriya",
+      "id": "log-1781264629701-57292",
+      "details": "Successful authentication via credentials.",
+      "action": "User Sign-In"
+    },
+    {
+      "employeeId": "emp-1781264518767",
+      "timestamp": "2026-06-12T11:44:38.378630Z",
+      "employeeName": "shriya",
+      "id": "log-1781264678378-41379",
+      "details": "Successful authentication via credentials.",
+      "action": "User Sign-In"
+    },
+    {
       "employeeId": "emp-1",
-      "action": "Attendance Requested"
+      "details": "Successful authentication via credentials.",
+      "action": "User Sign-In",
+      "id": "log-1781264756057-95030",
+      "employeeName": "Bharath",
+      "timestamp": "2026-06-12T11:45:56.057072Z"
+    },
+    {
+      "id": "log-1781264885617-42395",
+      "action": "Attendance Approved",
+      "details": "Approved attendance for employee Bharath on 2026-06-12.",
+      "timestamp": "2026-06-12T11:48:05.618006Z",
+      "employeeName": "Admin Olivia Vance",
+      "employeeId": "admin-1"
+    },
+    {
+      "timestamp": "2026-06-12T11:48:45.358183Z",
+      "employeeName": "Admin Olivia Vance",
+      "id": "log-1781264925358-36070",
+      "action": "Attendance Approved",
+      "details": "Approved attendance for employee Bharath on 2026-06-12.",
+      "employeeId": "admin-1"
+    },
+    {
+      "employeeId": "admin-1",
+      "id": "log-1781265097514-32100",
+      "details": "Approved attendance for employee Bharath on 2026-06-12.",
+      "action": "Attendance Approved",
+      "employeeName": "Admin Olivia Vance",
+      "timestamp": "2026-06-12T11:51:37.514822Z"
+    },
+    {
+      "id": "log-1781265865682-60567",
+      "action": "User Sign-In",
+      "details": "Successful authentication via credentials.",
+      "timestamp": "2026-06-12T12:04:25.682485Z",
+      "employeeName": "Bharath",
+      "employeeId": "emp-1"
+    },
+    {
+      "employeeId": "admin-1",
+      "employeeName": "G Venkat (HR Lead)",
+      "timestamp": "2026-06-12T12:09:27.270526Z",
+      "details": "Successful authentication via credentials.",
+      "action": "User Sign-In",
+      "id": "log-1781266167270-60906"
+    },
+    {
+      "employeeId": "admin-1",
+      "timestamp": "2026-06-12T12:10:00.156163Z",
+      "employeeName": "Admin Olivia Vance",
+      "id": "log-1781266200156-94105",
+      "details": "Approved attendance for employee Bharath on 2026-06-12.",
+      "action": "Attendance Approved"
     }
   ],
   "emails": [
     {
-      "to": "bharathsathyasaijanga@gmail.com",
-      "subject": "Welcome to AgentOps Labs!",
+      "body": "Welcome Bharath! Your AgentOps Labs onboarding portal account has been created.\n\nLogin credentials:\nEmail: bharathsathyasaijanga@gmail.com\nPassword: Bharath@767\n\nPlease update your password on your first login.",
+      "type": "welcome",
       "sentAt": "2026-06-12T09:19:46.377303Z",
       "id": "email-1",
-      "type": "welcome",
-      "body": "Welcome Bharath! Your AgentOps Labs onboarding portal account has been created.\n\nLogin credentials:\nEmail: bharathsathyasaijanga@gmail.com\nPassword: Bharath@767\n\nPlease update your password on your first login."
+      "to": "bharathsathyasaijanga@gmail.com",
+      "subject": "Welcome to AgentOps Labs!"
     },
     {
-      "id": "email-1781256877481-3352",
-      "type": "test_assigned",
       "to": "bharathsathyasaijanga@gmail.com",
+      "id": "email-1781256877481-3352",
       "subject": "EXAM ASSIGNED: test",
       "sentAt": "2026-06-12T09:34:37.482833Z",
+      "type": "test_assigned",
       "body": "Dear Bharath,\nA new skills assessment test [test] has been assigned to you. You have 15 minutes to complete it.\nPlease complete this assessment to advance your onboarding workflow."
     },
     {
-      "body": "Onboarding application submitted by candidate: Bharath (bharathsathyasaijanga@gmail.com).\nSubmission Time: 2026-06-12 15:04:55\nStatus: PENDING ADMIN REVIEW.",
-      "type": "app_submitted",
-      "id": "email-1781256895839-3802",
       "to": "admin@agentops.com",
+      "id": "email-1781256895839-3802",
       "subject": "New Candidate Application: Bharath",
-      "sentAt": "2026-06-12T09:34:55.839657Z"
+      "sentAt": "2026-06-12T09:34:55.839657Z",
+      "type": "app_submitted",
+      "body": "Onboarding application submitted by candidate: Bharath (bharathsathyasaijanga@gmail.com).\nSubmission Time: 2026-06-12 15:04:55\nStatus: PENDING ADMIN REVIEW."
+    },
+    {
+      "body": "Welcome shriya! Your AgentOps Labs onboarding portal account has been created.\n\nLogin credentials:\nEmail: shriyachary0810@gmail.com\nPassword: Shriya@123\n\nPlease update your password on your first login.",
+      "type": "welcome",
+      "sentAt": "2026-06-12T11:41:51.481983Z",
+      "subject": "Welcome to AgentOps Labs - Temporary Account Password",
+      "id": "email-1781264511481-9511",
+      "to": "shriyachary0810@gmail.com"
+    },
+    {
+      "body": "Welcome shriya! Your AgentOps Labs onboarding portal account has been created.\n\nLogin credentials:\nEmail: shriyachary0810@gmail.com\nPassword: Shriya@123\n\nPlease update your password on your first login.",
+      "type": "welcome",
+      "sentAt": "2026-06-12T11:41:52.035396Z",
+      "to": "shriyachary0810@gmail.com",
+      "id": "email-1781264512035-5553",
+      "subject": "Welcome to AgentOps Labs - Temporary Account Password"
+    },
+    {
+      "type": "welcome",
+      "body": "Welcome shriya! Your AgentOps Labs onboarding portal account has been created.\n\nLogin credentials:\nEmail: shriyachary0810@gmail.com\nPassword: Shriya@123\n\nPlease update your password on your first login.",
+      "subject": "Welcome to AgentOps Labs - Temporary Account Password",
+      "to": "shriyachary0810@gmail.com",
+      "id": "email-1781264512133-3093",
+      "sentAt": "2026-06-12T11:41:52.133481Z"
+    },
+    {
+      "type": "welcome",
+      "body": "Welcome shriya! Your AgentOps Labs onboarding portal account has been created.\n\nLogin credentials:\nEmail: shriyachary0810@gmail.com\nPassword: Shriya@123\n\nPlease update your password on your first login.",
+      "id": "email-1781264513317-8602",
+      "to": "shriyachary0810@gmail.com",
+      "subject": "Welcome to AgentOps Labs - Temporary Account Password",
+      "sentAt": "2026-06-12T11:41:53.317555Z"
+    },
+    {
+      "body": "Welcome shriya! Your AgentOps Labs onboarding portal account has been created.\n\nLogin credentials:\nEmail: shriyachary0810@gmail.com\nPassword: Shriya@123\n\nPlease update your password on your first login.",
+      "type": "welcome",
+      "sentAt": "2026-06-12T11:41:53.398364Z",
+      "id": "email-1781264513398-5589",
+      "to": "shriyachary0810@gmail.com",
+      "subject": "Welcome to AgentOps Labs - Temporary Account Password"
+    },
+    {
+      "type": "welcome",
+      "body": "Welcome shriya! Your AgentOps Labs onboarding portal account has been created.\n\nLogin credentials:\nEmail: shriyachary0810@gmail.com\nPassword: Shriya@123\n\nPlease update your password on your first login.",
+      "subject": "Welcome to AgentOps Labs - Temporary Account Password",
+      "id": "email-1781264515077-5458",
+      "to": "shriyachary0810@gmail.com",
+      "sentAt": "2026-06-12T11:41:55.077139Z"
+    },
+    {
+      "body": "Welcome shriya! Your AgentOps Labs onboarding portal account has been created.\n\nLogin credentials:\nEmail: shriyachary0810@gmail.com\nPassword: Shriya@123\n\nPlease update your password on your first login.",
+      "type": "welcome",
+      "sentAt": "2026-06-12T11:41:55.770385Z",
+      "id": "email-1781264515770-3581",
+      "to": "shriyachary0810@gmail.com",
+      "subject": "Welcome to AgentOps Labs - Temporary Account Password"
+    },
+    {
+      "type": "welcome",
+      "body": "Welcome shriya! Your AgentOps Labs onboarding portal account has been created.\n\nLogin credentials:\nEmail: shriyachary0810@gmail.com\nPassword: Shriya@123\n\nPlease update your password on your first login.",
+      "subject": "Welcome to AgentOps Labs - Temporary Account Password",
+      "id": "email-1781264517435-4927",
+      "to": "shriyachary0810@gmail.com",
+      "sentAt": "2026-06-12T11:41:57.435180Z"
+    },
+    {
+      "sentAt": "2026-06-12T11:41:58.615848Z",
+      "id": "email-1781264518615-1301",
+      "to": "shriyachary0810@gmail.com",
+      "subject": "Welcome to AgentOps Labs - Temporary Account Password",
+      "body": "Welcome shriya! Your AgentOps Labs onboarding portal account has been created.\n\nLogin credentials:\nEmail: shriyachary0810@gmail.com\nPassword: Shriya@123\n\nPlease update your password on your first login.",
+      "type": "welcome"
+    },
+    {
+      "type": "welcome",
+      "body": "Welcome shriya! Your AgentOps Labs onboarding portal account has been created.\n\nLogin credentials:\nEmail: shriyachary0810@gmail.com\nPassword: Shriya@123\n\nPlease update your password on your first login.",
+      "id": "email-1781264525308-2928",
+      "to": "shriyachary0810@gmail.com",
+      "subject": "Welcome to AgentOps Labs - Temporary Account Password",
+      "sentAt": "2026-06-12T11:42:05.308841Z"
+    },
+    {
+      "subject": "Welcome to AgentOps Labs - Temporary Account Password",
+      "id": "email-1781264526306-2427",
+      "to": "shriyachary0810@gmail.com",
+      "sentAt": "2026-06-12T11:42:06.306626Z",
+      "type": "welcome",
+      "body": "Welcome shriya! Your AgentOps Labs onboarding portal account has been created.\n\nLogin credentials:\nEmail: shriyachary0810@gmail.com\nPassword: Shriya@123\n\nPlease update your password on your first login."
+    },
+    {
+      "type": "welcome",
+      "body": "Welcome shriya! Your AgentOps Labs onboarding portal account has been created.\n\nLogin credentials:\nEmail: shriyachary0810@gmail.com\nPassword: Shriya@123\n\nPlease update your password on your first login.",
+      "to": "shriyachary0810@gmail.com",
+      "id": "email-1781264528071-2999",
+      "subject": "Welcome to AgentOps Labs - Temporary Account Password",
+      "sentAt": "2026-06-12T11:42:08.071627Z"
+    },
+    {
+      "sentAt": "2026-06-12T11:42:09.321718Z",
+      "subject": "Welcome to AgentOps Labs - Temporary Account Password",
+      "to": "shriyachary0810@gmail.com",
+      "id": "email-1781264529321-6525",
+      "body": "Welcome shriya! Your AgentOps Labs onboarding portal account has been created.\n\nLogin credentials:\nEmail: shriyachary0810@gmail.com\nPassword: Shriya@123\n\nPlease update your password on your first login.",
+      "type": "welcome"
+    },
+    {
+      "body": "Welcome shriya! Your AgentOps Labs onboarding portal account has been created.\n\nLogin credentials:\nEmail: shriyachary0810@gmail.com\nPassword: Shriya@123\n\nPlease update your password on your first login.",
+      "type": "welcome",
+      "sentAt": "2026-06-12T11:42:11.229485Z",
+      "to": "shriyachary0810@gmail.com",
+      "id": "email-1781264531229-4515",
+      "subject": "Welcome to AgentOps Labs - Temporary Account Password"
+    },
+    {
+      "sentAt": "2026-06-12T11:42:11.792475Z",
+      "subject": "Welcome to AgentOps Labs - Temporary Account Password",
+      "to": "shriyachary0810@gmail.com",
+      "id": "email-1781264531792-7898",
+      "body": "Welcome shriya! Your AgentOps Labs onboarding portal account has been created.\n\nLogin credentials:\nEmail: shriyachary0810@gmail.com\nPassword: Shriya@123\n\nPlease update your password on your first login.",
+      "type": "welcome"
+    },
+    {
+      "type": "welcome",
+      "body": "Welcome shriya! Your AgentOps Labs onboarding portal account has been created.\n\nLogin credentials:\nEmail: shriyachary0810@gmail.com\nPassword: Shriya@123\n\nPlease update your password on your first login.",
+      "to": "shriyachary0810@gmail.com",
+      "id": "email-1781264533206-6329",
+      "subject": "Welcome to AgentOps Labs - Temporary Account Password",
+      "sentAt": "2026-06-12T11:42:13.206599Z"
+    },
+    {
+      "sentAt": "2026-06-12T11:42:13.586373Z",
+      "subject": "Welcome to AgentOps Labs - Temporary Account Password",
+      "id": "email-1781264533586-4495",
+      "to": "shriyachary0810@gmail.com",
+      "body": "Welcome shriya! Your AgentOps Labs onboarding portal account has been created.\n\nLogin credentials:\nEmail: shriyachary0810@gmail.com\nPassword: Shriya@123\n\nPlease update your password on your first login.",
+      "type": "welcome"
+    },
+    {
+      "subject": "Welcome to AgentOps Labs - Temporary Account Password",
+      "to": "shriyachary0810@gmail.com",
+      "id": "email-1781264535447-9344",
+      "sentAt": "2026-06-12T11:42:15.447162Z",
+      "type": "welcome",
+      "body": "Welcome shriya! Your AgentOps Labs onboarding portal account has been created.\n\nLogin credentials:\nEmail: shriyachary0810@gmail.com\nPassword: Shriya@123\n\nPlease update your password on your first login."
+    },
+    {
+      "subject": "Welcome to AgentOps Labs - Temporary Account Password",
+      "id": "email-1781264536742-6601",
+      "to": "shriyachary0810@gmail.com",
+      "sentAt": "2026-06-12T11:42:16.742982Z",
+      "type": "welcome",
+      "body": "Welcome shriya! Your AgentOps Labs onboarding portal account has been created.\n\nLogin credentials:\nEmail: shriyachary0810@gmail.com\nPassword: Shriya@123\n\nPlease update your password on your first login."
+    },
+    {
+      "type": "welcome",
+      "body": "Welcome shriya! Your AgentOps Labs onboarding portal account has been created.\n\nLogin credentials:\nEmail: shriyachary0810@gmail.com\nPassword: Shriya@123\n\nPlease update your password on your first login.",
+      "subject": "Welcome to AgentOps Labs - Temporary Account Password",
+      "to": "shriyachary0810@gmail.com",
+      "id": "email-1781264538596-4469",
+      "sentAt": "2026-06-12T11:42:18.596189Z"
+    },
+    {
+      "body": "Welcome shriya! Your AgentOps Labs onboarding portal account has been created.\n\nLogin credentials:\nEmail: shriyachary0810@gmail.com\nPassword: Shriya@123\n\nPlease update your password on your first login.",
+      "type": "welcome",
+      "sentAt": "2026-06-12T11:42:21.876443Z",
+      "to": "shriyachary0810@gmail.com",
+      "id": "email-1781264541876-1410",
+      "subject": "Welcome to AgentOps Labs - Temporary Account Password"
     }
   ],
   "notifications": [
     {
-      "message": "Admin assigned standard certification exam: \"test\". Start assessment when ready.",
-      "createdAt": "2026-06-12T09:34:37.490036Z",
       "employeeId": "emp-1",
-      "title": "New Assessment Assigned",
-      "id": "notif-1781256877489-42912",
       "type": "warning",
+      "id": "notif-1781256877489-42912",
+      "createdAt": "2026-06-12T09:34:37.490036Z",
+      "message": "Admin assigned standard certification exam: \"test\". Start assessment when ready.",
+      "isRead": false,
+      "title": "New Assessment Assigned"
+    },
+    {
+      "id": "notif-1781256895832-50014",
+      "createdAt": "2026-06-12T09:34:55.832638Z",
+      "message": "Onboarding application profile submitted by Bharath. Complete reviews.",
+      "isRead": false,
+      "title": "New Application Submitted",
+      "employeeId": null,
+      "type": "warning"
+    },
+    {
+      "employeeId": null,
+      "type": "info",
+      "id": "notif-1781256901304-73059",
+      "message": "Employee Bharath requested attendance approval for 2026-06-12.",
+      "createdAt": "2026-06-12T09:35:01.304519Z",
+      "isRead": false,
+      "title": "Attendance Approval Requested"
+    },
+    {
+      "title": "Attendance Approval Requested",
+      "isRead": false,
+      "message": "Employee Bharath requested attendance approval for 2026-06-12.",
+      "createdAt": "2026-06-12T09:48:34.770008Z",
+      "id": "notif-1781257714769-71889",
+      "employeeId": null,
+      "type": "info"
+    },
+    {
+      "employeeId": "emp-1781264502166",
+      "type": "info",
+      "isRead": false,
+      "title": "Onboarding Setup Launched",
+      "id": "notif-1781264513306-17974",
+      "createdAt": "2026-06-12T11:41:53.306203Z",
+      "message": "Welcome! Please enter your dashboard, fill your Onboarding application description, and upload credentials."
+    },
+    {
+      "employeeId": "emp-1781264500973",
+      "type": "info",
+      "id": "notif-1781264514184-46644",
+      "message": "Welcome! Please enter your dashboard, fill your Onboarding application description, and upload credentials.",
+      "createdAt": "2026-06-12T11:41:54.184445Z",
+      "isRead": false,
+      "title": "Onboarding Setup Launched"
+    },
+    {
+      "employeeId": "emp-1781264502397",
+      "type": "info",
+      "id": "notif-1781264514560-81375",
+      "createdAt": "2026-06-12T11:41:54.560587Z",
+      "message": "Welcome! Please enter your dashboard, fill your Onboarding application description, and upload credentials.",
+      "isRead": false,
+      "title": "Onboarding Setup Launched"
+    },
+    {
+      "employeeId": "emp-1781264501567",
+      "type": "info",
+      "title": "Onboarding Setup Launched",
+      "isRead": false,
+      "createdAt": "2026-06-12T11:41:56.519518Z",
+      "message": "Welcome! Please enter your dashboard, fill your Onboarding application description, and upload credentials.",
+      "id": "notif-1781264516519-52234"
+    },
+    {
+      "employeeId": "emp-1781264493152",
+      "type": "info",
+      "createdAt": "2026-06-12T11:41:57.415597Z",
+      "message": "Welcome! Please enter your dashboard, fill your Onboarding application description, and upload credentials.",
+      "id": "notif-1781264517415-51063",
+      "title": "Onboarding Setup Launched",
       "isRead": false
     },
     {
-      "createdAt": "2026-06-12T09:34:55.832638Z",
-      "title": "New Application Submitted",
-      "employeeId": null,
-      "id": "notif-1781256895832-50014",
-      "isRead": false,
-      "type": "warning",
-      "message": "Onboarding application profile submitted by Bharath. Complete reviews."
-    },
-    {
-      "message": "Employee Bharath requested attendance approval for 2026-06-12.",
+      "employeeId": "emp-1781264502143",
       "type": "info",
       "isRead": false,
-      "id": "notif-1781256901304-73059",
-      "employeeId": null,
-      "title": "Attendance Approval Requested",
-      "createdAt": "2026-06-12T09:35:01.304519Z"
+      "title": "Onboarding Setup Launched",
+      "id": "notif-1781264519776-32584",
+      "message": "Welcome! Please enter your dashboard, fill your Onboarding application description, and upload credentials.",
+      "createdAt": "2026-06-12T11:41:59.776759Z"
     },
     {
-      "message": "Employee Bharath requested attendance approval for 2026-06-12.",
-      "createdAt": "2026-06-12T09:48:34.770008Z",
-      "isRead": false,
+      "employeeId": "emp-1781264499123",
       "type": "info",
-      "id": "notif-1781257714769-71889",
-      "employeeId": null,
-      "title": "Attendance Approval Requested"
+      "isRead": false,
+      "title": "Onboarding Setup Launched",
+      "id": "notif-1781264520170-18974",
+      "createdAt": "2026-06-12T11:42:00.170033Z",
+      "message": "Welcome! Please enter your dashboard, fill your Onboarding application description, and upload credentials."
+    },
+    {
+      "title": "Onboarding Setup Launched",
+      "isRead": false,
+      "message": "Welcome! Please enter your dashboard, fill your Onboarding application description, and upload credentials.",
+      "createdAt": "2026-06-12T11:42:00.724595Z",
+      "id": "notif-1781264520724-43229",
+      "employeeId": "emp-1781264506844",
+      "type": "info"
+    },
+    {
+      "title": "Onboarding Setup Launched",
+      "isRead": false,
+      "createdAt": "2026-06-12T11:42:01.498059Z",
+      "message": "Welcome! Please enter your dashboard, fill your Onboarding application description, and upload credentials.",
+      "id": "notif-1781264521498-89288",
+      "employeeId": "emp-1781264501713",
+      "type": "info"
+    },
+    {
+      "isRead": false,
+      "title": "Onboarding Setup Launched",
+      "id": "notif-1781264528350-51196",
+      "message": "Welcome! Please enter your dashboard, fill your Onboarding application description, and upload credentials.",
+      "createdAt": "2026-06-12T11:42:08.350691Z",
+      "employeeId": "emp-1781264503796",
+      "type": "info"
+    },
+    {
+      "title": "Onboarding Setup Launched",
+      "isRead": false,
+      "message": "Welcome! Please enter your dashboard, fill your Onboarding application description, and upload credentials.",
+      "createdAt": "2026-06-12T11:42:10.260840Z",
+      "id": "notif-1781264530260-64291",
+      "employeeId": "emp-1781264517533",
+      "type": "info"
+    },
+    {
+      "employeeId": "emp-1781264517516",
+      "type": "info",
+      "isRead": false,
+      "title": "Onboarding Setup Launched",
+      "id": "notif-1781264530459-29154",
+      "createdAt": "2026-06-12T11:42:10.459659Z",
+      "message": "Welcome! Please enter your dashboard, fill your Onboarding application description, and upload credentials."
+    },
+    {
+      "employeeId": "emp-1781264511246",
+      "type": "info",
+      "id": "notif-1781264531176-41922",
+      "createdAt": "2026-06-12T11:42:11.176316Z",
+      "message": "Welcome! Please enter your dashboard, fill your Onboarding application description, and upload credentials.",
+      "isRead": false,
+      "title": "Onboarding Setup Launched"
+    },
+    {
+      "employeeId": "emp-1781264517761",
+      "type": "info",
+      "message": "Welcome! Please enter your dashboard, fill your Onboarding application description, and upload credentials.",
+      "createdAt": "2026-06-12T11:42:14.354823Z",
+      "id": "notif-1781264534354-11769",
+      "title": "Onboarding Setup Launched",
+      "isRead": false
+    },
+    {
+      "isRead": false,
+      "title": "Onboarding Setup Launched",
+      "id": "notif-1781264535882-13333",
+      "createdAt": "2026-06-12T11:42:15.882512Z",
+      "message": "Welcome! Please enter your dashboard, fill your Onboarding application description, and upload credentials.",
+      "employeeId": "emp-1781264517771",
+      "type": "info"
+    },
+    {
+      "employeeId": "emp-1781264513383",
+      "type": "info",
+      "id": "notif-1781264536302-11213",
+      "message": "Welcome! Please enter your dashboard, fill your Onboarding application description, and upload credentials.",
+      "createdAt": "2026-06-12T11:42:16.302389Z",
+      "isRead": false,
+      "title": "Onboarding Setup Launched"
+    },
+    {
+      "title": "Onboarding Setup Launched",
+      "isRead": false,
+      "message": "Welcome! Please enter your dashboard, fill your Onboarding application description, and upload credentials.",
+      "createdAt": "2026-06-12T11:42:16.581784Z",
+      "id": "notif-1781264536581-11075",
+      "employeeId": "emp-1781264518551",
+      "type": "info"
+    },
+    {
+      "employeeId": "emp-1781264519926",
+      "type": "info",
+      "title": "Onboarding Setup Launched",
+      "isRead": false,
+      "message": "Welcome! Please enter your dashboard, fill your Onboarding application description, and upload credentials.",
+      "createdAt": "2026-06-12T11:42:16.666086Z",
+      "id": "notif-1781264536666-47309"
+    },
+    {
+      "title": "Onboarding Setup Launched",
+      "isRead": false,
+      "message": "Welcome! Please enter your dashboard, fill your Onboarding application description, and upload credentials.",
+      "createdAt": "2026-06-12T11:42:19.839685Z",
+      "id": "notif-1781264539839-10735",
+      "employeeId": "emp-1781264520871",
+      "type": "info"
+    },
+    {
+      "isRead": false,
+      "title": "Onboarding Setup Launched",
+      "id": "notif-1781264542872-52606",
+      "message": "Welcome! Please enter your dashboard, fill your Onboarding application description, and upload credentials.",
+      "createdAt": "2026-06-12T11:42:22.873010Z",
+      "employeeId": "emp-1781264518767",
+      "type": "info"
+    },
+    {
+      "title": "Onboarding Setup Launched",
+      "isRead": false,
+      "createdAt": "2026-06-12T11:42:24.992835Z",
+      "message": "Welcome! Please enter your dashboard, fill your Onboarding application description, and upload credentials.",
+      "id": "notif-1781264544992-41003",
+      "employeeId": "emp-1781264519952",
+      "type": "info"
+    },
+    {
+      "id": "notif-1781264590607-28676",
+      "message": "Admin sent you a new message: 'Python'",
+      "createdAt": "2026-06-12T11:43:10.607794Z",
+      "isRead": false,
+      "title": "New HR Message Received",
+      "employeeId": "emp-1",
+      "type": "info"
+    },
+    {
+      "isRead": false,
+      "title": "Attendance Approved",
+      "id": "notif-1781264879844-96329",
+      "createdAt": "2026-06-12T11:47:59.844743Z",
+      "message": "Your daily check-in for 2026-06-12 has been APPROVED by Admin.",
+      "employeeId": "emp-1",
+      "type": "success"
+    },
+    {
+      "id": "notif-1781264917549-85496",
+      "message": "Your daily check-in for 2026-06-12 has been APPROVED by Admin.",
+      "createdAt": "2026-06-12T11:48:37.549639Z",
+      "isRead": false,
+      "title": "Attendance Approved",
+      "employeeId": "emp-1",
+      "type": "success"
+    },
+    {
+      "isRead": false,
+      "title": "Attendance Approved",
+      "id": "notif-1781265093025-76372",
+      "createdAt": "2026-06-12T11:51:33.025689Z",
+      "message": "Your daily check-in for 2026-06-12 has been APPROVED by Admin.",
+      "employeeId": "emp-1",
+      "type": "success"
+    },
+    {
+      "employeeId": "emp-1",
+      "type": "success",
+      "title": "Attendance Approved",
+      "isRead": false,
+      "createdAt": "2026-06-12T12:09:54.785960Z",
+      "message": "Your daily check-in for 2026-06-12 has been APPROVED by Admin.",
+      "id": "notif-1781266194785-14773"
     }
   ],
   "annotations": [],
