@@ -46,6 +46,7 @@ export default function EmployeeProfile({
   
   // Profile editing state
   const [isEditing, setIsEditing] = useState(false);
+  const justSavedRef = React.useRef(false);
   const [editName, setEditName] = useState("");
   const [editMobile, setEditMobile] = useState("");
   const [editGender, setEditGender] = useState("");
@@ -67,6 +68,10 @@ export default function EmployeeProfile({
   // Sync profile editing values with currentUser and application
   useEffect(() => {
     if (!isEditing) {
+      if (justSavedRef.current) {
+        justSavedRef.current = false;
+        return;
+      }
       setEditName(currentUser.name || "");
       setEditMobile(currentUser.mobile || "");
       setEditGender(application?.gender || "");
@@ -89,13 +94,19 @@ export default function EmployeeProfile({
 
     setSaveLoading(true);
 
+    const token = localStorage.getItem("agentops_jwt");
+    const headers: Record<string, string> = {
+      "Content-Type": "application/json"
+    };
+    if (token) {
+      headers["Authorization"] = `Bearer ${token}`;
+    }
+
     try {
       // 1. Update user credentials (PUT /api/users/:id)
       const userRes = await fetch(`/api/users/${currentUser.id}`, {
         method: "PUT",
-        headers: { 
-          "Content-Type": "application/json"
-        },
+        headers,
         body: JSON.stringify({
           name: editName,
           mobile: editMobile,
@@ -110,9 +121,7 @@ export default function EmployeeProfile({
       // 2. Update onboarding application details (POST /api/applications)
       const appRes = await fetch("/api/applications", {
         method: "POST",
-        headers: { 
-          "Content-Type": "application/json"
-        },
+        headers,
         body: JSON.stringify({
           employeeId: currentUser.id,
           fullName: editName,
@@ -133,6 +142,10 @@ export default function EmployeeProfile({
         throw new Error("Failed to update onboarding academic details.");
       }
 
+      // Clear local storage draft backup since everything is persistent on the server database
+      localStorage.removeItem(`onboarding_form_${currentUser.id}`);
+
+      justSavedRef.current = true;
       setSuccessStatus("Your profile and academic credentials have been updated successfully!");
       setIsEditing(false);
       onRefreshAll();
@@ -151,8 +164,13 @@ export default function EmployeeProfile({
 
   async function fetchEmployeeDocs() {
     setLoadingDocs(true);
+    const token = localStorage.getItem("agentops_jwt");
+    const headers: Record<string, string> = {};
+    if (token) {
+      headers["Authorization"] = `Bearer ${token}`;
+    }
     try {
-      const res = await fetch(`/api/documents/${currentUser.id}`);
+      const res = await fetch(`/api/documents/${currentUser.id}`, { headers });
       if (res.ok) {
         setDocs(await res.json());
       }
@@ -183,10 +201,18 @@ export default function EmployeeProfile({
       return;
     }
 
+    const token = localStorage.getItem("agentops_jwt");
+    const headers: Record<string, string> = {
+      "Content-Type": "application/json"
+    };
+    if (token) {
+      headers["Authorization"] = `Bearer ${token}`;
+    }
+
     try {
       const res = await fetch(`/api/users/${currentUser.id}/change-password`, {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers,
         body: JSON.stringify({ currentPassword, newPassword })
       });
 
@@ -258,9 +284,17 @@ export default function EmployeeProfile({
         fileContent: downloadURL
       };
 
+      const token = localStorage.getItem("agentops_jwt");
+      const headers: Record<string, string> = {
+        "Content-Type": "application/json"
+      };
+      if (token) {
+        headers["Authorization"] = `Bearer ${token}`;
+      }
+
       const res = await fetch("/api/documents", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers,
         body: JSON.stringify(payload)
       });
 

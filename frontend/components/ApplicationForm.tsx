@@ -265,10 +265,18 @@ export default function ApplicationForm({
       status: type === "draft" ? ApplicationStatus.DRAFT : ApplicationStatus.SUBMITTED
     };
 
+    const token = localStorage.getItem("agentops_jwt");
+    const headers: Record<string, string> = {
+      "Content-Type": "application/json"
+    };
+    if (token) {
+      headers["Authorization"] = `Bearer ${token}`;
+    }
+
     try {
       const res = await fetch("/api/applications", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers,
         body: JSON.stringify(payload)
       });
 
