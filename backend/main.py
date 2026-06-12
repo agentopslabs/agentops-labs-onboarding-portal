@@ -1,5 +1,6 @@
 import os
 import sys
+sys.path.insert(0, os.path.dirname(__file__))
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), "python_packages"))
 import json
 import base64
@@ -29,7 +30,23 @@ app = FastAPI(
     version="1.0.0"
 )
 
-DB_PATH = os.environ.get("DB_PATH", os.path.join(os.getcwd(), "db_agentops.json"))
+is_vercel = "VERCEL" in os.environ or os.environ.get("NODE_ENV") == "production"
+default_db_path = (
+    os.path.join("/tmp", "db_agentops.json")
+    if is_vercel
+    else os.path.join(os.getcwd(), "db_agentops.json")
+)
+DB_PATH = os.environ.get("DB_PATH", default_db_path)
+
+if is_vercel and not os.path.exists(DB_PATH):
+    baseline_path = os.path.join(os.getcwd(), "db_agentops.json")
+    if os.path.exists(baseline_path):
+        try:
+            import shutil
+            shutil.copyfile(baseline_path, DB_PATH)
+            print("[Python FastAPI] Seeded /tmp database from git baseline.")
+        except Exception as copy_err:
+            print(f"[Python FastAPI] Failed to seed /tmp database from baseline: {copy_err}")
 
 # Enums
 class UserRole(str, Enum):
