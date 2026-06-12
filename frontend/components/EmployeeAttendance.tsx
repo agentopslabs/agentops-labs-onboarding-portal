@@ -98,7 +98,7 @@ export default function EmployeeAttendance({ currentUser, onRefreshAll }: Employ
 
   useEffect(() => {
     fetchEmployeeRecords();
-  }, [currentUser]);
+  }, [currentUser.id]);
 
   // Handle Daily Check-in request
   const handleCheckIn = async () => {

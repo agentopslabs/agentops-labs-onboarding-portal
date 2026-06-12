@@ -1,14 +1,9 @@
 /**
  * Firebase Storage uploader — reads config from firebase-applet-config.json
  * 
- * Files are uploaded directly to Firebase Storage (not base64-embedded in Firestore),
- * avoiding the Firestore 1MB per-document limit.
- * 
- * Upload flow:
- *   1. Employee selects a file
- *   2. File is uploaded to Firebase Storage: documents/{employeeId}/{docType}/{fileName}
- *   3. A permanent download URL is returned
- *   4. The backend stores ONLY the tiny metadata + https:// URL in Firestore
+ * Falls back to base64 encoding if Firebase Storage is not configured yet.
+ * Once you set up your AgentOps Firebase project in firebase-applet-config.json,
+ * files will be uploaded to Firebase Storage and stored as HTTPS URLs (no size limit).
  */
 
 import { initializeApp, getApps, FirebaseApp } from "firebase/app";
@@ -20,33 +15,32 @@ import {
   FirebaseStorage
 } from "firebase/storage";
 
-// Load config dynamically from the project config file
-// Update firebase-applet-config.json with your AgentOps Firebase project credentials
-async function loadFirebaseConfig() {
+let storageInstance: FirebaseStorage | null = null;
+let firebaseConfigured = false;
+let configChecked = false;
+
+async function tryInitFirebaseStorage(): Promise<FirebaseStorage | null> {
+  if (configChecked) return storageInstance;
+  configChecked = true;
+
   try {
     const res = await fetch("/firebase-applet-config.json");
-    if (res.ok) {
-      return await res.json();
+    if (!res.ok) return null;
+    const config = await res.json();
+
+    // Check if config has real values (not placeholders)
+    if (
+      !config.projectId ||
+      config.projectId === "YOUR_AGENTOPS_PROJECT_ID" ||
+      !config.apiKey ||
+      config.apiKey === "YOUR_API_KEY" ||
+      !config.storageBucket ||
+      config.storageBucket.includes("YOUR_")
+    ) {
+      console.warn("[Firebase Storage] Not configured yet — using base64 fallback mode.");
+      return null;
     }
-  } catch (e) {
-    console.error("[Firebase] Failed to load config:", e);
-  }
-  return null;
-}
 
-let storageInstance: FirebaseStorage | null = null;
-let configLoaded = false;
-
-async function getFirebaseStorage(): Promise<FirebaseStorage | null> {
-  if (storageInstance) return storageInstance;
-
-  const config = await loadFirebaseConfig();
-  if (!config || !config.projectId || config.projectId === "YOUR_AGENTOPS_PROJECT_ID") {
-    console.error("[Firebase Storage] Not configured yet. Please set up firebase-applet-config.json with your AgentOps Firebase project.");
-    return null;
-  }
-
-  try {
     let app: FirebaseApp;
     if (getApps().length === 0) {
       app = initializeApp({
@@ -61,15 +55,38 @@ async function getFirebaseStorage(): Promise<FirebaseStorage | null> {
       app = getApps()[0];
     }
     storageInstance = getStorage(app);
+    firebaseConfigured = true;
+    console.log("[Firebase Storage] Initialized with project:", config.projectId);
     return storageInstance;
   } catch (e) {
-    console.error("[Firebase Storage] Initialization failed:", e);
+    console.warn("[Firebase Storage] Init failed, using base64 fallback:", e);
     return null;
   }
 }
 
 /**
+ * Read a file as a base64 data URL (fallback when Firebase Storage not configured).
+ */
+function readFileAsBase64(file: File, onProgress?: (p: number) => void): Promise<string> {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onprogress = (e) => {
+      if (e.lengthComputable && onProgress) {
+        onProgress(Math.round((e.loaded / e.total) * 85));
+      }
+    };
+    reader.onload = () => {
+      if (onProgress) onProgress(100);
+      resolve(reader.result as string);
+    };
+    reader.onerror = () => reject(new Error("Failed to read file."));
+    reader.readAsDataURL(file);
+  });
+}
+
+/**
  * Upload a file to Firebase Storage and return its permanent download URL.
+ * If Firebase Storage is not configured, returns the file as a base64 data URL instead.
  */
 export async function uploadDocumentToStorage(
   file: File,
@@ -77,12 +94,17 @@ export async function uploadDocumentToStorage(
   docType: string,
   onProgress?: (percent: number) => void
 ): Promise<string> {
-  const st = await getFirebaseStorage();
-  
+  // Try Firebase Storage first
+  const st = await tryInitFirebaseStorage();
+
   if (!st) {
-    throw new Error("Firebase Storage is not configured. Please set up your AgentOps Firebase project in firebase-applet-config.json.");
+    // Fallback: return base64 data URL (works without Firebase setup)
+    if (onProgress) onProgress(10);
+    const base64 = await readFileAsBase64(file, onProgress);
+    return base64;
   }
 
+  // Firebase Storage path
   const timestamp = Date.now();
   const safeName = file.name.replace(/[^a-zA-Z0-9._-]/g, "_");
   const storagePath = `documents/${employeeId}/${docType}/${timestamp}_${safeName}`;
@@ -101,7 +123,9 @@ export async function uploadDocumentToStorage(
       },
       (error) => {
         console.error("[Firebase Storage] Upload failed:", error);
-        reject(new Error(`File upload failed: ${error.message}`));
+        // On storage error, fall back to base64
+        console.warn("[Firebase Storage] Falling back to base64 mode...");
+        readFileAsBase64(file, onProgress).then(resolve).catch(reject);
       },
       async () => {
         try {

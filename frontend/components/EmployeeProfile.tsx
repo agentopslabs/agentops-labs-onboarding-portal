@@ -165,7 +165,7 @@ export default function EmployeeProfile({
 
   useEffect(() => {
     fetchEmployeeDocs();
-  }, [currentUser]);
+  }, [currentUser.id]);
 
   // Handle password modification
   async function handlePasswordUpdate(e: React.FormEvent) {

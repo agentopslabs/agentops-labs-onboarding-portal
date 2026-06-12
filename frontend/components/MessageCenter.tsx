@@ -71,7 +71,7 @@ export default function MessageCenter({
 
   useEffect(() => {
     fetchMessages();
-  }, [currentUser]);
+  }, [currentUser.id]);
 
   // Mark message as read
   async function markAsRead(msgId: string) {

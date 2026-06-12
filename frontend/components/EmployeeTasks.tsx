@@ -80,7 +80,7 @@ export default function EmployeeTasks({ currentUser, onRefreshAll }: EmployeeTas
 
   useEffect(() => {
     fetchTasksAndSubmissions();
-  }, [currentUser]);
+  }, [currentUser.id]);
 
   const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files) {
