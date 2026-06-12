@@ -50,7 +50,7 @@ export async function loadFromFirestore(memoryDb: any): Promise<boolean> {
   try {
     const promises = collectionsInfo.map(async (colInfo) => {
       try {
-        const url = `${SUPABASE_URL}/rest/v1/${colInfo.name}?select=id,data`;
+        const url = `${SUPABASE_URL}/rest/v1/${colInfo.name.toLowerCase()}?select=id,data`;
         const res = await fetch(url, {
           headers: {
             "apikey": SUPABASE_SERVICE_ROLE_KEY,
@@ -99,7 +99,7 @@ export async function syncToFirestore(memoryDb: any): Promise<void> {
     const promises = collectionsInfo.map(async (colInfo) => {
       try {
         // Fetch existing IDs to perform deletion if items are removed
-        const scanUrl = `${SUPABASE_URL}/rest/v1/${colInfo.name}?select=id`;
+        const scanUrl = `${SUPABASE_URL}/rest/v1/${colInfo.name.toLowerCase()}?select=id`;
         const scanRes = await fetch(scanUrl, {
           headers: {
             "apikey": SUPABASE_SERVICE_ROLE_KEY,
@@ -128,7 +128,7 @@ export async function syncToFirestore(memoryDb: any): Promise<void> {
           }
 
           if (upsertPayloads.length > 0) {
-            const upsertUrl = `${SUPABASE_URL}/rest/v1/${colInfo.name}`;
+            const upsertUrl = `${SUPABASE_URL}/rest/v1/${colInfo.name.toLowerCase()}`;
             subPromises.push(
               fetch(upsertUrl, {
                 method: "POST",
@@ -146,7 +146,7 @@ export async function syncToFirestore(memoryDb: any): Promise<void> {
           // Delete items
           for (const existingId of existingIds) {
             if (!presentIds.has(existingId)) {
-              const deleteUrl = `${SUPABASE_URL}/rest/v1/${colInfo.name}?id=eq.${existingId}`;
+              const deleteUrl = `${SUPABASE_URL}/rest/v1/${colInfo.name.toLowerCase()}?id=eq.${existingId}`;
               subPromises.push(
                 fetch(deleteUrl, {
                   method: "DELETE",
@@ -169,7 +169,7 @@ export async function syncToFirestore(memoryDb: any): Promise<void> {
           }
 
           if (upsertPayloads.length > 0) {
-            const upsertUrl = `${SUPABASE_URL}/rest/v1/${colInfo.name}`;
+            const upsertUrl = `${SUPABASE_URL}/rest/v1/${colInfo.name.toLowerCase()}`;
             subPromises.push(
               fetch(upsertUrl, {
                 method: "POST",
@@ -187,7 +187,7 @@ export async function syncToFirestore(memoryDb: any): Promise<void> {
           // Delete passwords
           for (const existingId of existingIds) {
             if (!presentIds.has(existingId)) {
-              const deleteUrl = `${SUPABASE_URL}/rest/v1/${colInfo.name}?id=eq.${existingId}`;
+              const deleteUrl = `${SUPABASE_URL}/rest/v1/${colInfo.name.toLowerCase()}?id=eq.${existingId}`;
               subPromises.push(
                 fetch(deleteUrl, {
                   method: "DELETE",

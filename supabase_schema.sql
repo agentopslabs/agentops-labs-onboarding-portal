@@ -1,4 +1,6 @@
 -- Create tables for AgentOps Portal collections in Supabase
+-- All table names are in lowercase to align with standard PostgreSQL conventions.
+
 CREATE TABLE IF NOT EXISTS users (
     id VARCHAR PRIMARY KEY,
     data JSONB NOT NULL,
@@ -29,7 +31,7 @@ CREATE TABLE IF NOT EXISTS tests (
     updated_at TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now())
 );
 
-CREATE TABLE IF NOT EXISTS assignedTests (
+CREATE TABLE IF NOT EXISTS assignedtests (
     id VARCHAR PRIMARY KEY,
     data JSONB NOT NULL,
     updated_at TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now())
@@ -41,7 +43,7 @@ CREATE TABLE IF NOT EXISTS checklists (
     updated_at TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now())
 );
 
-CREATE TABLE IF NOT EXISTS activityLogs (
+CREATE TABLE IF NOT EXISTS activitylogs (
     id VARCHAR PRIMARY KEY,
     data JSONB NOT NULL,
     updated_at TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now())
@@ -77,7 +79,7 @@ CREATE TABLE IF NOT EXISTS tasks (
     updated_at TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now())
 );
 
-CREATE TABLE IF NOT EXISTS taskSubmissions (
+CREATE TABLE IF NOT EXISTS tasksubmissions (
     id VARCHAR PRIMARY KEY,
     data JSONB NOT NULL,
     updated_at TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now())

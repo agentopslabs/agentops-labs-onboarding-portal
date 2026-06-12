@@ -56,7 +56,7 @@ def load_from_supabase(db_state):
         col_name = col["name"]
         col_key = col["key"]
         col_type = col["type"]
-        url = f"{SUPABASE_URL}/rest/v1/{col_name}?select=id,data"
+        url = f"{SUPABASE_URL}/rest/v1/{col_name.lower()}?select=id,data"
         try:
             res = requests.get(url, headers=headers, timeout=5)
             if res.status_code == 200:
@@ -114,7 +114,7 @@ def sync_to_supabase(db_state, target_collection=None):
         col_type = col["type"]
 
         # Fetch existing IDs in Supabase to determine deletes
-        scan_url = f"{SUPABASE_URL}/rest/v1/{col_name}?select=id"
+        scan_url = f"{SUPABASE_URL}/rest/v1/{col_name.lower()}?select=id"
         existing_ids = set()
         try:
             res = requests.get(scan_url, headers={
@@ -144,7 +144,7 @@ def sync_to_supabase(db_state, target_collection=None):
 
                 if upsert_payloads:
                     # Supabase REST bulk upsert
-                    url = f"{SUPABASE_URL}/rest/v1/{col_name}"
+                    url = f"{SUPABASE_URL}/rest/v1/{col_name.lower()}"
                     res = requests.post(url, headers=headers, json=upsert_payloads, timeout=5)
                     if res.status_code not in (200, 201):
                         print(f"[Supabase Sync] Bulk upsert to {col_name} failed: {res.status_code} - {res.text}")
@@ -152,7 +152,7 @@ def sync_to_supabase(db_state, target_collection=None):
                 # Delete removed items
                 for ext_id in existing_ids:
                     if ext_id not in present_ids:
-                        delete_url = f"{SUPABASE_URL}/rest/v1/{col_name}?id=eq.{ext_id}"
+                        delete_url = f"{SUPABASE_URL}/rest/v1/{col_name.lower()}?id=eq.{ext_id}"
                         res = requests.delete(delete_url, headers={
                             "apikey": SUPABASE_SERVICE_ROLE_KEY,
                             "Authorization": f"Bearer {SUPABASE_SERVICE_ROLE_KEY}"
@@ -172,7 +172,7 @@ def sync_to_supabase(db_state, target_collection=None):
                     })
 
                 if upsert_payloads:
-                    url = f"{SUPABASE_URL}/rest/v1/{col_name}"
+                    url = f"{SUPABASE_URL}/rest/v1/{col_name.lower()}"
                     res = requests.post(url, headers=headers, json=upsert_payloads, timeout=5)
                     if res.status_code not in (200, 201):
                         print(f"[Supabase Sync] Bulk upsert passwords failed: {res.status_code} - {res.text}")
@@ -180,7 +180,7 @@ def sync_to_supabase(db_state, target_collection=None):
                 # Delete removed passwords
                 for ext_id in existing_ids:
                     if ext_id not in present_ids:
-                        delete_url = f"{SUPABASE_URL}/rest/v1/{col_name}?id=eq.{ext_id}"
+                        delete_url = f"{SUPABASE_URL}/rest/v1/{col_name.lower()}?id=eq.{ext_id}"
                         res = requests.delete(delete_url, headers={
                             "apikey": SUPABASE_SERVICE_ROLE_KEY,
                             "Authorization": f"Bearer {SUPABASE_SERVICE_ROLE_KEY}"
