@@ -144,7 +144,10 @@ def sync_to_firestore(db_state, target_collection=None):
     # Filter collections based on target_collection if provided
     collections_to_sync = collections_info
     if target_collection:
-        collections_to_sync = [c for c in collections_info if c["name"] == target_collection or c["key"] == target_collection]
+        if isinstance(target_collection, (list, set)):
+            collections_to_sync = [c for c in collections_info if c["name"] in target_collection or c["key"] in target_collection]
+        else:
+            collections_to_sync = [c for c in collections_info if c["name"] == target_collection or c["key"] == target_collection]
         
     def sync_collection(col):
         col_name = col["name"]
