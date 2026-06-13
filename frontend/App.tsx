@@ -272,6 +272,22 @@ export default function App() {
     }
   }, [activeTab]);
 
+  // Keep activeTab in sync with the currentUser's role to prevent role-based tab mismatches (e.g. "Admin View Omitted")
+  useEffect(() => {
+    if (currentUser) {
+      if (currentUser.role === UserRole.ADMIN) {
+        if (!activeTab.startsWith("admin-")) {
+          setActiveTab("admin-analytics");
+        }
+      } else {
+        if (!activeTab.startsWith("employee-")) {
+          setActiveTab("employee-dashboard");
+        }
+      }
+    }
+  }, [currentUser, activeTab]);
+
+
   // Handle loading other auxiliary pools once authenticated
   useEffect(() => {
     if (currentUser && authToken) {
