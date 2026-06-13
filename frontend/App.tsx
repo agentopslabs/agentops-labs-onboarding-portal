@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { ThemeProvider } from "./components/ThemeContext";
 import Login from "./components/Login";
 import DashboardLayout from "./components/DashboardLayout";
@@ -66,9 +66,9 @@ export default function App() {
   const [notifications, setNotifications] = useState<SystemNotification[]>([]);
   const [activityLogs, setActivityLogs] = useState<ActivityLog[]>([]);
 
-  // Active Assessment being taken by employee
   const [activeExamRecord, setActiveExamRecord] = useState<AssignedTest | null>(null);
   const [activeExamTemplate, setActiveExamTemplate] = useState<Test | null>(null);
+  const justEndedExamIdRef = useRef<string | null>(null);
 
   function triggerRefreshFn() {
     setRefreshTrigger(p => p + 1);
@@ -245,7 +245,7 @@ export default function App() {
       const activeRunningExam = assignedTests.find(
         t => t.employeeId === currentUser.id && t.status === TestStatus.IN_PROGRESS
       );
-      if (activeRunningExam) {
+      if (activeRunningExam && activeRunningExam.id !== justEndedExamIdRef.current) {
         const template = tests.find(t => t.id === activeRunningExam.testId);
         if (template) {
           setActiveExamRecord(activeRunningExam);
@@ -278,6 +278,7 @@ export default function App() {
 
   // Handle manual start test from dashboard click
   async function handleLaunchTest(assignedRecord: AssignedTest) {
+    justEndedExamIdRef.current = null;
     try {
       const res = await fetch(`/api/assigned-tests/${assignedRecord.id}/start`, {
         method: "POST"
@@ -331,12 +332,14 @@ export default function App() {
           testRecord={activeExamRecord}
           testTemplate={activeExamTemplate}
           onSubmitted={() => {
+            justEndedExamIdRef.current = activeExamRecord.id;
             setActiveExamRecord(null);
             setActiveExamTemplate(null);
             setActiveTab("employee-dashboard");
             refreshDataPool();
           }}
           onExit={() => {
+            justEndedExamIdRef.current = activeExamRecord.id;
             setActiveExamRecord(null);
             setActiveExamTemplate(null);
             refreshDataPool();

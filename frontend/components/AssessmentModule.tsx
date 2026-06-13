@@ -68,6 +68,7 @@ export default function AssessmentModule({
   const answersRef = useRef(selectedAnswers);
   const timeLeftRef = useRef(timeLeft);
   const lastSeededIdRef = useRef<string | null>(null);
+  const isSubmittingRef = useRef(false);
 
   useEffect(() => {
     answersRef.current = selectedAnswers;
@@ -91,6 +92,7 @@ export default function AssessmentModule({
 
   // Instant or on-demand sync of candidate progress to the server to prevent data loss on page refreshes
   async function saveProgressToServer(answersToSend: Record<string, number[]>, time: number) {
+    if (isSubmittingRef.current || submitSuccess) return;
     setSavingState(true);
     try {
       await fetch(`/api/assigned-tests/${testRecord.id}/progress`, {
@@ -160,6 +162,7 @@ export default function AssessmentModule({
 
   // Autosave answers payload to API
   async function handleAutosaveState() {
+    if (isSubmittingRef.current || submitSuccess) return;
     setSavingState(true);
     try {
       await fetch(`/api/assigned-tests/${testRecord.id}/progress`, {
@@ -209,6 +212,7 @@ export default function AssessmentModule({
 
   // Submit test
   async function handleSubmitExam() {
+    isSubmittingRef.current = true;
     setSavingState(true);
     setSubmitError("");
     try {
@@ -227,9 +231,11 @@ export default function AssessmentModule({
         }
         setIsFullScreen(false);
       } else {
+        isSubmittingRef.current = false;
         setSubmitError("Failed to submit and grade answers.");
       }
     } catch (e) {
+      isSubmittingRef.current = false;
       setSubmitError("Failed to communicate with auto grading engine.");
     } finally {
       setSavingState(false);

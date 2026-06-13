@@ -278,17 +278,21 @@ class RequestScopedDbState(dict):
             return
 
         if key not in self._loaded_keys:
+            self._loaded_keys.add(key)
             from supabase_sync import load_single_collection_from_supabase
             data, success = load_single_collection_from_supabase(key)
             if success and data is not None:
-                self[key] = data
+                super().__setitem__(key, data)
                 self._original_state[key] = copy.deepcopy(data)
             else:
                 fallback_data = get_from_local_file_cache(key)
                 if fallback_data is not None:
-                    self[key] = fallback_data
-                self._original_state[key] = copy.deepcopy(self[key])
-            self._loaded_keys.add(key)
+                    super().__setitem__(key, fallback_data)
+                else:
+                    col = next((c for c in collections_info if c["key"] == key), None)
+                    default_val = [] if col and col["type"] == "array" else {}
+                    super().__setitem__(key, default_val)
+                self._original_state[key] = copy.deepcopy(super().__getitem__(key))
 
     def __getitem__(self, key):
         self._ensure_loaded(key)
