@@ -99,7 +99,7 @@ def load_from_supabase(db_state):
 def sync_to_supabase(db_state, target_collection=None):
     if not SUPABASE_URL or not SUPABASE_SERVICE_ROLE_KEY or SUPABASE_URL == "YOUR_SUPABASE_URL":
         print("[Supabase Sync] Supabase credentials missing or placeholder, bypassing sync.")
-        return
+        return ["Supabase credentials missing or placeholder"]
 
     print(f"[Supabase Sync] Syncing database to Supabase in parallel (target={target_collection or 'all'})...")
     
@@ -117,6 +117,8 @@ def sync_to_supabase(db_state, target_collection=None):
         else:
             collections_to_sync = [c for c in collections_info if c["name"] == target_collection or c["key"] == target_collection]
 
+    errors = []
+
     def sync_collection(col):
         col_name = col["name"]
         col_key = col["key"]
@@ -132,8 +134,14 @@ def sync_to_supabase(db_state, target_collection=None):
             }, timeout=5)
             if res.status_code == 200:
                 existing_ids = {r["id"] for r in res.json()}
+            else:
+                err_msg = f"Failed to scan existing IDs for {col_name}: {res.status_code} - {res.text}"
+                print(f"[Supabase Sync] {err_msg}")
+                errors.append(err_msg)
         except Exception as e:
-            print(f"[Supabase Sync] Failed to scan existing IDs for {col_name}: {e}")
+            err_msg = f"Failed to scan existing IDs for {col_name}: {e}"
+            print(f"[Supabase Sync] {err_msg}")
+            errors.append(err_msg)
 
         # Sync items
         try:
@@ -152,11 +160,12 @@ def sync_to_supabase(db_state, target_collection=None):
                         })
 
                 if upsert_payloads:
-                    # Supabase REST bulk upsert
                     url = f"{SUPABASE_URL}/rest/v1/{col_name.lower()}"
                     res = requests.post(url, headers=headers, json=upsert_payloads, timeout=5)
                     if res.status_code not in (200, 201):
-                        print(f"[Supabase Sync] Bulk upsert to {col_name} failed: {res.status_code} - {res.text}")
+                        err_msg = f"Bulk upsert to {col_name} failed: {res.status_code} - {res.text}"
+                        print(f"[Supabase Sync] {err_msg}")
+                        errors.append(err_msg)
 
                 # Delete removed items
                 for ext_id in existing_ids:
@@ -167,7 +176,9 @@ def sync_to_supabase(db_state, target_collection=None):
                             "Authorization": f"Bearer {SUPABASE_SERVICE_ROLE_KEY}"
                         }, timeout=5)
                         if res.status_code not in (200, 204):
-                            print(f"[Supabase Sync] Delete from {col_name} (id={ext_id}) failed: {res.status_code} - {res.text}")
+                            err_msg = f"Delete from {col_name} (id={ext_id}) failed: {res.status_code} - {res.text}"
+                            print(f"[Supabase Sync] {err_msg}")
+                            errors.append(err_msg)
             else:
                 # Passwords mapping
                 passwords = db_state.get(col_key) or {}
@@ -184,7 +195,9 @@ def sync_to_supabase(db_state, target_collection=None):
                     url = f"{SUPABASE_URL}/rest/v1/{col_name.lower()}"
                     res = requests.post(url, headers=headers, json=upsert_payloads, timeout=5)
                     if res.status_code not in (200, 201):
-                        print(f"[Supabase Sync] Bulk upsert passwords failed: {res.status_code} - {res.text}")
+                        err_msg = f"Bulk upsert passwords failed: {res.status_code} - {res.text}"
+                        print(f"[Supabase Sync] {err_msg}")
+                        errors.append(err_msg)
 
                 # Delete removed passwords
                 for ext_id in existing_ids:
@@ -195,11 +208,16 @@ def sync_to_supabase(db_state, target_collection=None):
                             "Authorization": f"Bearer {SUPABASE_SERVICE_ROLE_KEY}"
                         }, timeout=5)
                         if res.status_code not in (200, 204):
-                            print(f"[Supabase Sync] Delete password (id={ext_id}) failed: {res.status_code} - {res.text}")
+                            err_msg = f"Delete password (id={ext_id}) failed: {res.status_code} - {res.text}"
+                            print(f"[Supabase Sync] {err_msg}")
+                            errors.append(err_msg)
         except Exception as e:
-            print(f"[Supabase Sync] Failed to sync collection {col_name}: {e}")
+            err_msg = f"Failed to sync collection {col_name}: {e}"
+            print(f"[Supabase Sync] {err_msg}")
+            errors.append(err_msg)
 
     with ThreadPoolExecutor(max_workers=8) as executor:
         list(executor.map(sync_collection, collections_to_sync))
 
     print("[Supabase Sync] Sync completed.")
+    return errors

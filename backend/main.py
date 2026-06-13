@@ -492,7 +492,16 @@ def save_database(target_collection=None):
         # Step 2: Supabase sync
         is_vercel = os.environ.get("VERCEL") == "1" or "VERCEL" in os.environ
         if is_vercel:
-            _background_supabase_sync_worker(db_copy, changed_collections)
+            from supabase_sync import sync_to_supabase
+            errors = sync_to_supabase(db_copy, changed_collections)
+            if errors:
+                raise HTTPException(status_code=500, detail=f"Supabase sync failed: {'; '.join(errors)}")
+            
+            last_supabase_load_time = time.time()
+            if hasattr(db_state, "_original_state"):
+                with db_lock:
+                    for key in changed_collections:
+                        db_state._original_state[key] = copy.deepcopy(db_copy.get(key))
         else:
             sync_thread = threading.Thread(
                 target=_background_supabase_sync_worker,
@@ -501,8 +510,11 @@ def save_database(target_collection=None):
             )
             sync_thread.start()
                 
+    except HTTPException:
+        raise
     except Exception as e:
         print(f"[Python FastAPI] Error occurred while saving database: {e}")
+        raise HTTPException(status_code=500, detail=f"Database save error: {str(e)}")
 
 # Middleware: fast path for all requests
 @app.middleware("http")
@@ -558,6 +570,47 @@ def get_supabase_config():
     return {
         "supabaseUrl": os.environ.get("SUPABASE_URL", config.get("supabaseUrl", "YOUR_SUPABASE_URL")),
         "supabaseAnonKey": os.environ.get("SUPABASE_ANON_KEY", config.get("supabaseAnonKey", "YOUR_SUPABASE_ANON_KEY"))
+    }
+
+# Diagnostic endpoint to verify Supabase connections and database table structure
+@app.get("/api/test-db")
+def test_database_connection():
+    from supabase_sync import SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY, collections_info
+    
+    if not SUPABASE_URL or not SUPABASE_SERVICE_ROLE_KEY or SUPABASE_URL == "YOUR_SUPABASE_URL":
+        return {
+            "status": "error",
+            "message": "Supabase credentials are not configured or are placeholders.",
+            "url": SUPABASE_URL,
+            "has_service_role_key": bool(SUPABASE_SERVICE_ROLE_KEY and SUPABASE_SERVICE_ROLE_KEY != "YOUR_SUPABASE_SERVICE_ROLE_KEY")
+        }
+        
+    headers = {
+        "apikey": SUPABASE_SERVICE_ROLE_KEY,
+        "Authorization": f"Bearer {SUPABASE_SERVICE_ROLE_KEY}"
+    }
+    
+    results = {}
+    all_ok = True
+    
+    for col in collections_info:
+        col_name = col["name"]
+        url = f"{SUPABASE_URL}/rest/v1/{col_name.lower()}?select=id"
+        try:
+            res = requests.get(url, headers=headers, timeout=5)
+            if res.status_code == 200:
+                results[col_name] = f"OK ({len(res.json())} rows)"
+            else:
+                results[col_name] = f"FAILED: {res.status_code} - {res.text}"
+                all_ok = False
+        except Exception as e:
+            results[col_name] = f"ERROR: {e}"
+            all_ok = False
+            
+    return {
+        "status": "success" if all_ok else "error",
+        "url": SUPABASE_URL,
+        "tables": results
     }
 
 
