@@ -51,7 +51,9 @@ export default function App() {
   const [resetEmailFromUrl, setResetEmailFromUrl] = useState<string | null>(null);
 
   // Active Tab/Navigation State
-  const [activeTab, setActiveTab] = useState("admin-analytics");
+  const [activeTab, setActiveTab] = useState<string>(() => {
+    return localStorage.getItem("agentops_active_tab") || "admin-analytics";
+  });
 
   // Auxiliary state updater tracking
   const [refreshTrigger, setRefreshTrigger] = useState(0);
@@ -95,6 +97,7 @@ export default function App() {
   // Core API loader
   async function refreshDataPool() {
     if (!authToken) return;
+    const tokenAtStart = authToken;
 
     try {
       const headers = { "Authorization": `Bearer ${authToken}` };
@@ -122,6 +125,8 @@ export default function App() {
         fetch("/api/activity-logs", { headers })
       ]);
 
+      if (authToken !== tokenAtStart) return;
+
       const mePayload = await safeJson(resMe);
       if (mePayload && mePayload.id) {
         setCurrentUser(mePayload);
@@ -137,27 +142,35 @@ export default function App() {
       }
 
       const usersArr = await safeJson(resUsers);
+      if (authToken !== tokenAtStart) return;
       if (Array.isArray(usersArr)) setEmployees(usersArr);
 
       const appsArr = await safeJson(resApps);
+      if (authToken !== tokenAtStart) return;
       if (Array.isArray(appsArr)) setApplications(appsArr);
 
       const docsArr = await safeJson(resDocs);
+      if (authToken !== tokenAtStart) return;
       if (Array.isArray(docsArr)) setDocuments(docsArr);
 
       const testsArr = await safeJson(resTests);
+      if (authToken !== tokenAtStart) return;
       if (Array.isArray(testsArr)) setTests(testsArr);
 
       const assignedArr = await safeJson(resAssigned);
+      if (authToken !== tokenAtStart) return;
       if (Array.isArray(assignedArr)) setAssignedTests(assignedArr);
 
       const emailsArr = await safeJson(resEmails);
+      if (authToken !== tokenAtStart) return;
       if (Array.isArray(emailsArr)) setEmails(emailsArr);
 
       const notifsArr = await safeJson(resNotifs);
+      if (authToken !== tokenAtStart) return;
       if (Array.isArray(notifsArr)) setNotifications(notifsArr);
 
       const logsArr = await safeJson(resLogs);
+      if (authToken !== tokenAtStart) return;
       if (Array.isArray(logsArr)) setActivityLogs(logsArr);
 
     } catch (e) {
@@ -200,16 +213,32 @@ export default function App() {
 
   // Handle bootstrap mount verification checks
   useEffect(() => {
+    let active = true;
     async function initCheck() {
       if (authToken) {
+        const tokenAtStart = authToken;
         try {
           const res = await fetch("/api/auth/me", {
             headers: { "Authorization": `Bearer ${authToken}` }
           });
           const user = await safeJson(res);
+          if (!active || authToken !== tokenAtStart) return;
           if (user && user.id) {
             setCurrentUser(user);
-            setActiveTab(user.role === UserRole.ADMIN ? "admin-analytics" : "employee-dashboard");
+            const savedTab = localStorage.getItem("agentops_active_tab");
+            if (user.role === UserRole.ADMIN) {
+              if (savedTab && savedTab.startsWith("admin-")) {
+                setActiveTab(savedTab);
+              } else {
+                setActiveTab("admin-analytics");
+              }
+            } else {
+              if (savedTab && savedTab.startsWith("employee-")) {
+                setActiveTab(savedTab);
+              } else {
+                setActiveTab("employee-dashboard");
+              }
+            }
           } else if (res.status === 401 || res.status === 403) {
             const reason = res.status === 401 
               ? "Your local credential token has expired (Unauthorized 401). Please sign in to establish a new session."
@@ -220,14 +249,28 @@ export default function App() {
           }
         } catch (e) {
           console.error(e);
-          handleLogout("Connection to the server failed. Please verify that the server is online.");
+          if (active && authToken === tokenAtStart) {
+            handleLogout("Connection to the server failed. Please verify that the server is online.");
+          }
         }
       }
-      setCheckingAuth(false);
+      if (active) {
+        setCheckingAuth(false);
+      }
     }
 
     initCheck();
+    return () => {
+      active = false;
+    };
   }, [authToken]);
+
+  // Persist activeTab to localStorage when updated
+  useEffect(() => {
+    if (activeTab) {
+      localStorage.setItem("agentops_active_tab", activeTab);
+    }
+  }, [activeTab]);
 
   // Handle loading other auxiliary pools once authenticated
   useEffect(() => {
@@ -260,11 +303,14 @@ export default function App() {
     setAuthToken(token);
     setCurrentUser(user);
     setAuthError(null);
-    setActiveTab(user.role === UserRole.ADMIN ? "admin-analytics" : "employee-dashboard");
+    const defaultTab = user.role === UserRole.ADMIN ? "admin-analytics" : "employee-dashboard";
+    setActiveTab(defaultTab);
+    localStorage.setItem("agentops_active_tab", defaultTab);
   }
 
   function handleLogout(errorMessage?: string) {
     localStorage.removeItem("agentops_jwt");
+    localStorage.removeItem("agentops_active_tab");
     setAuthToken(null);
     setCurrentUser(null);
     setActiveExamRecord(null);
