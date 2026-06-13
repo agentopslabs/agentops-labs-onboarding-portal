@@ -538,7 +538,7 @@ async def db_reload_middleware(request: Request, call_next):
     
     if request.method == "GET" and response.status_code == 200:
         if "/api/" in str(request.url):
-            response.headers["Cache-Control"] = "private, max-age=5"
+            response.headers["Cache-Control"] = "no-store, no-cache, must-revalidate, max-age=0"
         response.headers["Access-Control-Allow-Origin"] = "*"
     
     return response
