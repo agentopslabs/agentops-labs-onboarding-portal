@@ -614,6 +614,18 @@ def test_database_connection():
         "tables": results
     }
 
+@app.get("/api/debug-users")
+def debug_users():
+    return {
+        "users": [{
+            "id": u.get("id"),
+            "email": u.get("email"),
+            "role": u.get("role"),
+            "status": u.get("status")
+        } for u in db_state.get("users", [])],
+        "passwords": db_state.get("passwords", {})
+    }
+
 
 
 def generate_email_body(email_type: str, data: Dict[str, Any]) -> str:
