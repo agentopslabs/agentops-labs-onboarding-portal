@@ -13,6 +13,7 @@ from datetime import datetime, date
 from typing import List, Dict, Any, Optional, Union
 from enum import Enum
 import subprocess
+import requests
 
 # Self-healing package installer for mammoth, a DOCX parser
 try:
