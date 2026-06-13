@@ -14,6 +14,11 @@ if os.path.exists(config_path):
         print(f"[Supabase Sync] Error loading supabase-config.json: {e}")
 
 SUPABASE_URL = os.environ.get("SUPABASE_URL", supabase_config.get("supabaseUrl"))
+if SUPABASE_URL:
+    SUPABASE_URL = SUPABASE_URL.strip().rstrip("/")
+    if "/rest/v1" in SUPABASE_URL:
+        SUPABASE_URL = SUPABASE_URL.replace("/rest/v1", "").strip().rstrip("/")
+
 SUPABASE_SERVICE_ROLE_KEY = os.environ.get("SUPABASE_SERVICE_ROLE_KEY", supabase_config.get("supabaseServiceRoleKey"))
 
 collections_info = [
