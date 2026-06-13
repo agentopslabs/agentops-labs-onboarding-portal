@@ -2094,27 +2094,58 @@ def compile_new_message(req: Dict[str, Any]):
     if not snd_user or snd_user["role"] != "admin":
          raise HTTPException(status_code=403, detail="Only Admins are permitted to send messages.")
          
-    new_msg = {
-        "id": f"msg-{int(datetime.now().timestamp() * 1000)}-{str(random.randint(100, 999))}",
-        "senderId": snd_id,
-        "senderName": snd_name or "Anonymous",
-        "receiverId": rcv_id,
-        "subject": subj,
-        "body": body,
-        "createdAt": datetime.utcnow().isoformat() + "Z",
-        "isRead": False,
-        "type": msg_type
-    }
-    
-    db_state["messages"].insert(0, new_msg)
-    send_system_notification(
-        rcv_id,
-        "New HR Message Received",
-        f"Admin sent you a new message: '{subj}'",
-        "info"
-    )
-    save_database()
-    return new_msg
+    if rcv_id == "all":
+        employees = [u for u in db_state["users"] if u["role"] == "employee"]
+        created_messages = []
+        now_ts = int(datetime.now().timestamp() * 1000)
+        
+        for idx, emp in enumerate(employees):
+            new_msg = {
+                "id": f"msg-{now_ts}-{str(random.randint(100, 999))}-{idx}",
+                "senderId": snd_id,
+                "senderName": snd_name or "Anonymous",
+                "receiverId": emp["id"],
+                "subject": subj,
+                "body": body,
+                "createdAt": datetime.utcnow().isoformat() + "Z",
+                "isRead": False,
+                "type": msg_type
+            }
+            db_state["messages"].insert(0, new_msg)
+            send_system_notification(
+                emp["id"],
+                "New HR Message Received",
+                f"Admin sent you a new message: '{subj}'",
+                "info",
+                sync=False
+            )
+            created_messages.append(new_msg)
+            
+        save_database()
+        return created_messages[0] if created_messages else {"success": True}
+        
+    else:
+        new_msg = {
+            "id": f"msg-{int(datetime.now().timestamp() * 1000)}-{str(random.randint(100, 999))}",
+            "senderId": snd_id,
+            "senderName": snd_name or "Anonymous",
+            "receiverId": rcv_id,
+            "subject": subj,
+            "body": body,
+            "createdAt": datetime.utcnow().isoformat() + "Z",
+            "isRead": False,
+            "type": msg_type
+        }
+        
+        db_state["messages"].insert(0, new_msg)
+        send_system_notification(
+            rcv_id,
+            "New HR Message Received",
+            f"Admin sent you a new message: '{subj}'",
+            "info"
+        )
+        save_database()
+        return new_msg
 
 @app.put("/api/messages/{msg_id}/read")
 def read_message(msg_id: str):

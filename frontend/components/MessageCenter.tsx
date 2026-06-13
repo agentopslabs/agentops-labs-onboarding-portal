@@ -36,6 +36,7 @@ export default function MessageCenter({
   
   // Composer state
   const [composerOpen, setComposerOpen] = useState(false);
+  const [sendMode, setSendMode] = useState<"separate" | "all">("separate");
   const [compReceiverId, setCompReceiverId] = useState("");
   const [compSubject, setCompSubject] = useState("");
   const [compBody, setCompBody] = useState("");
@@ -207,9 +208,16 @@ export default function MessageCenter({
           {isAdmin && (
             <button
               onClick={() => {
+                setSendMode("separate");
                 if (employeeList.length > 0) {
                   setCompReceiverId(employeeList[0].id);
+                } else {
+                  setCompReceiverId("");
                 }
+                setCompSubject("");
+                setCompBody("");
+                setCompError("");
+                setCompSuccess("");
                 setComposerOpen(true);
               }}
               className="bg-indigo-650 bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-2 px-4 rounded-xl shadow-md transition flex items-center gap-1.5 cursor-pointer"
@@ -394,8 +402,12 @@ export default function MessageCenter({
                 {isAdmin && selectedMessage.senderId !== currentUser.id && selectedMessage.senderId !== "system" && (
                   <button
                     onClick={() => {
+                      setSendMode("separate");
                       setCompReceiverId(selectedMessage.senderId);
                       setCompSubject(`Re: ${selectedMessage.subject.startsWith("Re:") ? "" : "Re: "}${selectedMessage.subject}`);
+                      setCompBody("");
+                      setCompError("");
+                      setCompSuccess("");
                       setComposerOpen(true);
                     }}
                     className="bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-2 px-4 rounded-xl shadow transition flex items-center gap-1.5 cursor-pointer text-xs"
@@ -447,24 +459,69 @@ export default function MessageCenter({
                 <Check className="h-4 w-4" /> {compSuccess}
               </p>
             )}
-
             <div className="space-y-3">
+              {isAdmin && (
+                <div className="flex gap-4 p-3.5 bg-slate-50 dark:bg-white/5 rounded-xl border border-slate-200 dark:border-slate-800">
+                  <label className="flex items-center gap-1.5 cursor-pointer font-bold text-slate-700 dark:text-slate-350">
+                    <input
+                      type="radio"
+                      name="sendMode"
+                      value="separate"
+                      checked={sendMode === "separate"}
+                      onChange={() => {
+                        setSendMode("separate");
+                        if (employeeList.length > 0) {
+                          setCompReceiverId(employeeList[0].id);
+                        } else {
+                          setCompReceiverId("");
+                        }
+                      }}
+                      className="accent-indigo-600"
+                    />
+                    Send Separate Message
+                  </label>
+                  <label className="flex items-center gap-1.5 cursor-pointer font-bold text-slate-700 dark:text-slate-350">
+                    <input
+                      type="radio"
+                      name="sendMode"
+                      value="all"
+                      checked={sendMode === "all"}
+                      onChange={() => {
+                        setSendMode("all");
+                        setCompReceiverId("all");
+                      }}
+                      className="accent-indigo-600"
+                    />
+                    Send to All (Broadcast)
+                  </label>
+                </div>
+              )}
+
               <div>
                 <label className="text-slate-500 block mb-1 font-semibold uppercase">Recipient Address</label>
                 {isAdmin ? (
-                  <select
-                    value={compReceiverId}
-                    onChange={(e) => setCompReceiverId(e.target.value)}
-                    required
-                    className="w-full bg-white dark:bg-white/5 border border-slate-200 dark:border-slate-800 text-slate-900 dark:text-white rounded-xl p-2.5 focus:ring-1 focus:ring-indigo-500 focus:outline-none cursor-pointer"
-                  >
-                    <option value="">-- Choose Target Employee --</option>
-                    {employeeList.map((emp) => (
-                      <option key={emp.id} value={emp.id}>
-                        {emp.name} ({emp.email})
-                      </option>
-                    ))}
-                  </select>
+                  sendMode === "all" ? (
+                    <input
+                      type="text"
+                      disabled
+                      value="All Registered Employees (Broadcast)"
+                      className="w-full bg-slate-100 dark:bg-white/5 border border-slate-200 dark:border-slate-800 text-slate-500 dark:text-slate-400 rounded-xl p-2.5 cursor-not-allowed font-bold"
+                    />
+                  ) : (
+                    <select
+                      value={compReceiverId}
+                      onChange={(e) => setCompReceiverId(e.target.value)}
+                      required
+                      className="w-full bg-white dark:bg-white/5 border border-slate-200 dark:border-slate-800 text-slate-900 dark:text-white rounded-xl p-2.5 focus:ring-1 focus:ring-indigo-500 focus:outline-none cursor-pointer"
+                    >
+                      <option value="">-- Choose Target Employee --</option>
+                      {employeeList.map((emp) => (
+                        <option key={emp.id} value={emp.id}>
+                          {emp.name} ({emp.email})
+                        </option>
+                      ))}
+                    </select>
+                  )
                 ) : (
                   <input
                     type="text"
