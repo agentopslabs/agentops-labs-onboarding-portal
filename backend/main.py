@@ -226,25 +226,102 @@ class ResetPasswordPublicRequest(BaseModel):
     token: str
     newPassword: str
 
-# In-Memory database structure
-db_state = {
-    "users": [],
-    "passwords": {},
-    "applications": [],
-    "documents": [],
-    "tests": [],
-    "assignedTests": [],
-    "checklists": [],
-    "activityLogs": [],
-    "emails": [],
-    "notifications": [],
-    "annotations": [],
-    "messages": [],
-    "tasks": [],
-    "taskSubmissions": [],
-    "attendance": [],
-    "leaves": []
-}
+_local_file_cache = None
+
+def get_from_local_file_cache(key):
+    global _local_file_cache
+    if _local_file_cache is None:
+        _local_file_cache = {}
+        if os.path.exists(DB_PATH):
+            try:
+                with open(DB_PATH, "r", encoding="utf-8") as f:
+                    _local_file_cache = json.load(f)
+            except Exception as e:
+                print(f"[Python FastAPI] Failed to read local DB file cache: {e}")
+    return _local_file_cache.get(key)
+
+class RequestScopedDbState(dict):
+    def __init__(self):
+        super().__init__()
+        self._loaded_keys = set()
+        self._original_state = {}
+        self.reset()
+
+    def reset(self):
+        self._loaded_keys.clear()
+        self._original_state.clear()
+        self.clear()
+        self.update({
+            "users": [],
+            "passwords": {},
+            "applications": [],
+            "documents": [],
+            "tests": [],
+            "assignedTests": [],
+            "checklists": [],
+            "activityLogs": [],
+            "emails": [],
+            "notifications": [],
+            "annotations": [],
+            "messages": [],
+            "tasks": [],
+            "taskSubmissions": [],
+            "attendance": [],
+            "leaves": []
+        })
+
+    def _ensure_loaded(self, key):
+        from supabase_sync import collections_info
+        is_supabase_col = any(c["key"] == key for c in collections_info)
+        if not is_supabase_col:
+            return
+
+        if key not in self._loaded_keys:
+            from supabase_sync import load_single_collection_from_supabase
+            data, success = load_single_collection_from_supabase(key)
+            if success and data is not None:
+                self[key] = data
+                self._original_state[key] = copy.deepcopy(data)
+            else:
+                fallback_data = get_from_local_file_cache(key)
+                if fallback_data is not None:
+                    self[key] = fallback_data
+                self._original_state[key] = copy.deepcopy(self[key])
+            self._loaded_keys.add(key)
+
+    def __getitem__(self, key):
+        self._ensure_loaded(key)
+        return super().__getitem__(key)
+
+    def get(self, key, default=None):
+        self._ensure_loaded(key)
+        return super().get(key, default)
+
+    def __contains__(self, key):
+        self._ensure_loaded(key)
+        return super().__contains__(key)
+
+    def __setitem__(self, key, value):
+        self._loaded_keys.add(key)
+        if key not in self._original_state:
+            self._original_state[key] = [] if isinstance(value, list) else {}
+        super().__setitem__(key, value)
+
+    def get_changed_collections(self):
+        changed = set()
+        for key in self._loaded_keys:
+            if self.get(key) != self._original_state.get(key):
+                changed.add(key)
+        return changed
+
+    def get_loaded_snapshot(self):
+        snapshot = {}
+        for key in self._loaded_keys:
+            snapshot[key] = copy.deepcopy(dict.__getitem__(self, key))
+        return snapshot
+
+# Request-Scoped database state
+db_state = RequestScopedDbState()
 
 # Token reset secure store
 active_reset_tokens = {}
@@ -345,68 +422,11 @@ def deduplicate_database_state():
     print("[Python FastAPI] Database deduplication and Supabase sync complete.")
 
 def load_database(silent=True):
-    global db_state, last_supabase_load_time, last_synced_db
-    now = time.time()
-    
-    with db_lock:
-        is_empty = not db_state.get("users")
-        
-    # Extended cache: 30 seconds. In-memory state is fast and accurate.
-    # After any write, last_supabase_load_time is reset to now, so memory stays fresh.
-    if is_empty or (now - last_supabase_load_time >= 30.0):
-        with load_lock:
-            is_empty_locked = not db_state.get("users")
-            if is_empty_locked or (time.time() - last_supabase_load_time >= 30.0):
-                # Pull from Supabase first
-                from supabase_sync import load_from_supabase
-                supabase_loaded = False
-                try:
-                    with db_lock:
-                        temp_db = copy.deepcopy(db_state)
-                    supabase_loaded = load_from_supabase(temp_db)
-                    if supabase_loaded and temp_db.get("users"):
-                        with db_lock:
-                            db_state.clear()
-                            db_state.update(temp_db)
-                            last_synced_db = copy.deepcopy(temp_db)
-                        try:
-                            atomic_write_json(DB_PATH, temp_db)
-                        except Exception:
-                            pass
-                        last_supabase_load_time = time.time()
-                        if not silent:
-                            print("[Python FastAPI] Database successfully updated from Supabase.")
-                except Exception as e:
-                    print(f"[Python FastAPI] Supabase load failed: {e}")
-                
-                # Fallback to local DB_PATH if Supabase load failed or credentials not present
-                if not supabase_loaded:
-                    if os.path.exists(DB_PATH):
-                        try:
-                            with open(DB_PATH, "r", encoding="utf-8") as f:
-                                data = json.load(f)
-                            if data.get("users"):
-                                with db_lock:
-                                    db_state.clear()
-                                    db_state.update(data)
-                                    last_synced_db = copy.deepcopy(data)
-                                last_supabase_load_time = time.time()
-                                if not silent:
-                                    print("[Python FastAPI] Loaded database from disk cache fallback.")
-                        except Exception as disk_err:
-                            print(f"[Python FastAPI] Failed to read disk cache fallback: {disk_err}")
-                            if is_empty_locked:
-                                seed_database()
-                    elif is_empty_locked:
-                        seed_database()
-                        
-    with db_lock:
-        has_no_users = not db_state.get("users")
-    if has_no_users:
+    # Load "users" to ensure database seeding or loading occurs if empty
+    users = db_state.get("users", [])
+    if not users:
         print("[Python FastAPI] Database is empty (no users). Seeding default data...")
         seed_database()
-    else:
-        deduplicate_database_state()
 
 def _background_supabase_sync_worker(db_copy: dict, collections: set):
     """Background thread worker that syncs to Supabase without blocking the API response."""
@@ -415,9 +435,10 @@ def _background_supabase_sync_worker(db_copy: dict, collections: set):
         from supabase_sync import sync_to_supabase
         sync_to_supabase(db_copy, collections)
         last_supabase_load_time = time.time()
-        with db_lock:
-            for key in collections:
-                last_synced_db[key] = copy.deepcopy(db_copy.get(key, [] if isinstance(db_copy.get(key), list) else {}))
+        if hasattr(db_state, "_original_state"):
+            with db_lock:
+                for key in collections:
+                    db_state._original_state[key] = copy.deepcopy(db_copy.get(key))
     except Exception as sync_err:
         print(f"[Python FastAPI] Background Supabase sync failed: {sync_err}")
 
@@ -425,9 +446,6 @@ def save_database(target_collection=None):
     """Save database: write to disk immediately (fast), then sync Supabase."""
     global db_state, last_synced_db, last_supabase_load_time
     try:
-        with db_lock:
-            db_copy = copy.deepcopy(db_state)
-            
         # Detect which collections changed
         changed_collections = set()
         if target_collection:
@@ -436,49 +454,55 @@ def save_database(target_collection=None):
             else:
                 changed_collections.add(target_collection)
         else:
-            for key in db_copy.keys():
-                if last_synced_db.get(key) != db_copy.get(key):
-                    changed_collections.add(key)
-                    
-        # Step 1: Atomic disk write
+            if hasattr(db_state, "get_changed_collections"):
+                changed_collections = db_state.get_changed_collections()
+            else:
+                with db_lock:
+                    db_copy = copy.deepcopy(db_state)
+                for key in db_copy.keys():
+                    if last_synced_db.get(key) != db_copy.get(key):
+                        changed_collections.add(key)
+
+        if not changed_collections:
+            return
+
+        with db_lock:
+            if hasattr(db_state, "get_loaded_snapshot"):
+                db_copy = db_state.get_loaded_snapshot()
+            else:
+                db_copy = copy.deepcopy(db_state)
+
+        # Step 1: Smart local file saving (merge changed collections into the local file)
+        global _local_file_cache
+        base_data = {}
+        if os.path.exists(DB_PATH):
+            try:
+                with open(DB_PATH, "r", encoding="utf-8") as f:
+                    base_data = json.load(f)
+            except Exception:
+                pass
+        for key in changed_collections:
+            base_data[key] = db_copy.get(key)
+        _local_file_cache = copy.deepcopy(base_data)
         try:
-            atomic_write_json(DB_PATH, db_copy)
+            atomic_write_json(DB_PATH, base_data)
         except Exception as disk_err:
             print(f"[Python FastAPI] Disk write failed: {disk_err}")
 
-        # Step 2: Update last_synced_db optimistically
-        if changed_collections:
-            with db_lock:
-                for key in changed_collections:
-                    last_synced_db[key] = copy.deepcopy(db_copy.get(key, [] if isinstance(db_copy.get(key), list) else {}))
-            last_supabase_load_time = time.time()
-            
-        # Step 3: Supabase sync
-        if changed_collections:
-            is_vercel = os.environ.get("VERCEL") == "1" or "VERCEL" in os.environ
-            if is_vercel:
-                # Synchronous sync on Vercel serverless to avoid request container termination before sync completes
-                _background_supabase_sync_worker(db_copy, changed_collections)
-            else:
-                sync_thread = threading.Thread(
-                    target=_background_supabase_sync_worker,
-                    args=(db_copy, changed_collections),
-                    daemon=True
-                )
-                sync_thread.start()
+        # Step 2: Supabase sync
+        is_vercel = os.environ.get("VERCEL") == "1" or "VERCEL" in os.environ
+        if is_vercel:
+            _background_supabase_sync_worker(db_copy, changed_collections)
+        else:
+            sync_thread = threading.Thread(
+                target=_background_supabase_sync_worker,
+                args=(db_copy, changed_collections),
+                daemon=True
+            )
+            sync_thread.start()
                 
     except Exception as e:
         print(f"[Python FastAPI] Error occurred while saving database: {e}")
-
-def _startup_preload():
-    """Pre-warm the database from Supabase in a background thread on startup."""
-    print("[Python FastAPI] Pre-warming database from Supabase in background...")
-    load_database(silent=False)
-    print("[Python FastAPI] Database pre-warm complete.")
-
-# Kick off background preload immediately on module load
-_preload_thread = threading.Thread(target=_startup_preload, daemon=True)
-_preload_thread.start()
 
 # Middleware: fast path for all requests
 @app.middleware("http")
@@ -490,7 +514,11 @@ async def db_reload_middleware(request: Request, call_next):
         response.headers["Access-Control-Allow-Headers"] = "Content-Type, Authorization"
         return response
 
-    # Load database (lightweight cache check internally, reloads if expired)
+    # Reset the request-scoped database state at the beginning of each request
+    if hasattr(db_state, "reset"):
+        db_state.reset()
+
+    # Load database (lightweight check, seeds if empty)
     load_database(silent=True)
     
     response = await call_next(request)

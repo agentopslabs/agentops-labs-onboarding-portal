@@ -40,6 +40,39 @@ def get_item_id(item, col_name):
         return item.get("employeeId")
     return item.get("id")
 
+def load_single_collection_from_supabase(col_key):
+    if not SUPABASE_URL or not SUPABASE_SERVICE_ROLE_KEY or SUPABASE_URL == "YOUR_SUPABASE_URL":
+        return None, False
+        
+    col = next((c for c in collections_info if c["key"] == col_key), None)
+    if not col:
+        return None, False
+        
+    col_name = col["name"]
+    col_type = col["type"]
+    url = f"{SUPABASE_URL}/rest/v1/{col_name.lower()}?select=id,data"
+    headers = {
+        "apikey": SUPABASE_SERVICE_ROLE_KEY,
+        "Authorization": f"Bearer {SUPABASE_SERVICE_ROLE_KEY}"
+    }
+    try:
+        res = requests.get(url, headers=headers, timeout=5)
+        if res.status_code == 200:
+            rows = res.json()
+            if col_type == "array":
+                parsed_docs = [r["data"] for r in rows if "data" in r]
+            else:
+                parsed_docs = {}
+                for r in rows:
+                    if "data" in r:
+                        parsed_docs[r["id"]] = r["data"].get("password", "")
+            return parsed_docs, True
+        else:
+            print(f"[Supabase Sync] Failed to load table {col_name}: {res.status_code} - {res.text}")
+    except Exception as e:
+        print(f"[Supabase Sync] Failed to load collection {col_name}: {e}")
+    return None, False
+
 def load_from_supabase(db_state):
     if not SUPABASE_URL or not SUPABASE_SERVICE_ROLE_KEY or SUPABASE_URL == "YOUR_SUPABASE_URL":
         print("[Supabase Sync] Supabase credentials missing or placeholder, bypassing load.")
@@ -47,34 +80,10 @@ def load_from_supabase(db_state):
 
     print("[Supabase Sync] Downloading database from Supabase in parallel...")
     
-    headers = {
-        "apikey": SUPABASE_SERVICE_ROLE_KEY,
-        "Authorization": f"Bearer {SUPABASE_SERVICE_ROLE_KEY}"
-    }
-
     def load_collection(col):
-        col_name = col["name"]
         col_key = col["key"]
-        col_type = col["type"]
-        url = f"{SUPABASE_URL}/rest/v1/{col_name.lower()}?select=id,data"
-        try:
-            res = requests.get(url, headers=headers, timeout=5)
-            if res.status_code == 200:
-                rows = res.json()
-                if col_type == "array":
-                    parsed_docs = [r["data"] for r in rows if "data" in r]
-                else:
-                    parsed_docs = {}
-                    for r in rows:
-                        if "data" in r:
-                            parsed_docs[r["id"]] = r["data"].get("password", "")
-                return col_key, parsed_docs, True
-            else:
-                print(f"[Supabase Sync] Failed to load table {col_name}: {res.status_code} - {res.text}")
-                return col_key, None, False
-        except Exception as e:
-            print(f"[Supabase Sync] Failed to load collection {col_name}: {e}")
-            return col_key, None, False
+        data, success = load_single_collection_from_supabase(col_key)
+        return col_key, data, success
 
     loaded_any = False
     with ThreadPoolExecutor(max_workers=10) as executor:
