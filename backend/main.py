@@ -245,11 +245,13 @@ class RequestScopedDbState(dict):
     def __init__(self):
         super().__init__()
         self._loaded_keys = set()
+        self._failed_load_keys = set()
         self._original_state = {}
         self.reset()
 
     def reset(self):
         self._loaded_keys.clear()
+        self._failed_load_keys.clear()
         self._original_state.clear()
         self.clear()
         self.update({
@@ -285,6 +287,7 @@ class RequestScopedDbState(dict):
                 super().__setitem__(key, data)
                 self._original_state[key] = copy.deepcopy(data)
             else:
+                self._failed_load_keys.add(key)
                 fallback_data = get_from_local_file_cache(key)
                 if fallback_data is not None:
                     super().__setitem__(key, fallback_data)
@@ -433,12 +436,12 @@ def load_database(silent=True):
         print("[Python FastAPI] Database is empty (no users). Seeding default data...")
         seed_database()
 
-def _background_supabase_sync_worker(db_copy: dict, collections: set):
+def _background_supabase_sync_worker(db_copy: dict, collections: set, failed_collections: set = None):
     """Background thread worker that syncs to Supabase without blocking the API response."""
     global last_synced_db, last_supabase_load_time
     try:
         from supabase_sync import sync_to_supabase
-        sync_to_supabase(db_copy, collections)
+        sync_to_supabase(db_copy, collections, failed_collections=failed_collections)
         last_supabase_load_time = time.time()
         if hasattr(db_state, "_original_state"):
             with db_lock:
@@ -451,6 +454,11 @@ def save_database(target_collection=None):
     """Save database: write to disk immediately (fast), then sync Supabase."""
     global db_state, last_synced_db, last_supabase_load_time
     try:
+        # Retrieve failed load keys to prevent deleting rows in case of loading fallback
+        failed_collections = set()
+        if hasattr(db_state, "_failed_load_keys"):
+            failed_collections = set(db_state._failed_load_keys)
+
         # Detect which collections changed
         changed_collections = set()
         if target_collection:
@@ -498,7 +506,7 @@ def save_database(target_collection=None):
         is_vercel = os.environ.get("VERCEL") == "1" or "VERCEL" in os.environ
         if is_vercel:
             from supabase_sync import sync_to_supabase
-            errors = sync_to_supabase(db_copy, changed_collections)
+            errors = sync_to_supabase(db_copy, changed_collections, failed_collections=failed_collections)
             if errors:
                 raise HTTPException(status_code=500, detail=f"Supabase sync failed: {'; '.join(errors)}")
             
@@ -510,7 +518,7 @@ def save_database(target_collection=None):
         else:
             sync_thread = threading.Thread(
                 target=_background_supabase_sync_worker,
-                args=(db_copy, changed_collections),
+                args=(db_copy, changed_collections, failed_collections),
                 daemon=True
             )
             sync_thread.start()
