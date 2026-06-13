@@ -125,7 +125,7 @@ export default function App() {
       const mePayload = await safeJson(resMe);
       if (mePayload && mePayload.id) {
         setCurrentUser(mePayload);
-      } else if (!resMe.ok || resMe.status === 401 || resMe.status === 403) {
+      } else if (resMe.status === 401 || resMe.status === 403) {
         let reason = "Your authentication session has expired. For your safety, please sign in again.";
         if (resMe.status === 401) {
           reason = "Session expired or invalid credential token (401 Unauthorized). Please sign in again.";
