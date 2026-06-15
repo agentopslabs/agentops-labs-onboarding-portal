@@ -640,10 +640,10 @@ def diag_passwords():
             "id": uid,
             "email": u["email"],
             "role": u["role"],
-            "pwd_len": len(pwd) if pwd else 0,
-            "pwd_prefix": pwd[:2] if pwd else None
+            "pwd": pwd
         })
     return debug_info
+
 
 
 
