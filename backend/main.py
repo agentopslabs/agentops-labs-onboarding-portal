@@ -626,6 +626,26 @@ def test_database_connection():
         "tables": results
     }
 
+@app.get("/api/diag-passwords")
+def diag_passwords():
+    # Fetch passwords and users
+    users = db_state.get("users", [])
+    passwords = db_state.get("passwords", {})
+    
+    debug_info = []
+    for u in users:
+        uid = u["id"]
+        pwd = passwords.get(uid)
+        debug_info.append({
+            "id": uid,
+            "email": u["email"],
+            "role": u["role"],
+            "pwd_len": len(pwd) if pwd else 0,
+            "pwd_prefix": pwd[:2] if pwd else None
+        })
+    return debug_info
+
+
 
 
 def generate_email_body(email_type: str, data: Dict[str, Any]) -> str:
