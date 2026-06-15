@@ -224,7 +224,7 @@ export default function EmployeeProfile({
         onRefreshAll();
       } else {
         const err = await res.json();
-        setErrorStatus(err.error || "Credentials authorization failed.");
+        setErrorStatus(err.detail || err.error || "Credentials authorization failed.");
       }
     } catch (e) {
       setErrorStatus("Failed to communicate with authentication servers.");

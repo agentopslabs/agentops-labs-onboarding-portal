@@ -49,7 +49,7 @@ export default function PasswordResetPage({ token, email, onClose }: PasswordRes
           }
         } else {
           setTokenValid(false);
-          setVerificationError(data.error || "The reset token is invalid or has expired.");
+          setVerificationError(data.detail || data.error || "The reset token is invalid or has expired.");
         }
       } catch (e) {
         if (!active) return;
@@ -106,7 +106,7 @@ export default function PasswordResetPage({ token, email, onClose }: PasswordRes
           onClose();
         }, 2000);
       } else {
-        setErrorMsg(data.error || "Failed to update security credentials.");
+        setErrorMsg(data.detail || data.error || "Failed to update security credentials.");
       }
     } catch {
       setErrorMsg("Server is unreachable. Please verify connection.");

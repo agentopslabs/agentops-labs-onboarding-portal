@@ -64,7 +64,7 @@ export default function Login({ onLoginSuccess, initialError }: LoginProps) {
         onLoginSuccess(payload.user, payload.token);
       } else {
         const err = await res.json();
-        setErrorStatus(err.error || "Incorrect email or session password.");
+        setErrorStatus(err.detail || err.error || "Incorrect email or session password.");
       }
     } catch (e) {
       setErrorStatus("Auth authentication server unavailable. Ensure Express server is active.");
@@ -100,7 +100,7 @@ export default function Login({ onLoginSuccess, initialError }: LoginProps) {
         setResetStep(2);
       } else {
         const err = await res.json();
-        setResetError(err.error || "No account found with this email.");
+        setResetError(err.detail || err.error || "No account found with this email.");
       }
     } catch (e) {
       setResetError("Auth database is currently unreachable.");
@@ -156,7 +156,7 @@ export default function Login({ onLoginSuccess, initialError }: LoginProps) {
         }, 1500);
       } else {
         const err = await res.json();
-        setResetError(err.error || "Failed to alter password.");
+        setResetError(err.detail || err.error || "Failed to alter password.");
       }
     } catch (e) {
       setResetError("Auth database is currently unreachable.");

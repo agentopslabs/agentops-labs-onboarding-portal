@@ -141,7 +141,7 @@ export default function MessageCenter({
         }, 1500);
       } else {
         const err = await res.json();
-        setCompError(err.error || "Broadcast delivery rejected.");
+        setCompError(err.detail || err.error || "Broadcast delivery rejected.");
       }
     } catch (err) {
       setCompError("Failure connecting with message service.");

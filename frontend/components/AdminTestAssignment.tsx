@@ -87,7 +87,7 @@ export default function AdminTestAssignment({
         onRefreshAll();
       } else {
         const errorData = await res.json();
-        setAssignError(errorData.error || "Deployment failed.");
+        setAssignError(errorData.detail || errorData.error || "Deployment failed.");
       }
     } catch (e) {
       setAssignError("Deployment transaction failed.");
