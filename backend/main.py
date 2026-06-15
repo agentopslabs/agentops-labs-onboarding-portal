@@ -508,7 +508,9 @@ def save_database(target_collection=None):
             from supabase_sync import sync_to_supabase
             errors = sync_to_supabase(db_copy, changed_collections, failed_collections=failed_collections)
             if errors:
-                raise HTTPException(status_code=500, detail=f"Supabase sync failed: {'; '.join(errors)}")
+                filtered_errors = [e for e in errors if "Supabase credentials missing or placeholder" not in e]
+                if filtered_errors:
+                    raise HTTPException(status_code=500, detail=f"Supabase sync failed: {'; '.join(filtered_errors)}")
             
             last_supabase_load_time = time.time()
             if hasattr(db_state, "_original_state"):
