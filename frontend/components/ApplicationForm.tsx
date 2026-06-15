@@ -170,7 +170,7 @@ export default function ApplicationForm({
       setEmail(application?.email || currentUser.email || "");
       setFormStatus(status);
     }
-  }, [currentUser?.id]);
+  }, [currentUser?.id, application]);
 
   // Save to localStorage automatically as the user types/updates fields
   useEffect(() => {
