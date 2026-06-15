@@ -626,28 +626,6 @@ def test_database_connection():
         "tables": results
     }
 
-@app.get("/api/diag-passwords")
-def diag_passwords():
-    # Fetch passwords and users
-    users = db_state.get("users", [])
-    passwords = db_state.get("passwords", {})
-    
-    debug_info = []
-    for u in users:
-        uid = u["id"]
-        pwd = passwords.get(uid)
-        debug_info.append({
-            "id": uid,
-            "email": u["email"],
-            "role": u["role"],
-            "pwd": pwd
-        })
-    return debug_info
-
-
-
-
-
 def generate_email_body(email_type: str, data: Dict[str, Any]) -> str:
     if email_type == "welcome":
         return f"Welcome {data.get('name')}! Your AgentOps Labs onboarding portal account has been created.\n\nLogin credentials:\nEmail: {data.get('email')}\nPassword: {data.get('password')}\n\nPlease update your password on your first login."
