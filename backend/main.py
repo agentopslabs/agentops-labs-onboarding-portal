@@ -502,28 +502,23 @@ def save_database(target_collection=None):
         except Exception as disk_err:
             print(f"[Python FastAPI] Disk write failed: {disk_err}")
 
-        # Step 2: Supabase sync
-        is_vercel = os.environ.get("VERCEL") == "1" or "VERCEL" in os.environ
-        if is_vercel:
-            from supabase_sync import sync_to_supabase
-            errors = sync_to_supabase(db_copy, changed_collections, failed_collections=failed_collections)
-            if errors:
-                filtered_errors = [e for e in errors if "Supabase credentials missing or placeholder" not in e]
-                if filtered_errors:
+        # Step 2: Supabase sync (always synchronous to prevent race conditions during immediate client-side refetches)
+        from supabase_sync import sync_to_supabase
+        errors = sync_to_supabase(db_copy, changed_collections, failed_collections=failed_collections)
+        if errors:
+            filtered_errors = [e for e in errors if "Supabase credentials missing or placeholder" not in e]
+            if filtered_errors:
+                is_vercel = os.environ.get("VERCEL") == "1" or "VERCEL" in os.environ
+                if is_vercel:
                     raise HTTPException(status_code=500, detail=f"Supabase sync failed: {'; '.join(filtered_errors)}")
-            
-            last_supabase_load_time = time.time()
-            if hasattr(db_state, "_original_state"):
-                with db_lock:
-                    for key in changed_collections:
-                        db_state._original_state[key] = copy.deepcopy(db_copy.get(key))
-        else:
-            sync_thread = threading.Thread(
-                target=_background_supabase_sync_worker,
-                args=(db_copy, changed_collections, failed_collections),
-                daemon=True
-            )
-            sync_thread.start()
+                else:
+                    print(f"[Python FastAPI] Supabase sync failed: {'; '.join(filtered_errors)}")
+        
+        last_supabase_load_time = time.time()
+        if hasattr(db_state, "_original_state"):
+            with db_lock:
+                for key in changed_collections:
+                    db_state._original_state[key] = copy.deepcopy(db_copy.get(key))
                 
     except HTTPException:
         raise
