@@ -328,8 +328,69 @@ class RequestScopedDbState(dict):
             snapshot[key] = copy.deepcopy(dict.__getitem__(self, key))
         return snapshot
 
-# Request-Scoped database state
-db_state = RequestScopedDbState()
+# Request-Scoped database state context management to prevent concurrent request resets/data corruption
+import contextvars
+
+_request_db_context = contextvars.ContextVar("request_db_context")
+_global_fallback_db_state = RequestScopedDbState()
+
+class DbStateProxy(dict):
+    def __init__(self):
+        super().__init__()
+
+    def _get_current_state(self):
+        try:
+            return _request_db_context.get()
+        except LookupError:
+            global _global_fallback_db_state
+            return _global_fallback_db_state
+
+    def __getitem__(self, key):
+        return self._get_current_state()[key]
+
+    def __setitem__(self, key, value):
+        self._get_current_state()[key] = value
+
+    def __delitem__(self, key):
+        del self._get_current_state()[key]
+
+    def __contains__(self, key):
+        return key in self._get_current_state()
+
+    def get(self, key, default=None):
+        return self._get_current_state().get(key, default)
+
+    def keys(self):
+        return self._get_current_state().keys()
+
+    def values(self):
+        return self._get_current_state().values()
+
+    def items(self):
+        return self._get_current_state().items()
+
+    def clear(self):
+        self._get_current_state().clear()
+
+    def update(self, *args, **kwargs):
+        self._get_current_state().update(*args, **kwargs)
+
+    def __len__(self):
+        return len(self._get_current_state())
+
+    def __iter__(self):
+        return iter(self._get_current_state())
+
+    def __getattr__(self, name):
+        return getattr(self._get_current_state(), name)
+
+    def __setattr__(self, name, value):
+        if name in ("__dict__",):
+            super().__setattr__(name, value)
+        else:
+            setattr(self._get_current_state(), name, value)
+
+db_state = DbStateProxy()
 
 # Token reset secure store
 active_reset_tokens = {}
@@ -536,14 +597,15 @@ async def db_reload_middleware(request: Request, call_next):
         response.headers["Access-Control-Allow-Headers"] = "Content-Type, Authorization"
         return response
 
-    # Reset the request-scoped database state at the beginning of each request
-    if hasattr(db_state, "reset"):
-        db_state.reset()
-
-    # Load database (lightweight check, seeds if empty)
-    load_database(silent=True)
-    
-    response = await call_next(request)
+    # Bind a fresh, isolated request-scoped database state to this request context
+    state = RequestScopedDbState()
+    token = _request_db_context.set(state)
+    try:
+        # Load database (lightweight check, seeds if empty)
+        load_database(silent=True)
+        response = await call_next(request)
+    finally:
+        _request_db_context.reset(token)
     
     if request.method == "GET" and response.status_code == 200:
         if "/api/" in str(request.url):
