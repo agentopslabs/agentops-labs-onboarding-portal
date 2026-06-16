@@ -128,7 +128,7 @@ export async function syncToFirestore(memoryDb: any): Promise<void> {
           }
 
           if (upsertPayloads.length > 0) {
-            const upsertUrl = `${SUPABASE_URL}/rest/v1/${colInfo.name.toLowerCase()}`;
+            const upsertUrl = `${SUPABASE_URL}/rest/v1/${colInfo.name.toLowerCase()}?on_conflict=id`;
             subPromises.push(
               fetch(upsertUrl, {
                 method: "POST",
@@ -169,7 +169,7 @@ export async function syncToFirestore(memoryDb: any): Promise<void> {
           }
 
           if (upsertPayloads.length > 0) {
-            const upsertUrl = `${SUPABASE_URL}/rest/v1/${colInfo.name.toLowerCase()}`;
+            const upsertUrl = `${SUPABASE_URL}/rest/v1/${colInfo.name.toLowerCase()}?on_conflict=id`;
             subPromises.push(
               fetch(upsertUrl, {
                 method: "POST",

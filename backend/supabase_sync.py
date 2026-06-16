@@ -171,7 +171,7 @@ def sync_to_supabase(db_state, target_collection=None, failed_collections=None):
                         })
 
                 if upsert_payloads:
-                    url = f"{SUPABASE_URL}/rest/v1/{col_name.lower()}"
+                    url = f"{SUPABASE_URL}/rest/v1/{col_name.lower()}?on_conflict=id"
                     res = requests.post(url, headers=headers, json=upsert_payloads, timeout=5)
                     if res.status_code not in (200, 201):
                         err_msg = f"Bulk upsert to {col_name} failed: {res.status_code} - {res.text}"
@@ -204,7 +204,7 @@ def sync_to_supabase(db_state, target_collection=None, failed_collections=None):
                     })
 
                 if upsert_payloads:
-                    url = f"{SUPABASE_URL}/rest/v1/{col_name.lower()}"
+                    url = f"{SUPABASE_URL}/rest/v1/{col_name.lower()}?on_conflict=id"
                     res = requests.post(url, headers=headers, json=upsert_payloads, timeout=5)
                     if res.status_code not in (200, 201):
                         err_msg = f"Bulk upsert passwords failed: {res.status_code} - {res.text}"
