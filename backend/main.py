@@ -2061,6 +2061,12 @@ def clear_user_notifications(req: Dict[str, str]):
     save_database()
     return {"success": True}
 
+@app.delete("/api/notifications/{notif_id}")
+def delete_single_notification(notif_id: str):
+    db_state["notifications"] = [n for n in db_state["notifications"] if n.get("id") != notif_id]
+    save_database("notifications")
+    return {"success": True}
+
 # Messaging Inbox
 @app.get("/api/messages")
 def get_mailbox_messages(userId: str, role: Optional[str] = None):

@@ -120,6 +120,64 @@ export default function DashboardLayout({
     }
   }
 
+  async function handleNotificationClick(notif: SystemNotification) {
+    const isAdmin = currentUser.role === UserRole.ADMIN;
+    let destTab = "";
+    const title = (notif.title || "").toLowerCase();
+    const message = (notif.message || "").toLowerCase();
+
+    if (isAdmin) {
+      if (title.includes("application") || message.includes("application")) {
+        destTab = "admin-applications";
+      } else if (title.includes("document") || message.includes("document") || title.includes("certificate") || message.includes("certificate") || title.includes("doc")) {
+        destTab = "admin-documents";
+      } else if (title.includes("task") || message.includes("task") || title.includes("submission") || message.includes("submission") || message.includes("solution")) {
+        destTab = "admin-tasks";
+      } else if (title.includes("attendance") || message.includes("attendance") || title.includes("leave") || message.includes("leave")) {
+        destTab = "admin-attendance";
+      } else if (title.includes("test") || message.includes("test") || title.includes("exam") || message.includes("exam") || title.includes("assessment") || message.includes("assessment")) {
+        destTab = "admin-test-assignment";
+      } else if (title.includes("message") || message.includes("message") || title.includes("broadcast") || message.includes("broadcast")) {
+        destTab = "admin-messages";
+      } else {
+        destTab = "admin-employees";
+      }
+    } else {
+      if (title.includes("message") || message.includes("message") || title.includes("broadcast") || message.includes("broadcast") || title.includes("hr message")) {
+        destTab = "employee-messages";
+      } else if (title.includes("assessment") || message.includes("assessment") || title.includes("exam") || message.includes("exam") || title.includes("test") || message.includes("test")) {
+        destTab = "employee-assessments";
+      } else if (title.includes("document") || message.includes("document") || title.includes("doc") || message.includes("doc")) {
+        destTab = "employee-documents";
+      } else if (title.includes("task") || message.includes("task") || title.includes("coding") || message.includes("coding")) {
+        destTab = "employee-tasks";
+      } else if (title.includes("attendance") || message.includes("attendance") || title.includes("leave") || message.includes("leave")) {
+        destTab = "employee-attendance";
+      } else if (title.includes("profile") || message.includes("profile") || title.includes("credentials") || message.includes("credentials")) {
+        destTab = "employee-profile";
+      } else {
+        destTab = "employee-dashboard";
+      }
+    }
+
+    try {
+      await fetch(`/api/notifications/${notif.id}`, {
+        method: "DELETE"
+      });
+      fetchNotifications();
+      if (typeof triggerRefreshFn === "function") {
+        triggerRefreshFn();
+      }
+    } catch (err) {
+      console.error("Failed to delete clicked notification:", err);
+    }
+
+    if (destTab) {
+      setActiveTab(destTab);
+    }
+    setShowNotifDropdown(false);
+  }
+
   // Admin and Employee navigation tabs
   const adminNav = [
     { id: "admin-analytics", label: "Analytics Overview", icon: BarChart3 },
@@ -298,7 +356,11 @@ export default function DashboardLayout({
                       </div>
                     ) : (
                       notifications.map((notif) => (
-                        <div key={notif.id} className="p-3.5 hover:bg-white/5 transition-colors text-left">
+                        <div 
+                          key={notif.id} 
+                          onClick={() => handleNotificationClick(notif)}
+                          className="p-3.5 hover:bg-white/5 transition-colors text-left cursor-pointer border-l-2 border-transparent hover:border-[#F1B814]"
+                        >
                           <div className="flex items-center justify-between gap-2">
                             <span className={`text-[9px] font-extrabold uppercase px-1.5 py-0.2 rounded font-mono ${
                               notif.type === 'success' 
