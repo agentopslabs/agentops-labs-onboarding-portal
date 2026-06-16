@@ -1057,7 +1057,7 @@ def auth_login(req: LoginRequest):
     
     matched_user = None
     for u in db_state["users"]:
-        if u["email"].lower() == email:
+        if u.get("email", "").lower() == email:
             matched_user = u
             break
             
@@ -1101,7 +1101,7 @@ def forgot_password(req: Dict[str, str]):
         
     matched_user = None
     for u in db_state["users"]:
-        if u["email"].lower() == email:
+        if u.get("email", "").lower() == email:
             matched_user = u
             break
             
@@ -1208,7 +1208,7 @@ def reset_password_public(req: ResetPasswordPublicRequest):
         
     matched_user = None
     for u in db_state["users"]:
-        if u["email"].lower() == record["email"].lower().strip():
+        if u.get("email", "").lower() == record["email"].lower().strip():
             matched_user = u
             break
             
@@ -1321,7 +1321,7 @@ def create_employee(req: Dict[str, Any]):
         if not name or not email or not mobile:
             raise HTTPException(status_code=400, detail="Employee Name, Email, and Mobile are required.")
             
-        exists = any(u["email"].lower() == email.lower() for u in db_state["users"])
+        exists = any(u.get("email", "").lower() == email.lower() for u in db_state["users"])
         if exists:
             raise HTTPException(status_code=400, detail="Email already registered in system.")
             
@@ -1411,9 +1411,9 @@ def update_employee(user_id: str, req: Dict[str, Any]):
         
     user = db_state["users"][user_idx]
     
-    email = req.get("email", user["email"])
-    if email.lower() != user["email"].lower():
-        exists = any(u["email"].lower() == email.lower() for u in db_state["users"] if u["id"] != user_id)
+    email = req.get("email", user.get("email", ""))
+    if email.lower() != user.get("email", "").lower():
+        exists = any(u.get("email", "").lower() == email.lower() for u in db_state["users"] if u["id"] != user_id)
         if exists:
             raise HTTPException(status_code=400, detail="Email address is already in use by another employee.")
             
